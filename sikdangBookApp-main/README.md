@@ -1,2 +1,0 @@
-# sikdangBookApp
-sikdang Book

@@ -1,6 +1,0 @@
-<resources>
-    <string name="app_name">caculator</string>
-    <string name="lhs"></string>
-    <string name="rhs"></string>
-    <string name="result"></string>
-</resources>

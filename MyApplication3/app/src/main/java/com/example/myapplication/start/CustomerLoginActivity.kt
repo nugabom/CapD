@@ -27,8 +27,11 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.TaskCompletionSource
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
+import com.google.firebase.ktx.Firebase
 
 /*
     phone_number : 구글계정에 없으면 못씀
@@ -37,7 +40,7 @@ class CustomerLogInActivity : AppCompatActivity() {
     lateinit var auth : FirebaseAuth
 
     lateinit var google_login : ImageButton
-    lateinit var googleClient : GoogleSignInClient
+    lateinit var googleSignInClient : GoogleSignInClient
 
     lateinit var kakao_login : ImageButton
     val GOOGLE_SIGN_IN = 9001
@@ -128,16 +131,17 @@ class CustomerLogInActivity : AppCompatActivity() {
     }
 
     fun setGoogleLogin() {
-        var gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
 
-        googleClient = GoogleSignIn.getClient(this, gso)
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
+        auth = Firebase.auth
     }
 
     fun SignIn() {
-        var intent = googleClient.signInIntent
+        val intent = googleSignInClient.signInIntent
         startActivityForResult(intent, GOOGLE_SIGN_IN)
     }
 
@@ -145,10 +149,10 @@ class CustomerLogInActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == GOOGLE_SIGN_IN) {
-            var task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
-                var account = task.getResult(ApiException::class.java)
-                firebaseAuthWithGoogle(account)
+                val account = task.getResult(ApiException::class.java)!!
+                firebaseAuthWithGoogle(account.idToken!!)
             }
             catch (e: ApiException) {
                 Toast.makeText(this, "google login 실패", Toast.LENGTH_SHORT).show()
@@ -156,15 +160,16 @@ class CustomerLogInActivity : AppCompatActivity() {
         }
     }
 
-    private fun firebaseAuthWithGoogle(account: GoogleSignInAccount?) {
-        var credential = GoogleAuthProvider.getCredential(account?.idToken, null)
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    updateSignIn(auth)
+                    //updateSignIn(auth)
                     Toast.makeText(this, "Google Login 성공", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this, MainActivity::class.java))
-                    finish()
+                    moveMainPage(task.result?.user)
+                    //startActivity(Intent(this, MainActivity::class.java))
+                    //finish()
                 } else {
                     Toast.makeText(this, "Google Login 실패", Toast.LENGTH_SHORT).show()
                 }
@@ -208,6 +213,11 @@ class CustomerLogInActivity : AppCompatActivity() {
                 Log.d("register", userid + " : Database 유저정보 업데이트 실패")
                 return@addOnCompleteListener
             }
+        }
+    }
+    fun moveMainPage(user: FirebaseUser?) {
+        if (user != null) {
+            startActivity(Intent(this, MainActivity::class.java))
         }
     }
 }

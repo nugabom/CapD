@@ -1,11 +1,9 @@
 package com.example.myapplication.bookActivity
 
 import android.content.Intent
-import android.net.TrafficStats
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
 import android.text.TextUtils
 import android.util.Log
 import android.widget.Button
@@ -14,13 +12,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myapplication.IsFull
 import com.example.myapplication.R
 import com.example.myapplication.dataclass.StoreInfo
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
-import com.google.firebase.database.core.view.View
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import okio.Buffer
@@ -30,7 +26,6 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
-import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Semaphore
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -63,6 +58,7 @@ class PayActivity : AppCompatActivity() {
     var isSuccess = false
     var semaphore = Semaphore(1)
 
+    lateinit var user_id : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,7 +76,7 @@ class PayActivity : AppCompatActivity() {
             Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
             finish()
         }
-        val complete_intent = Intent(this, PayComplete::class.java)
+        val complete_intent = Intent(this, PayCompleteSuccess::class.java)
         init_UI()
     }
 
@@ -103,11 +99,16 @@ class PayActivity : AppCompatActivity() {
         store_name = findViewById(R.id.payPageSikdangName)
         store_name.text = storeInfo.store_name
         requset = findViewById(R.id.reqEditText)
+
         face_price = findViewById(R.id.payPageOriginalPrice)
         face_price.text = "매장 가격 : ${price}"
+
         coupon_directory = findViewById(R.id.couponNumTV)
         table_directory = findViewById(R.id.couponRV)
+
         real_price = findViewById(R.id.totalPriceTV)
+        real_price.text = "총 가격 : ${price}"
+
         pay_button = findViewById(R.id.payButton)
         check_select_button = findViewById(R.id.check_select_button)
         recycler_view_usedCoupon = findViewById(R.id.recycler_view_used_coupon)
@@ -143,7 +144,7 @@ class PayActivity : AppCompatActivity() {
     }
 
     private fun getCouponFromDB() {
-        FirebaseDatabase.getInstance().getReference("Coupon")
+        FirebaseDatabase.getInstance().getReference("UserCoupon")
                 .child(firebaseUser.uid)
                 .addListenerForSingleValueEvent(object : ValueEventListener{
                     override fun onDataChange(snapshot: DataSnapshot) {
@@ -164,12 +165,13 @@ class PayActivity : AppCompatActivity() {
             if(proto_coupon == null) continue
             if(!Coupon.IsValidCoupon(proto_coupon)) {
                 Log.d("PayActivity", "IsValidCoupon : ${proto_coupon.coupon_id} is expired")
-                FirebaseDatabase.getInstance().getReference("Coupon")
+                FirebaseDatabase.getInstance().getReference("UserCoupon")
                         .child(firebaseUser.uid)
                         .child(data.key!!).removeValue()
                 continue
             }
             coupon_list.add(Coupon(
+                    proto_coupon.user_id!!,
                     proto_coupon.coupon_id!!,
                     proto_coupon.min_price!!,
                     proto_coupon.discount!!,
@@ -349,7 +351,8 @@ class PayActivity : AppCompatActivity() {
                         }
 
                         reservate()
-                        val _intent = Intent(this@PayActivity, PayComplete::class.java)
+                        use_up_coupons()
+                        val _intent = Intent(this@PayActivity, PayCompleteSuccess::class.java)
                         _intent.putExtra("request", requset.text.toString())
                         _intent.putExtra("stocks", stocks)
                         startActivity(_intent)
@@ -412,6 +415,19 @@ class PayActivity : AppCompatActivity() {
             .child(current_date)
             .push()
             .setValue(reservation)
+    }
+
+    private fun use_up_coupons() {
+        for (use_up in used_coupons) {
+            FirebaseDatabase.getInstance().getReference("UserCoupon")
+                .child(user_id)
+                .child(use_up.coupon_id)
+                .removeValue()
+
+            FirebaseDatabase.getInstance().getReference("SystemCoupon")
+                .child(use_up.coupon_id)
+                .removeValue()
+        }
     }
 }
 

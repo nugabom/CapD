@@ -73,6 +73,7 @@ class PaymentActivity : AppCompatActivity() {
                             store_list.add(null)
                         }
                     }
+                    payment_list.reverse()
                     paymentAdapter.notifyDataSetChanged()
                 }
                 override fun onCancelled(error: DatabaseError) {

@@ -42,8 +42,8 @@ class CouponDialog
             return
         }
         when(coupon.type) {
-            1->{duplicateOK(coupon)}
-            2->{duplicateForbid(coupon)}
+            Coupon.DUPL->{duplicateOK(coupon)}
+            Coupon.SINGLE->{duplicateForbid(coupon)}
         }
     }
 

@@ -52,10 +52,10 @@ class SikdangMainCatAdapter(var context: Context, val catArrayList: ArrayList<St
 
                 //intent.putExtra("pos", 1)
                 //var a = catButtonUp.getTag()
-                intent.putExtra("cat", item1)
+                intent.putExtra("cat", CatList.getInstance().indexOf(item1))
                 var dist = 0
                 if (distText.getText().toString().length == 0 ){
-                    dist = 0
+                    dist = 1000
                 }
                 else{
                     dist = distText.getText().toString().toInt()
@@ -73,7 +73,7 @@ class SikdangMainCatAdapter(var context: Context, val catArrayList: ArrayList<St
                 //광고페이지 클래스를 호출해야 함
                 val intent :Intent
                 intent=Intent(itemView.context, SikdangChoice::class.java)
-                intent.putExtra("cat", item2)
+                intent.putExtra("cat", CatList.getInstance().indexOf(item2))
                 intent.putExtra("catArrayList", catArrayList)
                 var dist = 0
                 if (distText.getText().toString().length == 0 ){

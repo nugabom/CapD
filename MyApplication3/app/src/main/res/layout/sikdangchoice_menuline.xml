@@ -21,7 +21,7 @@
             android:layout_width="150dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+            android:src="@drawable/store_placeholder" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -55,25 +55,30 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/menuNameTV"
+                        android:visibility="visible"
+                        android:id="@+id/reqMenu1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="대표메뉴1" />
 
                     <TextView
-                        android:id="@+id/menuExpTV"
+                        android:visibility="visible"
+                        android:id="@+id/reqMenu2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="대표메뉴2" />
 
                     <TextView
-                        android:id="@+id/repMenuTV3"
+                        android:visibility="visible"
+
+                        android:id="@+id/reqMenu3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="대표메뉴3" />
 
                     <TextView
-                        android:id="@+id/menuPriceTV"
+                        android:visibility="visible"
+                        android:id="@+id/reqMenu4"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="대표메뉴4" />
@@ -100,6 +105,7 @@
                     android:text="주차" />
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/sikdangChoice_menuLine_coupon"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -107,6 +113,7 @@
                     android:text="쿠폰" />
 
                 <TextView
+                    android:visibility="visible"
                     android:id="@+id/sikdangChoice_menuLine_event"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"

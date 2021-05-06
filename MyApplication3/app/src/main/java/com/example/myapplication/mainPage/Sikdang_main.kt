@@ -369,10 +369,12 @@ class Sikdang_main : Fragment() {
         }
     }
 
+
+
  */
 }
 
-/**
+/*
 fun makeLocationsDB(){
     Log.d("makeLo", "here")
     val cat = "닭고기"
@@ -410,22 +412,31 @@ fun makeData(loc : Location) : HashMap<String, Any> {
     )
 }
 */
-/*
+
+
+
 fun makeCoupon(){
-    val ref = FirebaseDatabase.getInstance().getReference("Coupon")
-                .child(FirebaseAuth.getInstance().uid!!)
+    val ref = FirebaseDatabase.getInstance().getReference("SystemCoupon")
 
     val db = arrayListOf<TEMP>(
-        TEMP(10000, 30000, "쿠폰1", 1, "2021-03-21"),
-        TEMP(10000, 30000, "쿠폰1", 1, "2021-03-23"),
-        TEMP(5000, 0, "쿠폰2", 1, "2021-03-24"),
-        TEMP(3000, 50000, "쿠폰3", 1, "2021-03-23"),
-        TEMP(15000, 40000, "쿠폰4", 2, "2021-03-26"),
-        TEMP(10000, 0, "쿠폰5", 2, "2021-03-25"),
-        TEMP(4000, 0, "쿠폰6", 2, "2021-03-27"),
-        TEMP(3000, 100000, "쿠폰7", 2, "2021-03-28"),
-        TEMP(2000, 10000, "쿠폰8", 3, "2021-03-29")
-
+            TEMP(10000, 30000, "쿠폰 1", 1, "2021-05-31"),
+            TEMP(10000, 30000, "쿠폰 2", 1, "2021-05-31"),
+            TEMP(5000, 0, "쿠폰 3", 1, "2021-05-31"),
+            TEMP(3000, 50000, "쿠폰 4", 1, "2021-05-31"),
+            TEMP(15000, 40000, "쿠폰 5", 2, "2021-05-31"),
+            TEMP(10000, 0, "쿠폰 6", 2, "2021-05-31"),
+            TEMP(4000, 0, "쿠폰 7", 2, "2021-05-31"),
+            TEMP(3000, 100000, "쿠폰 8", 2, "2021-05-31"),
+            TEMP(2000, 10000, "쿠폰 9", 3, "2021-05-31"),
+            TEMP(3000, 30000, "쿠폰 10", 1, "2021-05-31"),
+            TEMP(12000, 30000, "쿠폰 11", 1, "2021-05-31"),
+            TEMP(5000, 0, "쿠폰 12", 1, "2021-05-31"),
+            TEMP(4000, 50000, "쿠폰 13", 1, "2021-05-31"),
+            TEMP(10000, 40000, "쿠폰 14", 2, "2021-05-31"),
+            TEMP(8000, 0, "쿠폰 15", 2, "2021-05-31"),
+            TEMP(4000, 0, "쿠폰 16", 2, "2021-05-31"),
+            TEMP(3000, 100000, "쿠폰 17", 2, "2021-05-31"),
+            TEMP(2000, 10000, "쿠폰 18", 3, "2021-05-31")
     )
 
     for(data in db){
@@ -442,8 +453,9 @@ fun coupon2Json(coupon: _coupon) : HashMap<String, Any>{
             "min_price" to coupon.min_price!!,
             "coupon_exp" to coupon.coupon_exp!!,
             "type" to coupon.type!!,
-            "expire" to coupon.expire!!
-    )
+            "expire" to coupon.expire!!,
+            "user_id" to "대충관리자가주기적으로업데이트!"
+        )
 }
 data class TEMP (
         val discount : Int,
@@ -454,8 +466,7 @@ data class TEMP (
         )
 {
     fun TEMP2_coupon(key : String): _coupon {
-        return _coupon(key, discount.toString(), minPrice, exp, type, expire)
+        return _coupon("대충관리자가주기적으로업데이트!", key, discount.toString(), minPrice, exp, type, expire)
     }
 }
 
- */

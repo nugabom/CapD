@@ -1,13 +1,19 @@
 package com.example.myapplication.sikdangChoicePage
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
-import android.os.ProxyFileDescriptorCallback
+import android.support.v4.app.INotificationSideChannel
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,49 +23,115 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.naver.maps.geometry.LatLng
+import kotlin.math.hypot
 
-//리사이클러뷰에 어댑터 설정하는 클래스
-//SikdangChoiceMenuViewPagerAdapter 클래스의 creatFragment 에서 사용
-class SikdangChoiceMenuFragment(var callback: SikdangChoice, var vp:ViewPager2, var catory : String) :Fragment() {
-    var sikdangList : ArrayList<SikdangListReqData> = arrayListOf()
+
+class SikdangChoiceMenuFragment(var catory : String, var range : Int) :
+        Fragment(), LocationListener {
+
+    private var current_lng : Double = 0.0
+    private var current_lat : Double = 0.0
+    private lateinit var locationManager  : LocationManager
+
+    private lateinit var sikdangChoiceMenuFragmentRecyclerView : RecyclerView
+    private lateinit var sikdangChoiceMenuAdapter: SikdangChoiceMenuAdapter
+
+    var sikdangStoreMenuList: ArrayList<SikdangStoreMenu> = arrayListOf()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         //return super.onCreateView(inflater, container, savedInstanceState)
         //view 는 리사이클러뷰 하나 들어있는 레이아웃
         var view= inflater.inflate(R.layout.sikdangchoice_menu_fragment, container, false)
-        bind(view)
+        locationManager = requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
+
+        sikdangChoiceMenuFragmentRecyclerView = view.findViewById(R.id.sikdangChoiceMenuFragmentRecyclerView)
+        sikdangChoiceMenuAdapter = SikdangChoiceMenuAdapter(requireContext(), sikdangStoreMenuList)
+        val linearLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        sikdangChoiceMenuFragmentRecyclerView.adapter = sikdangChoiceMenuAdapter
+        sikdangChoiceMenuFragmentRecyclerView.layoutManager = linearLayoutManager
+
+
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return view
+        }
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 20.0f, this)
+
+        updateMenu(range)
         //View.setBackgroundResource(bannerImage)
 
         return view
     }
 
+    fun updateMenu(range : Int) {
+        this.range = range
 
+        FirebaseDatabase.getInstance().getReference("Locations")
+                .child(catory)
+                .addListenerForSingleValueEvent(object : ValueEventListener{
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        sikdangStoreMenuList.clear()
+                        for (data in snapshot.children) {
 
-    fun bind(itemView:View):View?{
-        //Log.d("확인 SikdangChoiceMenuFragment", "bind")
-        //itemView는 프래그먼트 자체
-        //var sikdangchoice_menuline : LinearLayout = itemView.findViewById(R.id.sikdangChoiceMenuFragmentRecyclerView)
-        //itemView.setCurrentItem(1)
-        var sikdangChoiceMenuFragmentRecyclerView : RecyclerView = itemView.findViewById(R.id.sikdangChoiceMenuFragmentRecyclerView)
-        var sikdangChoiceMenuAdapter = SikdangChoiceMenuAdapter(requireContext(), arrayListOf<SikdangListReqData>())
-        sikdangChoiceMenuFragmentRecyclerView.adapter = sikdangChoiceMenuAdapter
+                            val store = data.getValue(SikdangReqMenu::class.java)
+                            Log.d("update Menu", "${catory} : ${store}")
+                            if (store == null) continue
+                            val dist = distance(store.Lat!!, store.Lng!!)
+                            Log.d("update Menu", "${store} : ${dist}")
+                            if (dist > range) continue
+                            sikdangStoreMenuList.add(SikdangStoreMenu(
+                                    store.Lat,
+                                    store.Lng,
+                                    store.id!!,
+                                    store.name!!,
+                                    dist
+                            ))
+                        }
+                        sikdangStoreMenuList.add(SikdangStoreMenu(
+                                37.535677,
+                                126.825981,
+                                "-MZLWlJ0ySb1PSa3C2yN",
+                                catory,
+                                1000
+                        ))
+                        sikdangChoiceMenuAdapter.notifyDataSetChanged()
+                    }
 
-        var sikdangChice_catLineLM = LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false)
-        sikdangChoiceMenuFragmentRecyclerView.layoutManager=sikdangChice_catLineLM
-        sikdangChoiceMenuFragmentRecyclerView.setHasFixedSize(true)
-
-        //Log.e("확인 페이지 넘기기 전", "1")
-        //vp.setCurrentItem(10, true)
-        //Log.e("확인 페이지 넘김", "1")
-        //vp.setCurrentItem(4, true)
-        //Log.e("확인 페이지 넘김", "2")
-
-
-        return itemView
+                    override fun onCancelled(error: DatabaseError) {
+                    }
+                })
     }
 
-    private fun getFromDB() {
+    private fun distance(lat : Double, lng : Double) : Int {
+        var result = floatArrayOf(0f, 0f)
+        Location.distanceBetween(current_lat, current_lng, lat, lng, result)
+        return hypot(result[0], result[1]).toInt()
+    }
 
+    override fun onLocationChanged(location: Location?) {
+        current_lat = location!!.latitude
+        current_lng = location!!.longitude
+        Log.d("location", "${current_lat}, ${current_lng}")
+        updateMenu(range)
+    }
+
+    override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onProviderEnabled(provider: String?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onProviderDisabled(provider: String?) {
+        TODO("Not yet implemented")
     }
 }

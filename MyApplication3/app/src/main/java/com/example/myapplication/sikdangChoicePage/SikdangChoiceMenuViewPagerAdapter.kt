@@ -1,43 +1,49 @@
 package com.example.myapplication.sikdangChoicePage
 
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import com.example.myapplication.R
+import com.example.myapplication.mainPage.CatList
 
-//뷰페이저에 프래그먼트 바인드하는 클래스
-//프래그먼트 몇개 넣을지, 매뉴의 어댑터 매개변수로 받음
-//매뉴 어댑터 받아서 메뉴 어댑터의 스크롤 함수르 호출한다
-class SikdangChoiceMenuViewPagerAdapter(fa:FragmentActivity, var callback : SikdangChoice , val catArrayList : ArrayList<String>, var vp: ViewPager2,
-                                        val sikdangChoiceCatAdapter: SikdangChoiceCatAdapter) : FragmentStateAdapter(fa) {
+class SikdangChoiceMenuViewPagerAdapter (
+    fa : FragmentActivity,
+    var viewPager: ViewPager2,
+    var current_page : Int,
+    var range : Int
+) : FragmentStateAdapter(fa)
+{
+    var fragmentList : List<SikdangChoiceMenuFragment>
 
-    var isFirst =true
-
-
-    override fun getItemCount(): Int {
-        //페이지수 리턴해야 함
-        return catArrayList.size
+    init {
+        fragmentList = CatList.getInstance().map {
+            catory -> SikdangChoiceMenuFragment(catory, range)
+        }
     }
 
-    public fun setPagerPos(pos:Int){
-        vp.setCurrentItem(pos, true)
+    override fun getItemCount(): Int {
+        return fragmentList.size
     }
 
     override fun createFragment(position: Int): Fragment {
-        //프래그먼트 초기화
-        //좌표는 지도와 연동해서 구해야 함
-        val catory = catArrayList[position]
-        var sikdangChoiceMenuFragment = SikdangChoiceMenuFragment(callback, vp, catory)
-        if (isFirst == true){//카테고리 클릭해서 페이지 들어갔을 때 클릭한 카테고리의 프래그먼트가 제일 처음 뜨게 해준다
-            var pos = sikdangChoiceCatAdapter.getCurruntNum()
-            vp.setCurrentItem(pos, true)
-            isFirst = false
-        }
-        return sikdangChoiceMenuFragment
+        Log.d("createFragment", "${fragmentList.size}, ${fragmentList[position].catory}")
+        return fragmentList[position]
     }
 
 
+    fun set_current_page(position: Int) {
+        current_page = position
+        viewPager.setCurrentItem(position, true)
+    }
 
+    fun updateFragment(position : Int, range : Int) {
+        if(this.range == range) return
 
+        this.range = range
+        current_page = position
+        fragmentList[current_page].updateMenu(range)
+    }
 }

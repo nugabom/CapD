@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 class Coupon(
+    val user_id : String,
     val coupon_id: String,
     val min_price: Int,
     val discount: String,
@@ -22,6 +23,8 @@ class Coupon(
     }
 
     companion object {
+        val DUPL = 1
+        val SINGLE = 2
         var CURRENT_TIME : String? = null
         fun IsValidCoupon(coupon: _coupon) : Boolean{
             Init_TIME()
@@ -38,6 +41,7 @@ class Coupon(
 }
 
 data class _coupon (
+    val user_id : String? = null,
     val coupon_id : String? = null,
     val discount : String? = null,
     val min_price : Int? = null,

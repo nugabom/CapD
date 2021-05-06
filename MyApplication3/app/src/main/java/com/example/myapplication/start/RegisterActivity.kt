@@ -97,10 +97,13 @@ class RegisterActivity : AppCompatActivity() {
                         .child("Users")
                         .child(userid)
 
+                    var phone = phone_number
+                    if (phone == null) phone = "Null"
+
                     val userInfo = hashMapOf<String, Any>(
                         "id" to userid,
                         "username" to username.toLowerCase(),
-                        "phone_number" to phone_number,
+                        "phone_number" to phone,
                         "email" to firebaseUser.email.toString()
                     )
 

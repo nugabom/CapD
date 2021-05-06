@@ -49,6 +49,10 @@ class MyPage : Fragment() {
         }
 
         my_coupon = view.findViewById(R.id.mp_couponTV)
+        my_coupon.setOnClickListener {
+            val _intent = Intent(requireContext(), MyCouponAcitivity::class.java)
+            startActivity(_intent)
+        }
 
         my_pay_history = view.findViewById(R.id.mp_paySetTV)
         my_pay_history.setOnClickListener {

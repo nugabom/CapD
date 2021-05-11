@@ -5,6 +5,7 @@ import java.io.Serializable
 
 @IgnoreExtraProperties
 data class StoreInfo(
+        val store_image : String? = "",
         val phone_number : String? = "",
         val store_id : String?="",
         val store_name : String? = "",

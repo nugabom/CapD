@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="darker_gray">#FFa9a9a9</color>
     <color name="violet">#B455A2</color>
+    <color name="maple_color">#BB9351</color>
+    <color name="iceberg_white_color">#EEF3F6</color>
 </resources>

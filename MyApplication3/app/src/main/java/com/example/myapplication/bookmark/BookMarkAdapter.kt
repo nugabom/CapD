@@ -11,6 +11,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.view.menu.ActionMenuItemView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.myapplication.R
 import com.example.myapplication.dataclass.StoreInfo
 import com.example.myapplication.storeActivity.StoreActivity
@@ -46,6 +47,7 @@ class BookMarkAdapter (
                 }
             })
 
+        Glide.with(context).load(store.store_image).into(holder.store_image)
         holder.store_name.text = store.store_name
         holder.store_type.text = store.store_type
         holder.phone_number.text = store.phone_number

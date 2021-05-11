@@ -11,11 +11,7 @@ import android.util.Log
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.VolleyError
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
+
 import com.example.myapplication.R
 import com.example.myapplication.mainPage.MainActivity
 import com.example.myapplication.mainPage.Sikdang_main

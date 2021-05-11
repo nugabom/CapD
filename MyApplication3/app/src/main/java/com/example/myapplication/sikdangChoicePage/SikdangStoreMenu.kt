@@ -18,13 +18,18 @@ class SikdangStoreMenu(
         val Lng : Double,
         val id : String,
         val name : String,
-        val dist : Int
-)
+        val dist : Int,
+        val store_image: String? = null
+) {
+
+}
+
 @IgnoreExtraProperties
 data class SikdangReqMenu(
     val Lat : Double? = null,
     val Lng : Double? = null,
     val id : String? = null,
     val name : String? = null,
-    val store_type : String? = null
+    val store_type : String? = null,
+    val store_image: String? = null
 )

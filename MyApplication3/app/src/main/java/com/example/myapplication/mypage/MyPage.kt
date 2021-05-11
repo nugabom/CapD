@@ -66,6 +66,10 @@ class MyPage : Fragment() {
         }
 
         notice = view.findViewById(R.id.mp_noticeTV)
+        notice.setOnClickListener {
+            val intent = Intent(requireContext(), NotificationActivity::class.java)
+            requireContext().startActivity(intent)
+        }
 
         app_setting = view.findViewById(R.id.mp_appSettingTV)
 

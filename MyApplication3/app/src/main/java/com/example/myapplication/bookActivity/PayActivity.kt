@@ -65,6 +65,7 @@ class PayActivity : AppCompatActivity() {
         Log.d("payActivity", "not uploaded ${isCouponSet}")
         setContentView(R.layout.activity_pay)
         firebaseUser = FirebaseAuth.getInstance().currentUser!!
+        user_id = firebaseUser.uid!!
         getCouponFromDB()
         stocks = intent.getSerializableExtra("stocks") as HashMap<String, ChoiceItem>
         price = intent.getIntExtra("price", 0)
@@ -310,6 +311,7 @@ class PayActivity : AppCompatActivity() {
         }
         var isCached = false
         var complete = false
+        var sem = Semaphore(1)
         while (!isCached) {
             var store_ref = FirebaseDatabase.getInstance().getReference("Tables")
                 .child(storeInfo.store_id!!)
@@ -340,12 +342,15 @@ class PayActivity : AppCompatActivity() {
                                 .child("BookInfo")
 
                             var bookInfo = bookInfoRef.getValue(BookInfo::class.java)
-                            if(bookInfo == null) Transaction.abort()
+                            if(bookInfo == null) return Transaction.abort()
+                            if (complete == true) return Transaction.abort()
                             if(!complete) {
                                 bookInfoRef.value = hashMapOf(
                                     "current" to (bookInfo!!.current!! - cnt),
                                     "max" to bookInfo!!.max
                                 )
+
+
                             }
                             complete = true
                         }
@@ -418,7 +423,9 @@ class PayActivity : AppCompatActivity() {
     }
 
     private fun use_up_coupons() {
+        Log.d("use_up_coupons", "use_up_coupons")
         for (use_up in used_coupons) {
+            Log.d("ss", "${use_up.coupon_id}")
             FirebaseDatabase.getInstance().getReference("UserCoupon")
                 .child(user_id)
                 .child(use_up.coupon_id)

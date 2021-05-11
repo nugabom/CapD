@@ -16,16 +16,23 @@
             android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/store_image"
+                android:scaleType="fitXY"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:src="@drawable/food_placeholder"/>
 
+            <androidx.cardview.widget.CardView
+                app:cardUseCompatPadding="true"
+                app:cardCornerRadius="10dp"
+                android:layout_width="match_parent"
+                android:layout_alignBottom="@+id/store_image"
+                android:layout_height="wrap_content">
             <LinearLayout
                 android:background="@color/white"
                 android:layout_width="400dp"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_alignBottom="@+id/store_image"
+
                 android:orientation="vertical">
 
                 <TextView
@@ -35,6 +42,7 @@
                     android:gravity="center_horizontal"
                     android:text="식당이름"
                     android:textSize="30sp"
+                    android:fontFamily="@font/type_moon_floor_b"
                     android:textStyle="bold"/>
 
                 <RelativeLayout
@@ -189,6 +197,7 @@
                 </LinearLayout>
             </LinearLayout>
 
+            </androidx.cardview.widget.CardView>
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_marginTop="20dp"
                 android:layout_width="match_parent"

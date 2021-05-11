@@ -89,7 +89,7 @@ class MapActivity : AppCompatActivity(),
 
         search_btn = findViewById(R.id.search_btn)
 
-        reference = FirebaseDatabase.getInstance().getReference("NaviLocations")
+        reference = FirebaseDatabase.getInstance().getReference("Locations")
 
         text_range.imeOptions = EditorInfo.IME_ACTION_DONE
         text_range.setOnEditorActionListener (object : TextView.OnEditorActionListener{

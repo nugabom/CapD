@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
 import com.example.myapplication.BookActivityBuilder
 import com.example.myapplication.R
 import com.example.myapplication.dataclass.StoreInfo
@@ -66,6 +67,7 @@ class StoreActivity : AppCompatActivity() {
 
     private fun init_Ui() {
         store_image = findViewById(R.id.store_image)
+        Glide.with(this).load(store_info.store_image).into(store_image)
 
         store_name = findViewById(R.id.store_name)
         store_name.text = store_info.store_name

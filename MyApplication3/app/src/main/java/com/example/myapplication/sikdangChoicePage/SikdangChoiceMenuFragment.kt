@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
@@ -34,6 +35,8 @@ class SikdangChoiceMenuFragment(var catory : String, var range : Int) :
     private var current_lat : Double = 0.0
     private lateinit var locationManager  : LocationManager
 
+    private lateinit var loading : ProgressBar
+
     private lateinit var sikdangChoiceMenuFragmentRecyclerView : RecyclerView
     private lateinit var sikdangChoiceMenuAdapter: SikdangChoiceMenuAdapter
 
@@ -43,6 +46,8 @@ class SikdangChoiceMenuFragment(var catory : String, var range : Int) :
         //return super.onCreateView(inflater, container, savedInstanceState)
         //view 는 리사이클러뷰 하나 들어있는 레이아웃
         var view= inflater.inflate(R.layout.sikdangchoice_menu_fragment, container, false)
+        loading = view.findViewById(R.id.loading)
+
         locationManager = requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
 
@@ -52,7 +57,8 @@ class SikdangChoiceMenuFragment(var catory : String, var range : Int) :
         sikdangChoiceMenuFragmentRecyclerView.adapter = sikdangChoiceMenuAdapter
         sikdangChoiceMenuFragmentRecyclerView.layoutManager = linearLayoutManager
 
-
+        if(!sikdangStoreMenuList.isEmpty())
+            loading.visibility = View.GONE
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -75,7 +81,8 @@ class SikdangChoiceMenuFragment(var catory : String, var range : Int) :
         this.range = range
 
         FirebaseDatabase.getInstance().getReference("Locations")
-                .child(catory)
+                .orderByChild("store_type")
+                .equalTo(catory)
                 .addListenerForSingleValueEvent(object : ValueEventListener{
                     override fun onDataChange(snapshot: DataSnapshot) {
                         sikdangStoreMenuList.clear()
@@ -92,7 +99,8 @@ class SikdangChoiceMenuFragment(var catory : String, var range : Int) :
                                     store.Lng,
                                     store.id!!,
                                     store.name!!,
-                                    dist
+                                    dist,
+                                    store.store_image
                             ))
                         }
                         sikdangStoreMenuList.add(SikdangStoreMenu(
@@ -102,6 +110,9 @@ class SikdangChoiceMenuFragment(var catory : String, var range : Int) :
                                 catory,
                                 1000
                         ))
+
+                        if (sikdangStoreMenuList.isEmpty()) { loading.visibility = View.VISIBLE}
+                        else loading.visibility = View.GONE
                         sikdangChoiceMenuAdapter.notifyDataSetChanged()
                     }
 
@@ -116,9 +127,10 @@ class SikdangChoiceMenuFragment(var catory : String, var range : Int) :
         return hypot(result[0], result[1]).toInt()
     }
 
-    override fun onLocationChanged(location: Location?) {
-        current_lat = location!!.latitude
-        current_lng = location!!.longitude
+
+    override fun onLocationChanged(location: Location) {
+        current_lat = location.latitude
+        current_lng = location.longitude
         Log.d("location", "${current_lat}, ${current_lng}")
         updateMenu(range)
     }
@@ -127,11 +139,11 @@ class SikdangChoiceMenuFragment(var catory : String, var range : Int) :
         TODO("Not yet implemented")
     }
 
-    override fun onProviderEnabled(provider: String?) {
+    override fun onProviderEnabled(provider: String) {
         TODO("Not yet implemented")
     }
 
-    override fun onProviderDisabled(provider: String?) {
+    override fun onProviderDisabled(provider: String) {
         TODO("Not yet implemented")
     }
 }

@@ -33,7 +33,7 @@ class PayCompleteSuccess : AppCompatActivity() {
         }
 
         stocks = intent.getSerializableExtra("stocks") as HashMap<String, ChoiceItem>
-        requst_string = intent.getStringExtra("request")
+        requst_string = intent.getStringExtra("request")!!
 
         tableDirectoryAdapter = TableDirectoryAdapter(this, stocks)
         val linearLayout = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)

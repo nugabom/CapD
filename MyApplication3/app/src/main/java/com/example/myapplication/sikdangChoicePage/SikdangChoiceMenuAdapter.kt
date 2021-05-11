@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.myapplication.R
 
 class SikdangChoiceMenuAdapter (
@@ -25,6 +26,7 @@ class SikdangChoiceMenuAdapter (
         val store = sikdangList[position]
 
         holder.sikdangName.text = store.name
+        Glide.with(context).load(store.store_image).into(holder.sikdangImage)
         holder.sikdangChoice_menuLine_dist.text = store.dist.toString()
     }
 

@@ -11,6 +11,7 @@ import com.example.myapplication.R
 import com.example.myapplication.Store
 import com.example.myapplication.bookhistory.BookHistoryFragment
 import com.example.myapplication.bookmark.BookMarkFragment
+import com.example.myapplication.dataclass.Location
 import com.example.myapplication.dataclass.StoreInfo
 import com.example.myapplication.mypage.MyPage
 import com.example.myapplication.sikdangChoicePage.SikdangChoice
@@ -18,6 +19,11 @@ import com.example.myapplication.storeActivity.EditReviewActivity
 import com.example.myapplication.storeActivity.StoreActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import kotlinx.android.synthetic.main.booktime_timeline.*
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     lateinit var bottomNavigator: BottomNavigationView
@@ -51,6 +57,7 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this, "My Profile clicked", Toast.LENGTH_SHORT).show()
                     selectedFragment = MyPage()
                     var store_info = StoreInfo(
+                            "https://firebasestorage.googleapis.com/v0/b/my-application-62b86.appspot.com/o/%ED%99%8D%EC%BD%A9%EB%B0%98%EC%A0%900410%2F%ED%99%8D%EC%BD%A9%EB%B0%98%EC%A0%900410.png?alt=media&token=f0f530ad-0e7e-435c-977b-feba82e5d65c",
                         "010-1348-6825",
                         "-MZLWlJ0ySb1PSa3C2yN",
                         "홍콩반점0410",

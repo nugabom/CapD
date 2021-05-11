@@ -24,7 +24,7 @@ class BookHistoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.bookhist)
 
-        user_id = intent.getStringExtra("user_id")
+        user_id = intent.getStringExtra("user_id")!!
         init_Ui()
         getFromDB()
     }

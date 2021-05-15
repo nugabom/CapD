@@ -4,10 +4,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.myapplication.R
 import android.content.Intent
+import android.os.Build
 import android.widget.Button
 import android.widget.Toast
 import com.example.myapplication.mainPage.MainActivity
 import com.example.myapplication.mainPage.Sikdang_main
+import com.example.sikdangbook_rest.MainActivity_res
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
@@ -24,12 +26,22 @@ class StartActivity : AppCompatActivity() {
         user_login = findViewById(R.id.user_login)
 
         user_login.setOnClickListener {
-            startActivity(Intent(this@StartActivity, CustomerLogInActivity::class.java))
-            finish()
+            //startActivity(Intent(this@StartActivity, CustomerLogInActivity::class.java))
+            //finish()
+            if(Build.VERSION.SDK_INT<26){
+                Toast.makeText(this, "안드로이드 버전이 낮습니다.", Toast.LENGTH_SHORT).show()
+            }
+            else{
+                startActivity(Intent(this@StartActivity, Sikdang_main::class.java))
+                //startActivity(Intent(this@StartActivity, CustomerLogInActivity::class.java))
+                finish()
+            }
         }
 
         manufacturer_login.setOnClickListener {
-            Toast.makeText(this, "미구현", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this, "미구현", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this@StartActivity, MainActivity_res::class.java))
+            finish()
         }
     }
 

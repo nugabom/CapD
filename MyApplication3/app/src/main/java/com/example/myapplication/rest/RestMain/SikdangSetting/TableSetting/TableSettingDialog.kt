@@ -119,11 +119,11 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
                     }
 
                 }
-                true
+                false
 
             }
             button.setOnClickListener {
-
+                Log.d("확인 버튼클릭", "@@@@@@@@@@@@@@@@@@@@@@@@")
             }
 
             lpAL.add(layoutParams)

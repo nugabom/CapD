@@ -20,6 +20,7 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
     lateinit var tableLayout:ConstraintLayout
     lateinit var tableData:TableData_res
     var TPC = 0
+    var moved=false
 
     var buttonAL=ArrayList<Button>()
 
@@ -133,13 +134,13 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
             var originWidth = pxTodp(tableLayout.width.toFloat())
             var originHeight = pxTodp(tableLayout.height.toFloat())
 
-            var width = originWidth - tableData.tableList[count].lengX
-            var height = originHeight - tableData.tableList[count].lengY
+            var width = originWidth - changedTableAL[count].lengX
+            var height = originHeight - changedTableAL[count].lengY
 
-            changedTableAL[i].locX= pxTodp(buttonAL[i].x)/width
-            changedTableAL[i].locy=pxTodp(buttonAL[i].y)/height
+            changedTableAL[count].locX= pxTodp(buttonAL[count].x)/width
+            changedTableAL[count].locy=pxTodp(buttonAL[count].y)/height
 
-            Log.d("확인 변경좌표", i.toString()+" "+changedTableAL[i].locX.toString() + "  " + changedTableAL[i].locy.toString())
+            Log.d("확인 변경좌표", i.toString()+" "+changedTableAL[count].locX.toString() + "  " + changedTableAL[count].locy.toString())
             Log.d("확인 원본크기", i.toString()+" "+originWidth.toString() + "  " + width.toString())
         }
     }
@@ -157,7 +158,7 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
         while(i< changedTableAL.size){
             var count=i
             var button= Button(getContext())
-            if (changedTableAL[i].isCircle == true)//원형테이블
+            if (changedTableAL[count].isCircle == true)//원형테이블
             {
                 var roundDrawable = context.getDrawable(R.drawable.button_round_gray)
                 button.background = roundDrawable
@@ -178,26 +179,37 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
             layoutParams.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
             layoutParams.topToTop = ConstraintLayout.LayoutParams.PARENT_ID
             layoutParams.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
-            layoutParams.horizontalBias = changedTableAL[i].locX//0.5가 중앙
-            layoutParams.verticalBias = changedTableAL[i].locy
+            layoutParams.horizontalBias = changedTableAL[count].locX//0.5가 중앙
+            layoutParams.verticalBias = changedTableAL[count].locy
 
 
             button.setLayoutParams(layoutParams)
             tableLayout.addView(button)
 
-            button.x=changedTableAL[i].locX
-            button.y=changedTableAL[i].locy
+            button.x=changedTableAL[count].locX
+            button.y=changedTableAL[count].locy
 
             button.setOnClickListener {
-                Log.d("확인 버튼클릭", "@@@@@@@@@@@@@@@@@@@@@@@@")
-
+                //Log.d("확인 버튼클릭", "@@@@@@@@@@@@@@@@@@@@@@@@")
+                var tNum = 0
+                if (moved == false){
+                    if (floorNum == 0) {
+                        tNum = count
+                    } else {
+                        tNum = count + tableData.accumTableNumList[floorNum - 1]//테이블리스트의 몇번째인가
+                    }
+                    showOneTableSettingDialog(changedTableAL[count].floor, tNum, changedTableAL[count].maxP)
+                }
             }
             button.setOnTouchListener{ v, event ->
                 when(event.action) {
+
                     MotionEvent.ACTION_DOWN -> {
                         moveX = v.x - event.rawX
                         moveY = v.y - event.rawY
                         var c = button.x
+                        //Log.d("확인 버튼클릭", "액션다운")
+                        moved=false
                     }
                     MotionEvent.ACTION_MOVE -> {
                         v.animate()
@@ -205,6 +217,11 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
                                 .y(event.rawY + moveY)
                                 .setDuration(0)
                                 .start()
+                        //Log.d("확인 버튼클릭", "액션무브")
+                        moved=true
+                    }
+                    MotionEvent.ACTION_UP -> {
+                        //Log.d("확인 버튼클릭", "액션업")
                     }
 
                 }
@@ -255,7 +272,8 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
 
     inner class Loc(locX:Float, locY:Float, width:Float, height:Float)
 
-    public fun showOneTableSettingDialog(){
-
+    public fun showOneTableSettingDialog(tableFloor:Int, tableNum:Int, pNum:Int){
+        var customDialog = OneTableSettingDialog(context,1, 1, 1, this)
+        customDialog!!.show()
     }
 }

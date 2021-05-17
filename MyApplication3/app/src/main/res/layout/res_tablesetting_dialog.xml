@@ -10,15 +10,17 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <androidx.recyclerview.widget.RecyclerView
+        <TextView
+            android:id="@+id/ts_floorTV"
             android:layout_width="match_parent"
-            android:layout_height="80dp" >
-
-        </androidx.recyclerview.widget.RecyclerView>
+            android:layout_height="80dp"
+            android:gravity="center"
+            android:text="몇층"
+            android:textSize="30sp" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="600dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/ts_tableSettingLayout"
@@ -33,11 +35,11 @@
                     android:id="@+id/imageView3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:adjustViewBounds="true"
 
                     app:srcCompat="@drawable/sikdangstr" />
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -75,13 +77,19 @@
             android:text="식당 단면도 변경" />
 
         <Button
-            android:id="@+id/button8"
+            android:id="@+id/ts_changeBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="변경" />
 
         <Button
-            android:id="@+id/button7"
+            android:id="@+id/ts_deleteFloorBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="층 삭제" />
+
+        <Button
+            android:id="@+id/ts_cancelBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="취소" />

@@ -1,5 +1,6 @@
 package com.example.sikdangbook_rest.Table
 
+import com.example.myapplication.bookActivity.Table
 import java.io.Serializable
 
 
@@ -34,12 +35,12 @@ class TableData_res(val bookTime:String):Serializable {
         tableList.add(Table_res(0.2F, 0.6F, 60, 30, 6, 1, false, false))
         tableList.add(Table_res(0.35F, 0.6F, 60, 30, 3, 1, true, false))
 
-        tableList.add(Table_res(0.3F, 0.3F, 50, 50, 2, 3, true, true))
+        tableList.add(Table_res(0.0F, 0.3F, 50, 50, 2, 3, true, true))
         tableList.add(Table_res(0.3F, 0.4F, 50, 50, 2, 3, false, true))
         tableList.add(Table_res(0.5F, 0.4F, 30, 30, 4, 3, false, true))
         tableList.add(Table_res(0.2F, 0.6F, 60, 30, 6, 3, false, false))
-        tableList.add(Table_res(0.35F, 0.6F, 60, 30, 3, 3, true, false))
-        tableList.add(Table_res(0.35F, 0.75F, 60, 30, 3, 3, false, false))
+        tableList.add(Table_res(0.0F, 0.6F, 60, 30, 3, 3, true, false))
+        tableList.add(Table_res(1.0F, 0.75F, 60, 30, 3, 3, false, false))
         setFloorTable()
 
     }

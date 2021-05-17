@@ -8,12 +8,14 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.MotionEvent
 import android.widget.Button
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.myapplication.R
 import com.example.sikdangbook_rest.Table.TableData_res
 import com.example.sikdangbook_rest.Table.Table_res
 
-
+//FloorListRVAdapter 에서 사용
+//층을 받아와 그 층의 테이블 정보 띄우고 테이블 정보 수정
 class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum: Int): Dialog(context) {
     lateinit var tableLayout:ConstraintLayout
     lateinit var tableData:TableData_res
@@ -22,10 +24,6 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
     var buttonAL=ArrayList<Button>()
 
     var changedTableAL = ArrayList<Table_res>()
-
-    var xAL = ArrayList<Float>()
-
-    var locAL = ArrayList<Loc>()
 
 
 
@@ -39,7 +37,8 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
 
 
         getTableData()
-
+        var ts_floorTV = findViewById<TextView>(R.id.ts_floorTV)
+        ts_floorTV.setText(tableData.floorList[floorNum].toString()+"층")
 
         //initalTableSet()
 
@@ -53,41 +52,32 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
         var ts_changeBtn:Button = findViewById(R.id.ts_changeBtn)
         ts_changeBtn.setOnClickListener {
 
+            setNowLoc()
+            //setTable()
 
+            //Log.d("확인 변경좌표", "\n\n\n")
 
-            //Log.d("확인 변경 가로길이", width.toString())
-
-
-            for (i in 0..changedTableAL.size-1){
-                var count = i
-                var originWidth = pxTodp(tableLayout.width.toFloat())
-                var originHeight = pxTodp(tableLayout.height.toFloat())
-
-                var width = originWidth - tableData.tableList[count].lengX
-                var height = originHeight - tableData.tableList[count].lengY
-                //Log.d("확인 변경for문시작",buttonAL.size.toString())
-                //var c = buttonAL[i].x
-                //Log.d("확인 변경for문2",c.toString())
-                //var putx=pxTodp(c)/(pxTodp(tableLayout.width.toFloat()))
-                changedTableAL[i].locX= pxTodp(buttonAL[i].x)/width
-                changedTableAL[i].locy=pxTodp(buttonAL[i].y)/height
-
-                Log.d("확인 변경좌표", i.toString()+" "+changedTableAL[i].locX.toString() + "  " + changedTableAL[i].locy.toString())
-            }
-            Log.d("확인 변경좌표", "\n\n\n")
-
+            /*
             for (i in 0..changedTableAL.size-1){
                 tableLayout.removeView(buttonAL[i])
             }
-            buttonAL=ArrayList<Button>()
+            buttonAL=ArrayList<Button>()*/
 
-            setTable()
+            tableDataSet()
 
+        }
+
+
+        var  ts_addRectTableBtn:Button = findViewById(R.id.ts_addRectTableBtn)
+        ts_addRectTableBtn.setOnClickListener {
+            addTable(false)
         }
 
 
         var ts_cancelBtn:Button = findViewById(R.id.ts_cancelBtn)
         ts_cancelBtn.setOnClickListener { this.dismiss() }
+
+
 
 
     }
@@ -107,12 +97,16 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
         return Math.round(dp).toFloat()
 
 
-
     }
 
     public fun setTableAL(){
+        //변경 테이블리스트 비우고 새로 집어넣음
+        //Log.d("확인 setTable", "0")
+        changedTableAL = ArrayList<Table_res>()
         var i = 0
+        //Log.d("확인 setTable", "1")
         while(i<tableData.tableNumList[floorNum]) {
+            //Log.d("확인 setTable", "2 "+i.toString())
             //Log.d("확인 TableFloorFragment i", i.toString())
             var count = i
             if (floorNum == 0) {
@@ -129,12 +123,35 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
             i++
 
         }
+        //Log.d("확인 setTable", "3")
+    }
+
+    //현재 테이블들의 위치를 저장
+    fun setNowLoc(){
+        for (i in 0..changedTableAL.size-1){
+            var count = i
+            var originWidth = pxTodp(tableLayout.width.toFloat())
+            var originHeight = pxTodp(tableLayout.height.toFloat())
+
+            var width = originWidth - tableData.tableList[count].lengX
+            var height = originHeight - tableData.tableList[count].lengY
+
+            changedTableAL[i].locX= pxTodp(buttonAL[i].x)/width
+            changedTableAL[i].locy=pxTodp(buttonAL[i].y)/height
+
+            Log.d("확인 변경좌표", i.toString()+" "+changedTableAL[i].locX.toString() + "  " + changedTableAL[i].locy.toString())
+            Log.d("확인 원본크기", i.toString()+" "+originWidth.toString() + "  " + width.toString())
+        }
     }
 
     public fun setTable(){
-        //var floorNumTV = findViewById<TextView>(R.id.floorNumTV)
-        //floorNumTV.setText(tableData.floorList[floorNum])
-        //floorNumTV.setText(tableData.floorList[floorNum].toString()+"층")
+        //현재 테이블 모두 삭제하고 changedTableAL 에 따라 테이블 재배치
+
+        Log.d("확인 setTable", "작동")
+        for ( i in 0..buttonAL.size-1){
+            tableLayout.removeView(buttonAL[i])
+        }
+        buttonAL=ArrayList<Button>()
 
         var i = 0
         while(i< changedTableAL.size){
@@ -153,7 +170,7 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
 
             //var a = tableLayout.layoutParams
 
-            var layoutParams = ConstraintLayout.LayoutParams(dpToPx(tableData.tableList[i].lengX), dpToPx(tableData.tableList[i].lengY))
+            var layoutParams = ConstraintLayout.LayoutParams(dpToPx(changedTableAL[count].lengX), dpToPx(changedTableAL[count].lengY))
             //with와 height에 픽셀값 들어감 => dp를 픽셀값으로 변환한 값 들어가야 한다.
 
 
@@ -171,36 +188,16 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
             button.x=changedTableAL[i].locX
             button.y=changedTableAL[i].locy
 
+            button.setOnClickListener {
+                Log.d("확인 버튼클릭", "@@@@@@@@@@@@@@@@@@@@@@@@")
 
-            //Log.d("확인 변경크기", WIDTH.toString()+" "+width.toString()+" "+height.toString())
-
-
-
-
-
+            }
             button.setOnTouchListener{ v, event ->
                 when(event.action) {
                     MotionEvent.ACTION_DOWN -> {
                         moveX = v.x - event.rawX
                         moveY = v.y - event.rawY
                         var c = button.x
-                        //var putx=pxTodp(c)/(pxTodp(tableLayout.width.toFloat()))
-                        //Log.d("확인 버튼터치", i.toString()+" "+changedTableAL.size.toString())
-
-                        //changedTableAL[i].locX= putx
-                        //changedTableAL[i].locy=pxTodp(buttonAL[i].y)/(pxTodp(tableLayout.width.toFloat()))
-                        var WIDTH = pxTodp(tableLayout.width.toFloat())
-                        var HEIGHT = pxTodp(tableLayout.height.toFloat())
-
-                        var width = WIDTH - tableData.tableList[count].lengX
-                        var height = HEIGHT - tableData.tableList[count].lengY
-
-                        var a =pxTodp(button.x)/width
-                        var b =pxTodp(button.y)/height
-
-                        Log.d("확인 변경좌표", WIDTH.toString()+" "+width.toString()+" "+a.toString()+" "+b.toString())
-
-
                     }
                     MotionEvent.ACTION_MOVE -> {
                         v.animate()
@@ -214,12 +211,9 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
                 false
 
             }
-            button.setOnClickListener {
-                Log.d("확인 버튼클릭", "@@@@@@@@@@@@@@@@@@@@@@@@")
-            }
+
 
             buttonAL.add(button)
-
 
 
             i++
@@ -228,15 +222,40 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
 
 
 
-
-
-
     }
+
+    public fun addTable(isCircle:Boolean){
+
+        setNowLoc()
+        var a =Table_res(0.0f, 0.0f, 30, 30, 1, tableData.floorList[floorNum], true, isCircle)
+        Log.d("확인 tableAL 크기 확인1: ", changedTableAL.size.toString())
+        //changedTableAL.add(Table_res(0.0f, 0.0f, 30, 30, 1, tableData.floorList[floorNum], true, isCircle))
+
+        changedTableAL.add(a)
+        Log.d("확인 tableAL 크기 확인2: ", changedTableAL.size.toString())
+        setTable()
+    }
+
 
 
     private fun getTableData(){
         tableData = TableData_res("09:30")
     }
 
+    private fun tableDataSet(){
+        // changedTableAL 을 데이터베이스로 넘긴다
+        // 데이터베이스에 이 층에 속해있는 데이터를 이걸로 대체
+        //floorNum 사용하거나 이전 다이얼로그에서 floor 받아와서 층 정보 넘긴다.
+
+        //이후 데이터 다시 불러옴
+        getTableData()
+        setTableAL()
+        setTable()
+    }
+
     inner class Loc(locX:Float, locY:Float, width:Float, height:Float)
+
+    public fun showOneTableSettingDialog(){
+
+    }
 }

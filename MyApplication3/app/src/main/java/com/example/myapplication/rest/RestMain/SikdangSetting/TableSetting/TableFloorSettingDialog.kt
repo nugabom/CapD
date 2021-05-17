@@ -11,6 +11,8 @@ import com.example.myapplication.rest.RestMain.SikdangSetting.AddMenuIngRVAdapte
 import com.example.sikdangbook_rest.Table.TableData_res
 import com.example.sikdangbook_rest.Table.Table_res
 
+//SikdangSettingDialog 에서 사용
+//테이블 층수 선택 / 테이블 층 추가 가능
 class TableFloorSettingDialog(context: Context, val sikdangNum: String): Dialog(context) {
 
     lateinit var floorListRV:RecyclerView

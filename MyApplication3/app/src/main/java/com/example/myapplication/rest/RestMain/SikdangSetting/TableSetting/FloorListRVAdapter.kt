@@ -10,6 +10,10 @@ import com.example.myapplication.R
 import com.example.myapplication.rest.RestMain.SikdangSetting.AddIngRVAdapter
 import com.example.myapplication.rest.RestMain.SikdangSetting.IngAddDialog
 
+//TableFloorSettingDialog 에서 사용
+//각 층 써져있는 버튼 바인드
+//버튼 누르면 그 창에 관한 다이얼로그 : TableSettingDialog 띄움
+
 class FloorListRVAdapter(var context: Context, var tableFloorSettingDialog: TableFloorSettingDialog): RecyclerView.Adapter<FloorListRVAdapter.Holder>() {
 
 

@@ -12,7 +12,7 @@ class TableData_res(val bookTime:String):Serializable {
 
 
     var tableList = ArrayList<Table_res>()//각 테이블 정보 담긴 리스트
-    var floorList = ArrayList<Int>()//식당 각 몇층인지
+    var floorList = ArrayList<Int>()//식당 각 몇층인지 1층과 3층이 있으면 1, 3 의 값을 갖는다.
     var tableNumList = ArrayList<Int>()//각 층에 테이블 몇개인지
     var accumTableNumList = ArrayList<Int>()//테이블 개수 축적
 

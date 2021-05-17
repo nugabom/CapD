@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.widget.Button
 import com.example.myapplication.R
+import com.example.myapplication.rest.RestMain.SikdangSetting.TableSetting.TableFloorSettingDialog
 import com.example.myapplication.rest.RestMain.SikdangSetting.TableSetting.TableSettingDialog
 
 //SikdangMain_res 에서 사용
@@ -33,7 +34,7 @@ class SikdangSettingDialog(context: Context, val sikdangNum:String): Dialog(cont
 
         var ss_editTableBtn:Button = findViewById(R.id.ss_editTableBtn)
         ss_editTableBtn.setOnClickListener {
-            showTableSettingDialog()
+            showTableFloorSettingDialog()
         }
 
 
@@ -57,8 +58,8 @@ class SikdangSettingDialog(context: Context, val sikdangNum:String): Dialog(cont
         customDialog!!.show()
     }
 
-    private fun showTableSettingDialog(){
-        var customDialog = TableSettingDialog(context,sikdangNum, 1)
+    private fun showTableFloorSettingDialog(){
+        var customDialog = TableFloorSettingDialog(context,sikdangNum)
         customDialog!!.show()
     }
 

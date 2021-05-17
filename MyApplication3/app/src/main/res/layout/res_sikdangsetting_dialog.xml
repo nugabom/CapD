@@ -36,7 +36,7 @@
         android:id="@+id/booktimeSettingBtn"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:text="예약 시간 절정"
+        android:text="예약 시간 설정"
         android:textSize="24sp" />
 
     <Button

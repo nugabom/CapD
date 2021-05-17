@@ -54,13 +54,19 @@
             android:id="@+id/ts_addRectTableBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="사갈형 테이블" />
+            android:text="사각형 테이블" />
 
         <Button
             android:id="@+id/button5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="원형 테이블" />
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="층수 변경" />
 
         <Button
             android:id="@+id/button6"

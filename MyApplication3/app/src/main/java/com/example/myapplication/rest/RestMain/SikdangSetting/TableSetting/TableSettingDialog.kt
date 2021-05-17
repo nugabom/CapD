@@ -50,6 +50,8 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
 
 
 
+
+
     }
 
 

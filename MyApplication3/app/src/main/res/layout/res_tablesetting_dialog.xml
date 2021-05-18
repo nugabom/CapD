@@ -59,7 +59,7 @@
             android:text="사각형 테이블" />
 
         <Button
-            android:id="@+id/button5"
+            android:id="@+id/ts_addCircleTableBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="원형 테이블" />

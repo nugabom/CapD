@@ -68,11 +68,14 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
 
         }
 
-
+        //사각형 테이블 추가버튼
         var  ts_addRectTableBtn:Button = findViewById(R.id.ts_addRectTableBtn)
         ts_addRectTableBtn.setOnClickListener {
             addTable(false)
         }
+        //원형테이블 추가버튼
+        var ts_addCircleTableBtn:Button = findViewById(R.id.ts_addCircleTableBtn)
+        ts_addCircleTableBtn.setOnClickListener { addTable(true) }
 
 
         var ts_cancelBtn:Button = findViewById(R.id.ts_cancelBtn)
@@ -198,7 +201,9 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
                     } else {
                         tNum = count + tableData.accumTableNumList[floorNum - 1]//테이블리스트의 몇번째인가
                     }
-                    showOneTableSettingDialog(changedTableAL[count].floor, tNum, changedTableAL[count].maxP)
+                    //tableData.floorList[floorNum]
+                    //Log.d("확인 버튼정보", changedTableAL[count].floor.toString()+changedTableAL[count].isCircle.toString()+changedTableAL[count].maxP.toString() )
+                    showOneTableSettingDialog(changedTableAL[count].floor, tNum, changedTableAL[count].maxP, count)
                 }
             }
             button.setOnTouchListener{ v, event ->
@@ -265,15 +270,36 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
         //floorNum 사용하거나 이전 다이얼로그에서 floor 받아와서 층 정보 넘긴다.
 
         //이후 데이터 다시 불러옴
-        getTableData()
-        setTableAL()
+        //getTableData()
+        //setTableAL()
+        //setTable()
+
+        //다시 불러오지 않고 그냥 다이얼로그 닫게 할 수도 있음
+        this.dismiss()
+    }
+
+
+
+    //층수, 테이블번호, 인원수, changedTableAL 배열에서 몇 번째인지
+    public fun showOneTableSettingDialog(tableFloor:Int, tableNum:Int, pNum:Int, alNum:Int){
+        var customDialog = OneTableSettingDialog(context,tableFloor, tableNum, pNum, alNum, this)
+        customDialog!!.show()
+    }
+
+    public fun deleteTable(alNum:Int){
+        setNowLoc()
+        changedTableAL.remove(changedTableAL[alNum])
         setTable()
     }
 
-    inner class Loc(locX:Float, locY:Float, width:Float, height:Float)
-
-    public fun showOneTableSettingDialog(tableFloor:Int, tableNum:Int, pNum:Int){
-        var customDialog = OneTableSettingDialog(context,1, 1, 1, this)
-        customDialog!!.show()
+    public fun changePnum(alNum:Int, pNum:Int){
+        setNowLoc()
+        changedTableAL[alNum].maxP=pNum
+        setTable()
     }
+
+
+
+
+
 }

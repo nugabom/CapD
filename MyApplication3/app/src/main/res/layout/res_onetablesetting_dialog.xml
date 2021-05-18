@@ -29,12 +29,13 @@
             android:textSize="30sp" />
 
         <EditText
-            android:id="@+id/editTextNumberDecimal"
+            android:id="@+id/ots_ET"
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:ems="10"
-            android:inputType="numberDecimal" />
+            android:selectAllOnFocus="true"
+            android:inputType="number" />
 
         <TextView
             android:id="@+id/textView34"

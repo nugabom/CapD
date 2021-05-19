@@ -48,15 +48,22 @@ class AddMenuDialog(context: Context, val sikdangNum: String): Dialog(context) {
         }
 
         var am_menuName:EditText=findViewById(R.id.am_menuName)
+        am_menuName.setText("")
         var am_price:EditText = findViewById(R.id.am_price)
+        am_price.setText("0")
         var am_menuEXP:EditText=findViewById(R.id.am_menuEXP)
 
 
 
         var am_addBtn = findViewById<Button>(R.id.am_addBtn)
         am_addBtn.setOnClickListener {
-            addMenu(am_menuName.text.toString(), imgUrl,am_price.text.toString().toInt(), am_menuEXP.text.toString(), addIngAL)
-            this.dismiss()
+            if (am_price.text.toString()==""){
+                this.dismiss()
+            }
+            else{
+                addMenu(am_menuName.text.toString(), imgUrl,am_price.text.toString().toInt(), am_menuEXP.text.toString(), addIngAL)
+                this.dismiss()
+            }
         }
 
         var am_calcelBtn:Button = findViewById(R.id.am_calcelBtn)

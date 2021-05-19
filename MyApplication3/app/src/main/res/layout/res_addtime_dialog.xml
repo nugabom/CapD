@@ -8,8 +8,9 @@
         android:id="@+id/at_expTV"
         android:layout_width="match_parent"
         android:layout_height="100dp"
+        android:gravity="center"
         android:text="TextView"
-        android:textSize="18sp" />
+        android:textSize="24sp" />
 
     <LinearLayout
         android:layout_width="match_parent"

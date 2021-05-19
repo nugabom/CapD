@@ -54,16 +54,18 @@ class AddTimeDialog(context: Context, var bookTimeSettingDialog: BookTimeSetting
         at_expTV.setText("예약 시간 텀 설정\n소비자가 예약할 때의 기본 예약 텀 설정합니다."+
                 "\n예)텀 01:20 예약 시작 13:20\n14:40분까지 예약")
 
+        at_expTV.setText("예약 가능 시간 추가")
+
 
         //시간 설정 관련 부분
         hET1.setText("0")
         hET1.addTextChangedListener {
-            Log.d("확인 hET1.addTextChangedListener", "1")
+            //Log.d("확인 hET1.addTextChangedListener", "1")
             //Log.d("확인 TableStateNotBookedDialog_res", "텍스트 변경")
             if (hET1.text.toString() == "0" || hET1.text.toString() == "1"){
-                Log.d("확인 hET1.addTextChangedListener", "2")
+                //Log.d("확인 hET1.addTextChangedListener", "2")
                 setTime()
-                Log.d("확인 hET1.addTextChangedListener", "3")
+                //Log.d("확인 hET1.addTextChangedListener", "3")
                 hET2.requestFocus()
             }else if(hET1.text.toString() == "2"){
                 if(hET2.text.toString() == "" || hET2.text.toString() == "0" || hET2.text.toString() == "1" ||
@@ -311,7 +313,10 @@ class AddTimeDialog(context: Context, var bookTimeSettingDialog: BookTimeSetting
         var at_addTimeBtn:Button = findViewById(R.id.at_addTimeBtn)
         at_addTimeBtn.setOnClickListener {
             var newTime:String = hET1.text.toString()+hET2.text.toString()+mET1.text.toString()+mET2.text.toString()
-            bookTimeSettingDialog.addTime(newTime)
+            var addChecked = bookTimeSettingDialog.addTime(newTime)
+            if (addChecked==true){
+                this.dismiss()
+            }
         }
     }
 

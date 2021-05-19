@@ -6,7 +6,7 @@ class TempTimeClass(sikdangId_:Int) {
     private var sikdangName: String = ""
     private var sikdangImage:Int=0
     private val sikdangId = sikdangId_
-    lateinit private var timeArrayList:ArrayList<String> //예약 시간을 arrayList로
+    public var timeArrayList = ArrayList<String>() //예약 시간을 arrayList로
     lateinit private var isFull:ArrayList<Boolean> // 각 예약시간대에 예약이 차있는가
     init{
         setData(sikdangId)
@@ -35,9 +35,7 @@ class TempTimeClass(sikdangId_:Int) {
     public fun getSikdangName():String{
         return sikdangName
     }
-    public fun getTimeArrayList():ArrayList<String>{
-        return timeArrayList
-    }
+
     public fun getIsFull():ArrayList<Boolean>{
         return isFull
     }

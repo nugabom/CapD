@@ -17,7 +17,7 @@ import java.util.*
 class TimeLineAdapter(var context: Context, val timeSelectDialog: TimeSelectDialog): RecyclerView.Adapter<TimeLineAdapter.Holder>() {
     var tempTimeClass = TempTimeClass(1111)
 
-    var timeNumMax = tempTimeClass.getTimeArrayList().size
+    var timeNumMax = tempTimeClass.timeArrayList.size
     var timePoint = timeSet()
     var vartimePoint=timePoint
 
@@ -35,14 +35,14 @@ class TimeLineAdapter(var context: Context, val timeSelectDialog: TimeSelectDial
         timeString=timeString+curTime[0]+curTime[1]+curTime[3]+curTime[4]
 
         var i = 0
-        while (i<tempTimeClass.getTimeArrayList().size){
-            if(timeString <= tempTimeClass.getTimeArrayList()[i]){
+        while (i<tempTimeClass.timeArrayList.size){
+            if(timeString <= tempTimeClass.timeArrayList[i]){
                 break
             }
             //Log.d("확인 time 현재 다음 ", timeString+" "+bookTimeData.getTimeArrayList()[i])
             i++
         }
-        if(i==tempTimeClass.getTimeArrayList().size){
+        if(i==tempTimeClass.timeArrayList.size){
             //이경우는 하루 영업이 끝남
             val myToast = Toast.makeText(context, "영업끝", Toast.LENGTH_SHORT).show()
             Log.d("확인 time 현재 다음 ", timeString+"영업끝")
@@ -71,7 +71,7 @@ class TimeLineAdapter(var context: Context, val timeSelectDialog: TimeSelectDial
             //this.setIsRecyclable(false)
 
             var button1: Button = itemView.findViewById(R.id.timebtn1)
-            val timeText = tempTimeClass.getTimeArrayList()[vartimePoint]
+            val timeText = tempTimeClass.timeArrayList[vartimePoint]
             button1.setText(timeText)
 
 
@@ -87,7 +87,7 @@ class TimeLineAdapter(var context: Context, val timeSelectDialog: TimeSelectDial
             var button2: Button = itemView.findViewById(R.id.timebtn2)
             vartimePoint+=1
             if (vartimePoint<timeNumMax){
-                button2.setText(tempTimeClass.getTimeArrayList()[vartimePoint])
+                button2.setText(tempTimeClass.timeArrayList[vartimePoint])
 
             }
             else{
@@ -106,7 +106,7 @@ class TimeLineAdapter(var context: Context, val timeSelectDialog: TimeSelectDial
             var button3: Button = itemView.findViewById(R.id.timebtn3)
             vartimePoint+=1
             if (vartimePoint<timeNumMax){
-                button3.setText(tempTimeClass.getTimeArrayList()[vartimePoint])
+                button3.setText(tempTimeClass.timeArrayList[vartimePoint])
             }
             else{
                 button3.setText("")
@@ -122,7 +122,7 @@ class TimeLineAdapter(var context: Context, val timeSelectDialog: TimeSelectDial
             var button4: Button = itemView.findViewById(R.id.timebtn4)
             vartimePoint+=1
             if (vartimePoint<timeNumMax){
-                button4.setText(tempTimeClass.getTimeArrayList()[vartimePoint])
+                button4.setText(tempTimeClass.timeArrayList[vartimePoint])
                 vartimePoint+=1
             }
             else{

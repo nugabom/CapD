@@ -8,6 +8,7 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.MotionEvent
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.myapplication.R
@@ -20,8 +21,10 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
     lateinit var tableLayout:ConstraintLayout
     lateinit var tableData:TableData_res
     lateinit var ts_floorTV:TextView
+    lateinit var ts_floorImg:ImageView
     var TPC = 0
     var moved=false
+    var nowFloor=0
 
     var buttonAL=ArrayList<Button>()
 
@@ -41,13 +44,16 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
         getTableData()
         ts_floorTV = findViewById<TextView>(R.id.ts_floorTV)
         ts_floorTV.setText(tableData.floorList[floorNum].toString()+"층")
+        ts_floorImg = findViewById(R.id.ts_floorImg)
+
+        setFloorImg()
 
         //initalTableSet()
 
         setTableAL()
         setTable()
 
-
+        var nowFloor=tableData.floorList[floorNum]
 
         //변경버튼 클릭시
         //테이블 정보 새로 저장
@@ -82,7 +88,12 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
         var ts_changeFloorBtn:Button = findViewById(R.id.ts_changeFloorBtn)
         ts_changeFloorBtn.setOnClickListener {
             setNowLoc()
-            showChangeFloorDialog(tableData.floorList[floorNum])
+            showChangeFloorDialog(nowFloor)
+        }
+
+        var ts_changeImage =findViewById<Button>(R.id.ts_changeImage)
+        ts_changeImage.setOnClickListener {
+            showChangeFloorImageDialog(nowFloor)
         }
 
 
@@ -108,6 +119,17 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
         //Log.d("확인 pxTodp", px.toString()+" "+Math.round(dp).toFloat().toString())
         return Math.round(dp).toFloat()
 
+
+    }
+
+    //데이터베이스에 접속해서 이미지 가져온다.
+    private fun setFloorImg(){
+        //ts_floorImg 에 이미지 넣는다.
+        //아래는 임시데이터
+        ts_floorImg.setImageResource(R.drawable.sikdangstr)
+
+    }
+    public fun setNowShape(){
 
     }
 
@@ -150,9 +172,11 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
 
             changedTableAL[count].locX= pxTodp(buttonAL[count].x)/width
             changedTableAL[count].locy=pxTodp(buttonAL[count].y)/height
+            changedTableAL[count].lengX= pxTodp(buttonAL[count].width.toFloat()).toInt()
+            changedTableAL[count].lengY=pxTodp(buttonAL[count].height.toFloat()).toInt()
 
             Log.d("확인 변경좌표", i.toString()+" "+changedTableAL[count].locX.toString() + "  " + changedTableAL[count].locy.toString())
-            Log.d("확인 원본크기", i.toString()+" "+originWidth.toString() + "  " + width.toString())
+            Log.d("확인 변경크기", i.toString()+" "+changedTableAL[count].lengX.toString())
         }
     }
 
@@ -288,14 +312,19 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
 
 
 
-    //층수, 테이블번호, 인원수, changedTableAL 배열에서 몇 번째인지
+    //층수, 테이블번호, 인원수, changedTableAL 배열에서 몇 번째인지, 버튼 크기
     public fun showOneTableSettingDialog(tableFloor:Int, tableNum:Int, pNum:Int, alNum:Int){
-        var customDialog = OneTableSettingDialog(context,tableFloor, tableNum, pNum, alNum, this)
+        var customDialog = OneTableSettingDialog(context,tableFloor, tableNum, pNum, alNum, changedTableAL[alNum].lengX, changedTableAL[alNum].lengY, this)
         customDialog!!.show()
     }
 
     public fun showChangeFloorDialog(nowFloor:Int){
         var customDialog = ChangeFloorDialog(context, sikdangNum, nowFloor, this)
+        customDialog!!.show()
+    }
+
+    public fun showChangeFloorImageDialog(nowFloor:Int){
+        var customDialog = ChangeFloorImageDialog(context, sikdangNum, nowFloor, this)
         customDialog!!.show()
     }
 
@@ -305,14 +334,21 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
         setTable()
     }
 
-    public fun changePnum(alNum:Int, pNum:Int){
+    public fun changeOneTableSetting(alNum:Int, pNum:Int, newLengX:Int, newLengY:Int){
         setNowLoc()
         changedTableAL[alNum].maxP=pNum
+        changedTableAL[alNum].lengX = newLengX
+        changedTableAL[alNum].lengY = newLengY
         setTable()
     }
 
     public fun setNewFloor(newFloor:Int){
         ts_floorTV.setText(newFloor.toString()+"층")
+        nowFloor=newFloor
+    }
+
+    public fun setNewFloorImg(newImg:Int){
+        ts_floorImg.setImageResource(newImg)
     }
 
 

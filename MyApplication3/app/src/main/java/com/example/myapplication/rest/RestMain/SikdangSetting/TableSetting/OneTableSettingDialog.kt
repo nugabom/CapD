@@ -11,7 +11,7 @@ import androidx.core.widget.addTextChangedListener
 import com.example.myapplication.R
 import kotlinx.android.synthetic.main.res_onetablesetting_dialog.*
 
-class OneTableSettingDialog(context: Context, val tableFloor:Int, val tableNum:Int, val pNum:Int, val alNum:Int, var tableSettingDialog: TableSettingDialog): Dialog(context) {
+class OneTableSettingDialog(context: Context, val tableFloor:Int, val tableNum:Int, val pNum:Int, val alNum:Int,val lengX:Int, val lengY:Int, var tableSettingDialog: TableSettingDialog): Dialog(context) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.res_onetablesetting_dialog)
@@ -28,6 +28,13 @@ class OneTableSettingDialog(context: Context, val tableFloor:Int, val tableNum:I
             }
         }
 
+        var ots_lengXET:EditText = findViewById(R.id.ots_lengXET)
+        ots_lengXET.setText(lengX.toString())
+
+        var ots_lengYET:EditText = findViewById(R.id.ots_lengYET)
+        ots_lengYET.setText(lengY.toString())
+
+
         var otsCancelBtn: Button = findViewById(R.id.otsCancelBtn)
         otsCancelBtn.setOnClickListener { this.dismiss() }
 
@@ -40,7 +47,7 @@ class OneTableSettingDialog(context: Context, val tableFloor:Int, val tableNum:I
 
         var ots_changeBtn:Button = findViewById(R.id.ots_changeBtn)
         ots_changeBtn.setOnClickListener {
-            tableSettingDialog.changePnum(alNum, ots_ET.text.toString().toInt())
+            tableSettingDialog.changeOneTableSetting(alNum, ots_ET.text.toString().toInt(), ots_lengXET.text.toString().toInt(), ots_lengYET.text.toString().toInt())
             this.dismiss()
         }
 

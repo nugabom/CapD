@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="420dp"
-    android:layout_height="240dp"
+    android:layout_height="400dp"
     android:orientation="vertical">
 
     <TextView
@@ -25,8 +25,9 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
+            android:textSize="30sp"
             android:text="인원"
-            android:textSize="30sp" />
+             />
 
         <EditText
             android:id="@+id/ots_ET"
@@ -34,8 +35,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:ems="10"
-            android:selectAllOnFocus="true"
-            android:inputType="number" />
+            android:inputType="number"
+            android:selectAllOnFocus="true" />
 
         <TextView
             android:id="@+id/textView34"
@@ -44,6 +45,77 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="명"
+            android:textSize="30sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView32"
+            android:layout_width="170dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="30sp"
+            android:text="가로" />
+
+        <EditText
+            android:id="@+id/ots_lengXET"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:selectAllOnFocus="true"
+            android:gravity="center"
+            android:textSize="30sp"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="number" />
+
+        <TextView
+            android:id="@+id/textView39"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="30sp"
+            android:text="dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView38"
+            android:layout_width="170dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="세로"
+            android:textSize="30sp" />
+
+        <EditText
+            android:id="@+id/ots_lengYET"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ems="10"
+            android:gravity="center"
+            android:inputType="number"
+            android:selectAllOnFocus="true"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/textView40"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="dp"
             android:textSize="30sp" />
     </LinearLayout>
 
@@ -58,23 +130,23 @@
             android:layout_width="140dp"
             android:layout_height="60dp"
             android:layout_weight="1"
-            android:textSize="24sp"
-            android:text="변경" />
+            android:text="변경"
+            android:textSize="24sp" />
 
         <Button
             android:id="@+id/ots_deleteBtn"
             android:layout_width="140dp"
             android:layout_height="60dp"
             android:layout_weight="1"
-            android:textSize="24sp"
-            android:text="삭제" />
+            android:text="삭제"
+            android:textSize="24sp" />
 
         <Button
             android:id="@+id/otsCancelBtn"
             android:layout_width="140dp"
             android:layout_height="60dp"
             android:layout_weight="1"
-            android:textSize="24sp"
-            android:text="취소" />
+            android:text="취소"
+            android:textSize="24sp" />
     </LinearLayout>
 </LinearLayout>

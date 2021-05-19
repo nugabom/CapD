@@ -19,6 +19,7 @@ import com.example.sikdangbook_rest.Table.Table_res
 class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum: Int): Dialog(context) {
     lateinit var tableLayout:ConstraintLayout
     lateinit var tableData:TableData_res
+    lateinit var ts_floorTV:TextView
     var TPC = 0
     var moved=false
 
@@ -38,7 +39,7 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
 
 
         getTableData()
-        var ts_floorTV = findViewById<TextView>(R.id.ts_floorTV)
+        ts_floorTV = findViewById<TextView>(R.id.ts_floorTV)
         ts_floorTV.setText(tableData.floorList[floorNum].toString()+"층")
 
         //initalTableSet()
@@ -76,6 +77,13 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
         //원형테이블 추가버튼
         var ts_addCircleTableBtn:Button = findViewById(R.id.ts_addCircleTableBtn)
         ts_addCircleTableBtn.setOnClickListener { addTable(true) }
+
+        //층 변경 버튼
+        var ts_changeFloorBtn:Button = findViewById(R.id.ts_changeFloorBtn)
+        ts_changeFloorBtn.setOnClickListener {
+            setNowLoc()
+            showChangeFloorDialog(tableData.floorList[floorNum])
+        }
 
 
         var ts_cancelBtn:Button = findViewById(R.id.ts_cancelBtn)
@@ -286,6 +294,11 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
         customDialog!!.show()
     }
 
+    public fun showChangeFloorDialog(nowFloor:Int){
+        var customDialog = ChangeFloorDialog(context, sikdangNum, nowFloor, this)
+        customDialog!!.show()
+    }
+
     public fun deleteTable(alNum:Int){
         setNowLoc()
         changedTableAL.remove(changedTableAL[alNum])
@@ -296,6 +309,10 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
         setNowLoc()
         changedTableAL[alNum].maxP=pNum
         setTable()
+    }
+
+    public fun setNewFloor(newFloor:Int){
+        ts_floorTV.setText(newFloor.toString()+"층")
     }
 
 

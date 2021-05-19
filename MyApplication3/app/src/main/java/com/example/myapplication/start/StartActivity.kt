@@ -32,8 +32,8 @@ class StartActivity : AppCompatActivity() {
                 Toast.makeText(this, "안드로이드 버전이 낮습니다.", Toast.LENGTH_SHORT).show()
             }
             else{
-                startActivity(Intent(this@StartActivity, Sikdang_main::class.java))
-                //startActivity(Intent(this@StartActivity, CustomerLogInActivity::class.java))
+                //startActivity(Intent(this@StartActivity, Sikdang_main::class.java))
+                startActivity(Intent(this@StartActivity, CustomerLogInActivity::class.java))
                 finish()
             }
         }

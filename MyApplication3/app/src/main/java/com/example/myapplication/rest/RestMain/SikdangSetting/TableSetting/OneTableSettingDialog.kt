@@ -11,6 +11,8 @@ import androidx.core.widget.addTextChangedListener
 import com.example.myapplication.R
 import kotlinx.android.synthetic.main.res_onetablesetting_dialog.*
 
+//TableSettingDialog에서 사용
+//테이블 하나 클릭하면 뜨는 테이블 하나 설정 바꾼느 다이얼로그
 class OneTableSettingDialog(context: Context, val tableFloor:Int, val tableNum:Int, val pNum:Int, val alNum:Int,val lengX:Int, val lengY:Int, var tableSettingDialog: TableSettingDialog): Dialog(context) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

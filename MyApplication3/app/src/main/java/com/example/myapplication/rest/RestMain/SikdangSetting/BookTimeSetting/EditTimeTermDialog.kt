@@ -4,24 +4,22 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.view.inputmethod.InputMethodManager
+import android.util.TypedValue
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import com.example.myapplication.R
-import java.text.SimpleDateFormat
-import java.util.*
 
-//BookTimeSettingDialog에서 사용
-//다이얼창 있고 여기서 시간 선택해서 추가하면 예약 가능 시간 추가
-class AddTimeDialog(context: Context,  var bookTimeSettingDialog: BookTimeSettingDialog): Dialog(context) {
+//BookTimeSettingDialog 에서 사용
+//다이얼 뜨고 시간 선택하면 예약 텀 선택 가능
+class EditTimeTermDialog(context: Context, var nowTerm:String, var bookTimeSettingDialog: BookTimeSettingDialog): Dialog(context) {
 
-    lateinit var hET1:EditText
-    lateinit var hET2:EditText
-    lateinit var mET1:EditText
-    lateinit var mET2:EditText
+    lateinit var hET1: EditText
+    lateinit var hET2: EditText
+    lateinit var mET1: EditText
+    lateinit var mET2: EditText
     lateinit var hupBtn1: Button
     lateinit var hupBtn2: Button
     lateinit var hdownBtn1: Button
@@ -31,10 +29,11 @@ class AddTimeDialog(context: Context,  var bookTimeSettingDialog: BookTimeSettin
     lateinit var mupBtn2: Button
     lateinit var mdownBtn1: Button
     lateinit var mdownBtn2: Button
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.res_addtime_dialog)
-
 
         hET1 = findViewById<EditText>(R.id.at_hET1)
         hET2 = findViewById<EditText>(R.id.at_hET2)
@@ -51,16 +50,23 @@ class AddTimeDialog(context: Context,  var bookTimeSettingDialog: BookTimeSettin
         mdownBtn1=findViewById(R.id.at_mdown1)
         mdownBtn2=findViewById(R.id.at_mdown2)
 
+        var at_expTV: TextView =findViewById(R.id.at_expTV)
+        at_expTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f)
 
-        var at_expTV:TextView=findViewById(R.id.at_expTV)
+        at_expTV.setText("예약 시간 텀 설정\n소비자가 예약할 때의 기본 예약 텀 설정합니다."+
+                "\n예)텀 01:20 예약 시작 13:20\n14:40분까지 예약")
+
+        var a:String = nowTerm.slice(IntRange(0,0))
+        var b:String = nowTerm.slice(IntRange(1,1))
+        var c:String = nowTerm.slice(IntRange(2,2))
+        var d:String = nowTerm.slice(IntRange(3,3))
+
+        hET1.setText(a)
+        hET2.setText(b)
+        mET1.setText(c)
+        mET2.setText(d)
 
 
-        at_expTV.setText("예약 가능 시간 추가")
-
-
-
-
-        //시간 설정 관련 부분
         hET1.setText("0")
         hET1.addTextChangedListener {
             //Log.d("확인 hET1.addTextChangedListener", "1")
@@ -313,27 +319,14 @@ class AddTimeDialog(context: Context,  var bookTimeSettingDialog: BookTimeSettin
 
 
 
-        var at_addTimeBtn:Button = findViewById(R.id.at_addTimeBtn)
+        var at_addTimeBtn: Button = findViewById(R.id.at_addTimeBtn)
+        at_addTimeBtn.setText("텀 변경")
+
         at_addTimeBtn.setOnClickListener {
-            var newTime:String = hET1.text.toString()+hET2.text.toString()+mET1.text.toString()+mET2.text.toString()
-            var addChecked = bookTimeSettingDialog.addTime(newTime)
-            if (addChecked==true){
-                this.dismiss()
-            }
+            var newTerm:String = hET1.text.toString()+hET2.text.toString()+mET1.text.toString()+mET2.text.toString()
+            var addChecked = bookTimeSettingDialog.editTerm(newTerm)
+            this.dismiss()
+
         }
     }
-
-
-
-
-    fun closeKeyBoard(){
-        var view = this.currentFocus
-        if (view != null){
-            //var act = activity as SikdangMain_res
-            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(view!!.getWindowToken(), 0)
-        }
-    }
-
-
 }

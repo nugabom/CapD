@@ -7,6 +7,9 @@ import android.widget.Button
 import android.widget.TextView
 import com.example.myapplication.R
 
+//BookTimeSettingRVAdapter 에서 사용
+//시간 버튼 클릭시 띄우는 삭제할것인지 묻는 다이얼로그
+
 class CheckDeleteTimeDialog(context: Context, val deleteTime:String, var bookTimeSettingDialog: BookTimeSettingDialog): Dialog(context) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

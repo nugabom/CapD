@@ -8,6 +8,8 @@ import android.widget.TextView
 import com.example.myapplication.R
 import com.example.myapplication.rest.Table.IsBooked.DeleteTableDialog
 
+//TableSettingDialog에서 사용
+//층 삭제하는 다이얼로그
 class CheckingDeleteFloorDialog(context: Context, val nowFloor:Int, var tableSettingDialog: TableSettingDialog): Dialog(context) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

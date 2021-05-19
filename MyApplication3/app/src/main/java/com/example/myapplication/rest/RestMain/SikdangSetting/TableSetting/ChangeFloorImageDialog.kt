@@ -8,6 +8,9 @@ import android.widget.ImageView
 import android.widget.Toast
 import com.example.myapplication.R
 
+//TableSettingDialog에서 사용
+//층 단면도 변경 다이얼로그
+//
 class ChangeFloorImageDialog(context: Context, val sikdangNum: String, val floor: Int, var tableSettingDialog: TableSettingDialog): Dialog(context) {
     //var newUrl:String=""
     var newImg:Int=0

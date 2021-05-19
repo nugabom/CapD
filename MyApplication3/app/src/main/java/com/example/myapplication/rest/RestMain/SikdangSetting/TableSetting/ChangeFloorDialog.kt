@@ -5,13 +5,21 @@ import android.content.Context
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import com.example.myapplication.R
 
+//TableSettingDialog에서 사용
+//층수 변경 버튼 클릭시 뜨는 다이얼로그
+//에딧텍스트에서 숫자 입력하고 변경시킴
 class ChangeFloorDialog(context: Context, val sikdangNum: String, val floor: Int, var tableSettingDialog: TableSettingDialog): Dialog(context) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.res_changefloor_dialog)
+
+        var cf_nowFloorTV =findViewById<TextView>(R.id.cf_nowFloorTV)
+        cf_nowFloorTV.setText("현재층 : "+floor.toString())
+
 
         var cf_afterFloorET = findViewById<EditText>(R.id.cf_afterFloorET)
         cf_afterFloorET.setText(floor.toString())

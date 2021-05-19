@@ -43,6 +43,9 @@ class SikdangSettingDialog(context: Context, val sikdangNum:String): Dialog(cont
             showBookTimeSettingDialog()
         }
 
+        var ss_cancelBtn:Button=findViewById(R.id.ss_cancelBtn)
+        ss_cancelBtn.setOnClickListener { this.dismiss() }
+
 
 
 

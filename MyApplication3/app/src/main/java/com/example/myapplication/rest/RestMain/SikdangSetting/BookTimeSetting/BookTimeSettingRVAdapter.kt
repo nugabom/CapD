@@ -12,6 +12,8 @@ import com.example.myapplication.R
 import java.text.SimpleDateFormat
 import java.util.*
 
+//BookTimeDialog에서 사용
+//시간 나타내는 네개의 버튼 한 줄에 바인드
 class BookTimeSettingRVAdapter(var context: Context, val bookTimeSettingDialog: BookTimeSettingDialog): RecyclerView.Adapter<BookTimeSettingRVAdapter.Holder>() {
 
     var timeNumMax = bookTimeSettingDialog.tempTimeClass.timeArrayList.size

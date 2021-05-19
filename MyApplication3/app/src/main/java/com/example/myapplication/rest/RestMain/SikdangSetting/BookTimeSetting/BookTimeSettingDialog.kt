@@ -12,6 +12,12 @@ import com.example.myapplication.R
 import com.example.myapplication.rest.Time.TempTimeClass
 import com.example.sikdangbook_rest.Time.TimeLineAdapter
 
+//SikdangSettingDialog에서 사용
+//예약 가능 시간 목록 띄우고
+//여기서 시간 하나 선택하면 삭제 가능
+//추가버튼으로 추가 가능
+//텀 변경 버튼으로 예약 텀 변경 가능
+//저장버튼 클릭시 변경사항 저장
 class BookTimeSettingDialog(context: Context, val sikdangNum:String): Dialog(context) {
 
     lateinit var bookTimeSettingRV : RecyclerView
@@ -19,11 +25,14 @@ class BookTimeSettingDialog(context: Context, val sikdangNum:String): Dialog(con
 
     lateinit var tempTimeClass:TempTimeClass
 
+    public var nowTerm:String ="0000"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.res_booktimesetting_dialog)
 
         getTime()
+        getTerm()
 
 
         bookTimeSettingRV  = findViewById(R.id.bookTimeSettingRV)
@@ -45,6 +54,16 @@ class BookTimeSettingDialog(context: Context, val sikdangNum:String): Dialog(con
         bts_addTimeBtn.setOnClickListener {
             showAddTimeDialog()
         }
+        var bts_editTermBtn:Button = findViewById(R.id.bts_editTermBtn)
+        bts_editTermBtn.setOnClickListener {
+            showEditTimeTermDialog()
+        }
+
+        var bts_saveBtn:Button = findViewById(R.id.bts_saveBtn)
+        bts_saveBtn.setOnClickListener {
+            saveTimeInfo()
+        }
+
 
 
 
@@ -63,6 +82,8 @@ class BookTimeSettingDialog(context: Context, val sikdangNum:String): Dialog(con
         bookTimeSettingRVAdapter.notifyDataSetChanged()
         //bookTimeSettingRVAdapter.setButtonText()
     }
+
+    //데이터베이스에서 시간 정보 가져온다.
     public fun getTime(){
         tempTimeClass = TempTimeClass(1111)
     }
@@ -112,6 +133,27 @@ class BookTimeSettingDialog(context: Context, val sikdangNum:String): Dialog(con
     public fun showAddTimeDialog(){
         var customDialog = AddTimeDialog(context, this)
         customDialog!!.show()
+    }
+
+    public fun showEditTimeTermDialog(){
+        var customDialog = EditTimeTermDialog(context, nowTerm, this)
+        customDialog!!.show()
+    }
+
+    public fun getTerm(){
+        nowTerm="0100"
+    }
+    public fun editTerm(newTerm:String){
+        nowTerm=newTerm
+    }
+
+    //데이터베이스에 접속해 현재 시간정보 저장
+    public fun saveTimeInfo(){
+        //아래 두개 저장
+        //tempTimeClass.timeArrayList
+        //nowTerm
+
+        this.dismiss()
     }
 
 

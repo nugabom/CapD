@@ -106,7 +106,7 @@ class TableFloorFragment_res(var floorNum:Int,val sikdangmainRes: SikdangMain_re
     }
 
     public fun showDialogNotBooked(floor:Int, tableNum: Int){
-        var customDialog = TableStateNotBookedDialog_res(this!!.requireContext(), sikdangmainRes, tableNum)
+        var customDialog = TableStateNotBookedDialog(this!!.requireContext(), sikdangmainRes, tableNum)
         customDialog!!.show()
     }
 

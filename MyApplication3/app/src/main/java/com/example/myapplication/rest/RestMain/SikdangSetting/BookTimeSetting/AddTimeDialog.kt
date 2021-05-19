@@ -296,7 +296,7 @@ class AddTimeDialog(context: Context,  var bookTimeSettingDialog: BookTimeSettin
                 mET2.setText("0")
             }
             else if(mET2.text.toString().toInt()>0){
-                var tempInt = mET1.text.toString().toInt()
+                var tempInt = mET2.text.toString().toInt()
                 tempInt--
                 mET2.setText(tempInt.toString())
             }else if(mET2.text.toString().toInt()==0){

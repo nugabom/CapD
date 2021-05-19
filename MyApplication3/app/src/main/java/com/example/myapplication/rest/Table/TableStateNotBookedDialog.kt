@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 //TableFloorFragment_res 에서 사용
-class TableStateNotBookedDialog_res(context: Context, val sikdangmainRes: SikdangMain_res, val tableNum:Int): Dialog(context) {
+class TableStateNotBookedDialog(context: Context, val sikdangmainRes: SikdangMain_res, val tableNum:Int): Dialog(context) {
     lateinit var hET1:EditText
     lateinit var hET2:EditText
     lateinit var mET1:EditText
@@ -294,7 +294,7 @@ class TableStateNotBookedDialog_res(context: Context, val sikdangmainRes: Sikdan
                 mET2.setText("0")
             }
             else if(mET2.text.toString().toInt()>0){
-                var tempInt = mET1.text.toString().toInt()
+                var tempInt = mET2.text.toString().toInt()
                 tempInt--
                 mET2.setText(tempInt.toString())
             }else if(mET2.text.toString().toInt()==0){

@@ -53,7 +53,7 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
         setTableAL()
         setTable()
 
-        var nowFloor=tableData.floorList[floorNum]
+        nowFloor=tableData.floorList[floorNum]
 
         //변경버튼 클릭시
         //테이블 정보 새로 저장
@@ -88,12 +88,19 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
         var ts_changeFloorBtn:Button = findViewById(R.id.ts_changeFloorBtn)
         ts_changeFloorBtn.setOnClickListener {
             setNowLoc()
-            showChangeFloorDialog(nowFloor)
+            showChangeFloorDialog()
         }
 
+        //층 단면도 변경
         var ts_changeImage =findViewById<Button>(R.id.ts_changeImage)
         ts_changeImage.setOnClickListener {
-            showChangeFloorImageDialog(nowFloor)
+            showChangeFloorImageDialog()
+        }
+
+        //층 삭제 버튼
+        var ts_deleteFloorBtn = findViewById<Button>(R.id.ts_deleteFloorBtn)
+        ts_deleteFloorBtn.setOnClickListener {
+            showCheckingDeleteFloorDialog()
         }
 
 
@@ -318,15 +325,22 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
         customDialog!!.show()
     }
 
-    public fun showChangeFloorDialog(nowFloor:Int){
+    public fun showChangeFloorDialog(){
         var customDialog = ChangeFloorDialog(context, sikdangNum, nowFloor, this)
         customDialog!!.show()
     }
 
-    public fun showChangeFloorImageDialog(nowFloor:Int){
+    public fun showChangeFloorImageDialog(){
         var customDialog = ChangeFloorImageDialog(context, sikdangNum, nowFloor, this)
         customDialog!!.show()
     }
+
+    public fun showCheckingDeleteFloorDialog(){
+        var customDialog = CheckingDeleteFloorDialog(context, nowFloor, this)
+        customDialog!!.show()
+    }
+
+
 
     public fun deleteTable(alNum:Int){
         setNowLoc()
@@ -349,6 +363,13 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
 
     public fun setNewFloorImg(newImg:Int){
         ts_floorImg.setImageResource(newImg)
+    }
+
+    //데이터베이스 접속해서 이 층 삭제
+    public fun deleteThisFloor(){
+        //삭제하고 이 다이얼로그 닫느다.
+
+        this.dismiss()
     }
 
 

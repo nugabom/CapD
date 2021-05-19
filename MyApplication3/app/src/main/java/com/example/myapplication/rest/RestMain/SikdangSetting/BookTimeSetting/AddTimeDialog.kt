@@ -1,4 +1,4 @@
-package com.example.sikdangbook_rest.Table
+package com.example.myapplication.rest.RestMain.SikdangSetting.BookTimeSetting
 
 import android.app.Dialog
 import android.content.Context
@@ -11,12 +11,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import com.example.myapplication.R
-import com.example.sikdangbook_rest.SikdangMain_res
 import java.text.SimpleDateFormat
 import java.util.*
 
-//TableFloorFragment_res 에서 사용
-class TableStateNotBookedDialog_res(context: Context, val sikdangmainRes: SikdangMain_res, val tableNum:Int): Dialog(context) {
+class AddTimeDialog(context: Context, var bookTimeSettingDialog: BookTimeSettingDialog): Dialog(context) {
+
     lateinit var hET1:EditText
     lateinit var hET2:EditText
     lateinit var mET1:EditText
@@ -30,45 +29,41 @@ class TableStateNotBookedDialog_res(context: Context, val sikdangmainRes: Sikdan
     lateinit var mupBtn2: Button
     lateinit var mdownBtn1: Button
     lateinit var mdownBtn2: Button
-    //lateinit var floorNumTV_dialog:TextView
-    //lateinit var tableNumTV_dialog:TextView
-
-    var tableData = TableData_res("0900")
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.res_tablestatenotbooked_dialog)
+        setContentView(R.layout.res_addtime_dialog)
 
-        hET1 = findViewById<EditText>(R.id.hET1)
-        hET2 = findViewById<EditText>(R.id.hET2)
-        mET1 = findViewById<EditText>(R.id.mET1)
-        mET2 = findViewById<EditText>(R.id.mET2)
 
-        hupBtn1=findViewById(R.id.hupBtn1)
-        hupBtn2=findViewById(R.id.hupBtn2)
-        hdownBtn1=findViewById(R.id.hdownBtn1)
-        hdownBtn2=findViewById(R.id.hdownBtn2)
+        hET1 = findViewById<EditText>(R.id.at_hET1)
+        hET2 = findViewById<EditText>(R.id.at_hET2)
+        mET1 = findViewById<EditText>(R.id.at_mET1)
+        mET2 = findViewById<EditText>(R.id.at_mET2)
 
-        mupBtn1=findViewById(R.id.mupBtn1)
-        mupBtn2=findViewById(R.id.mupBtn2)
-        mdownBtn1=findViewById(R.id.mdownBtn1)
-        mdownBtn2=findViewById(R.id.mdownBtn2)
+        hupBtn1=findViewById(R.id.at_hup1)
+        hupBtn2=findViewById(R.id.at_hup2)
+        hdownBtn1=findViewById(R.id.at_hdown1)
+        hdownBtn2=findViewById(R.id.at_hdown2)
 
-        var floorNumTV_dialog = findViewById<TextView>(R.id.floorNumTV_dialog)
-        var tableNumTV_dialog = findViewById<TextView>(R.id.tableNumTV_dialog)
+        mupBtn1=findViewById(R.id.at_mup1)
+        mupBtn2=findViewById(R.id.at_mup2)
+        mdownBtn1=findViewById(R.id.at_mdown1)
+        mdownBtn2=findViewById(R.id.at_mdown2)
 
-        floorNumTV_dialog.setText(tableData.tableList[tableNum].floor.toString()+" 층")
-        tableNumTV_dialog.setText(tableNum.toString()+" 번 테이블")
+
+        var at_expTV:TextView=findViewById(R.id.at_expTV)
+        at_expTV.setText("예약 시간 텀 설정\n소비자가 예약할 때의 기본 예약 텀 설정합니다."+
+                "\n예)텀 01:20 예약 시작 13:20\n14:40분까지 예약")
+
 
         //시간 설정 관련 부분
-
+        hET1.setText("0")
         hET1.addTextChangedListener {
-            Log.d("확인 TableStateNotBookedDialog_res", "텍스트 변경")
+            Log.d("확인 hET1.addTextChangedListener", "1")
+            //Log.d("확인 TableStateNotBookedDialog_res", "텍스트 변경")
             if (hET1.text.toString() == "0" || hET1.text.toString() == "1"){
-                Log.d("확인 TableStateNotBookedDialog_res", "텍스트 변경2")
+                Log.d("확인 hET1.addTextChangedListener", "2")
                 setTime()
-                Log.d("확인 TableStateNotBookedDialog_res", "텍스트 변경3")
+                Log.d("확인 hET1.addTextChangedListener", "3")
                 hET2.requestFocus()
             }else if(hET1.text.toString() == "2"){
                 if(hET2.text.toString() == "" || hET2.text.toString() == "0" || hET2.text.toString() == "1" ||
@@ -91,6 +86,7 @@ class TableStateNotBookedDialog_res(context: Context, val sikdangmainRes: Sikdan
                 setTime()
             }
         }
+        hET2.setText("0")
         hET2.addTextChangedListener {
             //Log.d("확인 TableStateNotBookedDialog_res", "텍스트 변경")
             if (hET1.text.toString() == "2"){
@@ -122,7 +118,7 @@ class TableStateNotBookedDialog_res(context: Context, val sikdangmainRes: Sikdan
 
             }
         }
-
+        mET1.setText("0")
         mET1.addTextChangedListener{
             if(mET1.text.toString() == "0" || mET1.text.toString() == "1" || mET1.text.toString() == "2" || mET1.text.toString() == "3"
                     || mET1.text.toString() == "4" || mET1.text.toString() == "5"){
@@ -136,6 +132,7 @@ class TableStateNotBookedDialog_res(context: Context, val sikdangmainRes: Sikdan
                 setTime()
             }
         }
+        mET2.setText("1")
         mET2.addTextChangedListener{
             if(mET2.text.toString() == "0" || mET2.text.toString() == "1" || mET2.text.toString() == "2" || mET2.text.toString() == "3" ||
                     mET2.text.toString() == "4" || mET2.text.toString() == "5" || mET2.text.toString() == "6" || mET2.text.toString() == "7" ||
@@ -308,50 +305,18 @@ class TableStateNotBookedDialog_res(context: Context, val sikdangmainRes: Sikdan
 
 
 
-        var plusBookBtn:Button = findViewById(R.id.plusBookBtn)
-        plusBookBtn.setOnClickListener {
-            if (hET1.text.toString()=="" || hET2.text.toString()=="" || mET1.text.toString()==""||mET2.text.toString()==""){
-                val myToast = Toast.makeText(context, "입력 오류", Toast.LENGTH_SHORT).show()
-            }
-            else if((hET1.text.toString().length != 1) || (hET2.text.toString().length != 1) ||
-                    (mET1.text.toString().length != 1) || (mET2.text.toString().length != 1)){
-                val myToast = Toast.makeText(context, "입력 오류", Toast.LENGTH_SHORT).show()
-            }
-            else{//시간 텍스트가 정상인 경우
-                var timeEndString:String = hET1.text.toString()+hET2.text.toString()+mET1.text.toString()+mET2.text.toString()
-                //tableData.tableList[tableNum].floor
-                //tableNum 이 두개와 timeEndString을 데이터베이스로 보낸다.
-                //시간 텍스트를 데이터 베이스로 보낸다
-                sikdangmainRes.renewalTable()
 
-                this.dismiss()
 
-            }
-            
-            
+
+        var at_addTimeBtn:Button = findViewById(R.id.at_addTimeBtn)
+        at_addTimeBtn.setOnClickListener {
+            var newTime:String = hET1.text.toString()+hET2.text.toString()+mET1.text.toString()+mET2.text.toString()
+            bookTimeSettingDialog.addTime(newTime)
         }
-
-
-
-
-
-
-
-
-
-
-        var xtv: TextView = findViewById(R.id.XTV)
-        xtv.setOnClickListener {
-            this.dismiss()
-        }
-
-        var closeBtn:Button = findViewById(R.id.closeBtn)
-
-        closeBtn.setOnClickListener {
-            this.dismiss()
-        }
-
     }
+
+
+
 
     fun closeKeyBoard(){
         var view = this.currentFocus
@@ -364,18 +329,17 @@ class TableStateNotBookedDialog_res(context: Context, val sikdangmainRes: Sikdan
 
     public fun setTime(){
         //Log.d("확인 setTime()", "1")
+
         val time = System.currentTimeMillis()
         val dateFormat = SimpleDateFormat("kk:mm")
-        val curTime = dateFormat.format(Date(time))
+        //val curTime = dateFormat.format(Date(time))
         var timeString:String=""
-        timeString=timeString+curTime[0]+curTime[1]+curTime[3]+curTime[4]
-        //Log.d("확인 setTime()", "1")
-
-        //var timeString:String="0000"
-
+        //timeString=timeString+curTime[0]+curTime[1]+curTime[3]+curTime[4]
+        timeString="0000"
         var plusTime:String = ""
         //plusTime = plusTime + hET1.text.toString() + hET2.text.toString() + mET1.text.toString()+ mET2.text.toString()
 
+        //Log.d("확인 setTime()", "2")
 
         if (hET1.text.toString() == "") plusTime = plusTime+"0"
         else plusTime = plusTime + hET1.text.toString()
@@ -389,11 +353,15 @@ class TableStateNotBookedDialog_res(context: Context, val sikdangmainRes: Sikdan
         if (mET2.text.toString() == "") plusTime = plusTime+"0"
         else plusTime = plusTime + mET2.text.toString()
 
+        //Log.d("확인 setTime()", "3")
+
         var h1 = timeString.substring(0..1)
         var h2 = plusTime.substring(0..1)
         var m1 = timeString.substring(2..3)
         var m2 = plusTime.substring(2..3)
         //Log.d("확인 TableStateNotBookedDialog_res.setTime 시간", timeString+" "+plusTime)
+
+        //Log.d("확인 setTime()", "4")
 
         var resultTime = ""
 
@@ -419,12 +387,10 @@ class TableStateNotBookedDialog_res(context: Context, val sikdangmainRes: Sikdan
             }
 
         }
-        var afterTimeTV:TextView = findViewById(R.id.afterTimeTV)
-        afterTimeTV.setText(resultTime+" 까지 예약")
+        //Log.d("확인 setTime()", "5" + "")
+        //var afterTimeTV:TextView = findViewById(R.id.afterImeTV)
+        //afterTimeTV.setText(resultTime+" 까지 예약")
         //Log.d("확인 TableStateNotBookedDialog_res.setTime 시간", resultTime.toString())
 
-
     }
-
-
 }

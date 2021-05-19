@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.widget.Button
 import com.example.myapplication.R
+import com.example.myapplication.rest.RestMain.SikdangSetting.BookTimeSetting.BookTimeSettingDialog
 import com.example.myapplication.rest.RestMain.SikdangSetting.TableSetting.TableFloorSettingDialog
 import com.example.myapplication.rest.RestMain.SikdangSetting.TableSetting.TableSettingDialog
 
@@ -37,6 +38,11 @@ class SikdangSettingDialog(context: Context, val sikdangNum:String): Dialog(cont
             showTableFloorSettingDialog()
         }
 
+        var booktimeSettingBtn:Button = findViewById(R.id.booktimeSettingBtn)
+        booktimeSettingBtn.setOnClickListener {
+            showBookTimeSettingDialog()
+        }
+
 
 
 
@@ -60,6 +66,11 @@ class SikdangSettingDialog(context: Context, val sikdangNum:String): Dialog(cont
 
     private fun showTableFloorSettingDialog(){
         var customDialog = TableFloorSettingDialog(context,sikdangNum)
+        customDialog!!.show()
+    }
+
+    private fun showBookTimeSettingDialog(){
+        var customDialog = BookTimeSettingDialog(context,sikdangNum)
         customDialog!!.show()
     }
 

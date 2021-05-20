@@ -241,7 +241,7 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
                         tNum = count + tableData.accumTableNumList[floorNum - 1]//테이블리스트의 몇번째인가
                     }
                     //tableData.floorList[floorNum]
-                    Log.d("확인 버튼정보", changedTableAL[count].floor.toString()+changedTableAL[count].isCircle.toString()+changedTableAL[count].maxP.toString() )
+                    //Log.d("확인 버튼정보", changedTableAL[count].floor.toString()+changedTableAL[count].isCircle.toString()+changedTableAL[count].maxP.toString() )
                     showOneTableSettingDialog(changedTableAL[count].floor, tNum, changedTableAL[count].maxP, count)
                 }
             }
@@ -252,7 +252,7 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
                         moveX = v.x - event.rawX
                         moveY = v.y - event.rawY
                         var c = button.x
-                        Log.d("확인 버튼클릭", "액션다운")
+                        //Log.d("확인 버튼클릭", "액션다운")
                         moveNum = 0
                     }
                     MotionEvent.ACTION_MOVE -> {
@@ -261,11 +261,11 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
                                 .y(event.rawY + moveY)
                                 .setDuration(0)
                                 .start()
-                        Log.d("확인 버튼클릭", "액션무브")
+                        //Log.d("확인 버튼클릭", "액션무브")
                         moveNum+=1
                     }
                     MotionEvent.ACTION_UP -> {
-                        Log.d("확인 버튼클릭", "액션업")
+                        //Log.d("확인 버튼클릭", "액션업")
                     }
 
                 }

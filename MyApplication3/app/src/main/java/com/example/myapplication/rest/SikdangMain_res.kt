@@ -2,8 +2,10 @@ package com.example.sikdangbook_rest
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
@@ -73,6 +75,35 @@ class SikdangMain_res:AppCompatActivity() {
 
 
 
+
+
+    }
+
+    var backPressed =false
+    var pressedTime= System.currentTimeMillis()
+    override fun onBackPressed() {
+        //super.onBackPressed()
+        if (  backPressed == false ) {
+            Toast.makeText(this, " 한 번 더 누르면 종료됩니다." , Toast.LENGTH_LONG).show();
+            pressedTime = System.currentTimeMillis()
+            backPressed=true
+        }
+        else {
+            var seconds =  (System.currentTimeMillis() - pressedTime).toInt();
+            if ( seconds > 2000 ) {
+                Log.d("확인 종료 안됨", seconds.toString())
+                Toast.makeText(this, " 한 번 더 누르면 종료됩니다." , Toast.LENGTH_LONG).show();
+                backPressed=true ;
+            }
+            else {
+
+                //Log.d("확인 종료@@@@@@@@@@@@@@@@@@@", "1")
+                //Toast.makeText(this, " 종료@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@." , Toast.LENGTH_LONG).show();
+                super.onBackPressed()
+                //finish(); // app 종료 시키기
+            }
+        }
+
     }
 
     //데이터베이스에서 식당이름 불러온다
@@ -104,6 +135,7 @@ class SikdangMain_res:AppCompatActivity() {
 
 
     private fun showSikdangSettingDialog(){
+        Log.d("확인 showSikdangSettingDialog()", "ㅁㅁ")
         var customDialog = SikdangSettingDialog(this, sikdangNum)
         customDialog!!.show()
     }

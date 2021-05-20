@@ -23,7 +23,7 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
     lateinit var ts_floorTV:TextView
     lateinit var ts_floorImg:ImageView
     var TPC = 0
-    var moved=false
+    var moveNum = 0
     var nowFloor=0
 
     var buttonAL=ArrayList<Button>()
@@ -234,14 +234,14 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
             button.setOnClickListener {
                 //Log.d("확인 버튼클릭", "@@@@@@@@@@@@@@@@@@@@@@@@")
                 var tNum = 0
-                if (moved == false){
+                if (moveNum<10){
                     if (floorNum == 0) {
                         tNum = count
                     } else {
                         tNum = count + tableData.accumTableNumList[floorNum - 1]//테이블리스트의 몇번째인가
                     }
                     //tableData.floorList[floorNum]
-                    //Log.d("확인 버튼정보", changedTableAL[count].floor.toString()+changedTableAL[count].isCircle.toString()+changedTableAL[count].maxP.toString() )
+                    Log.d("확인 버튼정보", changedTableAL[count].floor.toString()+changedTableAL[count].isCircle.toString()+changedTableAL[count].maxP.toString() )
                     showOneTableSettingDialog(changedTableAL[count].floor, tNum, changedTableAL[count].maxP, count)
                 }
             }
@@ -252,8 +252,8 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
                         moveX = v.x - event.rawX
                         moveY = v.y - event.rawY
                         var c = button.x
-                        //Log.d("확인 버튼클릭", "액션다운")
-                        moved=false
+                        Log.d("확인 버튼클릭", "액션다운")
+                        moveNum = 0
                     }
                     MotionEvent.ACTION_MOVE -> {
                         v.animate()
@@ -261,11 +261,11 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
                                 .y(event.rawY + moveY)
                                 .setDuration(0)
                                 .start()
-                        //Log.d("확인 버튼클릭", "액션무브")
-                        moved=true
+                        Log.d("확인 버튼클릭", "액션무브")
+                        moveNum+=1
                     }
                     MotionEvent.ACTION_UP -> {
-                        //Log.d("확인 버튼클릭", "액션업")
+                        Log.d("확인 버튼클릭", "액션업")
                     }
 
                 }

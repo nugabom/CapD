@@ -168,7 +168,7 @@
         android:textSize="24sp" />
 
     <Button
-        android:id="@+id/button8"
+        android:id="@+id/at_cancelBtn"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:textSize="24sp"

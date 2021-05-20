@@ -316,6 +316,10 @@ class EditTimeTermDialog(context: Context, var nowTerm:String, var bookTimeSetti
 
 
 
+        var at_cancelBtn:Button = findViewById(R.id.at_cancelBtn)
+        at_cancelBtn.setOnClickListener { this.dismiss() }
+
+
 
 
 

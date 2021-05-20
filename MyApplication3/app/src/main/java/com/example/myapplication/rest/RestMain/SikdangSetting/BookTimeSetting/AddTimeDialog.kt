@@ -311,6 +311,10 @@ class AddTimeDialog(context: Context,  var bookTimeSettingDialog: BookTimeSettin
 
 
 
+        var at_cancelBtn:Button = findViewById(R.id.at_cancelBtn)
+        at_cancelBtn.setOnClickListener { this.dismiss() }
+
+
 
 
         var at_addTimeBtn:Button = findViewById(R.id.at_addTimeBtn)

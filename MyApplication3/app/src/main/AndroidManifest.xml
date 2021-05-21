@@ -92,6 +92,9 @@
         <activity android:name="com.example.sikdangbook_rest.MainActivity_res" />
         <activity android:name="com.example.sikdangbook_rest.SikdangMain_res" />
         <activity android:name="com.example.sikdangbook_rest.ChoiceSikdangPage_res" />
+        <activity android:name=".rest.ResInfo.ResInfoActivity" />
+        <activity android:name=".rest.ResInfo.SellInfoActivity" />
+
 
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"

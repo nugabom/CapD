@@ -43,7 +43,7 @@
                 android:textSize="30sp" />
 
             <Button
-                android:id="@+id/button11"
+                android:id="@+id/sm_messageTV"
                 android:layout_width="wrap_content"
                 android:layout_height="80dp"
                 android:layout_weight="1"
@@ -82,7 +82,7 @@
         <!--android:layout_gravity="start" 이 줄을 위에 넣음-->
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/sm_infoBtn"
             android:layout_width="200dp"
             android:layout_height="80dp"
             android:text="회원정보"
@@ -96,7 +96,7 @@
             android:textSize="24sp" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/sm_choiceSikdangBtn"
             android:layout_width="200dp"
             android:layout_height="80dp"
             android:text="식당 선택"
@@ -108,5 +108,17 @@
             android:layout_height="80dp"
             android:text="로그아웃"
             android:textSize="24sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="400dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/sm_messageRV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </LinearLayout>
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -1,5 +1,6 @@
 package com.example.sikdangbook_rest
 
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +11,7 @@ import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.example.myapplication.R
+import com.example.myapplication.rest.ResInfo.ResInfoActivity
 import com.example.myapplication.rest.RestMain.SikdangSetting.SikdangSettingDialog
 import com.example.sikdangbook_rest.Table.TableFloorVPAdapter_res
 import com.example.sikdangbook_rest.Time.TimeSelectDialog
@@ -64,10 +66,22 @@ class SikdangMain_res:AppCompatActivity() {
 
         }
 
+        var sm_infoBtn:Button = findViewById(R.id.sm_infoBtn)
+        sm_infoBtn.setOnClickListener {
+            val intent = Intent(this, ResInfoActivity::class.java)
+            startActivity(intent)
+        }
+
         //식당 설정 버튼
         var sikdangSettingbtn:Button = findViewById(R.id.sikdangSettingbtn)
         sikdangSettingbtn.setOnClickListener {
             showSikdangSettingDialog()
+        }
+
+        //식당 선택 버튼
+        var sm_choiceSikdangBtn:Button = findViewById(R.id.sm_choiceSikdangBtn)
+        sm_choiceSikdangBtn.setOnClickListener {
+            this.finish()
         }
 
 

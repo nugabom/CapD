@@ -15,7 +15,7 @@ class ChoiceSikdangPage_res:AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.res_choice_sikdang_page)
         var mySikdangRV:RecyclerView = findViewById(R.id.mySikdangRV)
-        var choiceMySikdangRVAdapter = ChoiceMySikdangRVAdapter_res(this)
+        var choiceMySikdangRVAdapter = ChoiceMySikdangRVAdapter(this)
         mySikdangRV.adapter = choiceMySikdangRVAdapter
 
         var RVLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)

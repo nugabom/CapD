@@ -29,16 +29,6 @@ class ResInfoActivity: AppCompatActivity() {
         ip_nameTV.setText(ownerName)
 
 
-        //bookTimeSettingRV  = findViewById(R.id.bookTimeSettingRV)
-        //bookTimeSettingRVAdapter = BookTimeSettingRVAdapter(context, this)
-        //bookTimeSettingRV.adapter = bookTimeSettingRVAdapter
-
-        //var timeLM = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        //bookTimeSettingRV.layoutManager=timeLM
-        //bookTimeSettingRV.setHasFixedSize(true)
-
-
-
 
         var ip_settingTV:TextView=findViewById(R.id.ip_settingTV)
         ip_settingTV.setOnClickListener {

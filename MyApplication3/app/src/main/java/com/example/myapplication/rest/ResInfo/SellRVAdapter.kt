@@ -10,6 +10,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 
+//sellInfoActivity 에서 사용
+//리사이클러뷰에 판매 정보 바인드
 class SellRVAdapter(var context: Context, var sellInfoActivity: SellInfoActivity): RecyclerView.Adapter<SellRVAdapter.Holder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {

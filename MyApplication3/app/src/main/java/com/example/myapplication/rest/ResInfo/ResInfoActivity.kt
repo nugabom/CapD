@@ -32,7 +32,8 @@ class ResInfoActivity: AppCompatActivity() {
 
         var ip_settingTV:TextView=findViewById(R.id.ip_settingTV)
         ip_settingTV.setOnClickListener {
-
+            val intent = Intent(this, ResPrivateSettingActivity::class.java)
+            startActivity(intent)
         }
 
         var ip_sellInfoTV:TextView=findViewById(R.id.ip_sellInfoTV)

@@ -94,6 +94,7 @@
         <activity android:name="com.example.sikdangbook_rest.ChoiceSikdangPage_res" />
         <activity android:name=".rest.ResInfo.ResInfoActivity" />
         <activity android:name=".rest.ResInfo.SellInfoActivity" />
+        <activity android:name=".rest.ResInfo.ResPrivateSettingActivity" />
 
 
         <meta-data

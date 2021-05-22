@@ -234,12 +234,12 @@ class SikdangMain_res:AppCompatActivity() {
         tempMenuAL3.add(tempMenu9)
 
         var tempTableAL1=ArrayList<MessageTableData>()
-        tempTableAL1.add(MessageTableData(1, tempMenuAL1))
-        tempTableAL1.add(MessageTableData(3, tempMenuAL2))
-        tempTableAL1.add(MessageTableData(4, tempMenuAL3))
+        tempTableAL1.add(MessageTableData(2, 8, tempMenuAL1))
+        tempTableAL1.add(MessageTableData(2, 9, tempMenuAL2))
+        tempTableAL1.add(MessageTableData(3, 11,  tempMenuAL3))
 
 
-        messages.add(MessageData("임꺽정", "010-1234-5678", 80000, 2021, 5, 21, 9, 34, 10, 9, 30, 10, 30, tempTableAL1))
+        messages.add(MessageData("임꺽정", "010-1234-5678", 80000, 2021, 5, 21, 9, 34, 10, 9, 30, 10, 30, tempTableAL1, "987654321"))
 
         var temp2Menu = MessageMenuData("맥콜", 3)
         var temp2Menu2 = MessageMenuData("파인애플피자", 5)
@@ -266,12 +266,12 @@ class SikdangMain_res:AppCompatActivity() {
         temp2MenuAL3.add(temp2Menu9)
 
         var temp2TableAL1=ArrayList<MessageTableData>()
-        temp2TableAL1.add(MessageTableData(1, temp2MenuAL1))
-        temp2TableAL1.add(MessageTableData(3, temp2MenuAL2))
-        temp2TableAL1.add(MessageTableData(4, temp2MenuAL3))
+        temp2TableAL1.add(MessageTableData(1, 1,  temp2MenuAL1))
+        temp2TableAL1.add(MessageTableData(1, 3, temp2MenuAL2))
+        temp2TableAL1.add(MessageTableData(1, 4, temp2MenuAL3))
 
 
-        messages.add(MessageData("장길산", "010-1234-5678", 90000,2021, 5, 21, 9, 34, 10, 9, 30, 10, 30, temp2TableAL1))
+        messages.add(MessageData("장길산", "010-1234-5678", 90000,2021, 5, 21, 9, 34, 10, 9, 30, 10, 30, temp2TableAL1, "123456789") )
 
 
 
@@ -282,16 +282,17 @@ class SikdangMain_res:AppCompatActivity() {
 
     //하나의 예약 신청에서 식당 주인이 확인할 정보
     //conName 소비자 이름 pn 소비자 번호 price 가격 y, m, day, h, min, sec, 예약 수락 or 예약 신청 시간 sh, sm 예약 시작시간 eh em 예약 끝 시간
+    //orderId 는 주문 고유번호
     inner class MessageData(var conName:String, var pn:String, var price:Int,
                             var y:Int, var m:Int, var day:Int, var h:Int, var min:Int, var sec:Int,
-                            var sh:Int, var sm:Int, var eh:Int, var em:Int, var Tables:ArrayList<MessageTableData>)
+                            var sh:Int, var sm:Int, var eh:Int, var em:Int, var tables:ArrayList<MessageTableData>, var orderId:String)
 
 
 
     //테이블별 메뉴 내용
-    inner class MessageTableData(tableNum:Int, menus:ArrayList<MessageMenuData>)
+    inner class MessageTableData(var tableFloor:Int, var tableNum:Int, var menus:ArrayList<MessageMenuData>)
 
-    inner class MessageMenuData(menuName:String, menuNum:Int)
+    inner class MessageMenuData(var menuName:String, var menuNum:Int)
 
 
 

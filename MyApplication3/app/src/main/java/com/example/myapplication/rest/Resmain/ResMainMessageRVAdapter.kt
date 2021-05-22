@@ -8,8 +8,12 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
+import com.example.myapplication.rest.RestMain.SikdangSetting.SikdangSettingDialog
 
 //SikdangMain_res 에서 사용
+//오른쪽 사이드바에 예약 신청 내역 바인드
+//예약 신청 하나 클릭시 예약 받을지 선택하는 다이얼로그 띄움
+
 class ResMainMessageRVAdapter(var context: Context, var sikdangmainRes: SikdangMain_res): RecyclerView.Adapter<ResMainMessageRVAdapter.Holder>() {
 
 
@@ -30,6 +34,7 @@ class ResMainMessageRVAdapter(var context: Context, var sikdangmainRes: SikdangM
     inner class Holder(itemView: View): RecyclerView.ViewHolder(itemView){
         public fun bind(pos:Int){
             var count = pos
+            var orderId =sikdangmainRes.messages[count].orderId
             var oml_nameTV :TextView = itemView.findViewById(R.id.oml_nameTV)
             oml_nameTV.setText(sikdangmainRes.messages[count].conName)
 
@@ -51,11 +56,17 @@ class ResMainMessageRVAdapter(var context: Context, var sikdangmainRes: SikdangM
 
             var oml_layout : LinearLayout= itemView.findViewById(R.id.oml_layout)
             oml_layout.setOnClickListener {
-
+                showOrderMessageDialog(count, orderId)
             }
 
 
 
         }
+    }
+
+
+    public  fun showOrderMessageDialog(pos:Int, orderId:String){
+        var customDialog = OrderMessageDialog(context, pos, orderId, sikdangmainRes)
+        customDialog!!.show()
     }
 }

@@ -87,6 +87,7 @@ class SikdangChoice : AppCompatActivity() {
             override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
                 if (actionId == EditorInfo.IME_ACTION_DONE){
                     val dist = sikdangChoice_distET.text.toString().toInt()
+                    range_from_text.setText(dist.toString())
                     var intent = Intent(this@SikdangChoice, MapActivity::class.java)
                     intent.putExtra("range", dist)
                     dist_range = dist
@@ -114,9 +115,7 @@ class SikdangChoice : AppCompatActivity() {
                     val dist = range_from_text.text.toString().toInt()
                     map_range = dist
                     dist_range = dist
-                    var intent = Intent(this@SikdangChoice, MapActivity::class.java)
-                    intent.putExtra("range", dist)
-                    startActivity(intent)
+                    sikdangChoiceMenuViewPagerAdapter.updateFragment(-1, dist_range)
                     return true
                 }
                 return false
@@ -127,6 +126,7 @@ class SikdangChoice : AppCompatActivity() {
         find_from_text.setOnClickListener {
             val dist = range_from_text.text.toString().toInt()
             map_range = dist
+            sikdangChoiceMenuViewPagerAdapter.updateFragment(-1, dist)
         }
     }
     private fun movePage(position : Int) {

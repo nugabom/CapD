@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.myapplication.R
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -69,7 +70,7 @@ class SikdangChoiceMenuFragment(var catory : String, var range : Int) :
             // for ActivityCompat#requestPermissions for more details.
             return view
         }
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 20.0f, this)
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 3000, 20.0f, this)
 
         updateMenu(range)
         //View.setBackgroundResource(bannerImage)
@@ -89,29 +90,25 @@ class SikdangChoiceMenuFragment(var catory : String, var range : Int) :
                         for (data in snapshot.children) {
 
                             val store = data.getValue(SikdangReqMenu::class.java)
+                            if(store == null) continue
                             Log.d("update Menu", "${catory} : ${store}")
-                            if (store == null) continue
-                            val dist = distance(store.Lat!!, store.Lng!!)
+                            val dist = distance(store!!.Lat!!, store!!.Lng!!)
                             Log.d("update Menu", "${store} : ${dist}")
                             if (dist > range) continue
                             sikdangStoreMenuList.add(SikdangStoreMenu(
-                                    store.Lat,
-                                    store.Lng,
+                                    store.Lat!!,
+                                    store.Lng!!,
                                     store.id!!,
                                     store.name!!,
                                     dist,
-                                    store.store_image
+                                    store.store_image,
+                                    store.store_type!!
                             ))
                         }
-                        sikdangStoreMenuList.add(SikdangStoreMenu(
-                                37.535677,
-                                126.825981,
-                                "-MZLWlJ0ySb1PSa3C2yN",
-                                catory,
-                                1000
-                        ))
 
-                        if (sikdangStoreMenuList.isEmpty()) { loading.visibility = View.VISIBLE}
+                        if (sikdangStoreMenuList.isEmpty()) {
+                            loading.visibility = View.INVISIBLE
+                        }
                         else loading.visibility = View.GONE
                         sikdangChoiceMenuAdapter.notifyDataSetChanged()
                     }

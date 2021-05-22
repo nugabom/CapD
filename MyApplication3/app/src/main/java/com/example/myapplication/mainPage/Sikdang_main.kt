@@ -38,6 +38,7 @@ import com.example.myapplication.recommendation.MsgCat
 import com.example.myapplication.sikdangChoicePage.SikdangChoice
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import kotlinx.android.synthetic.main.sikdangchoice.*
 import java.security.MessageDigest
 import java.util.*
 import kotlin.collections.ArrayList

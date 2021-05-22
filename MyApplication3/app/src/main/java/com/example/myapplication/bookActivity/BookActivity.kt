@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.ActivityChooserView
+import com.bumptech.glide.Glide
 import com.example.myapplication.R
 import com.example.myapplication.dataclass.StoreInfo
 import java.sql.Time
@@ -30,6 +31,7 @@ class BookActivity : AppCompatActivity() {
         sikdangName = findViewById(R.id.sikdangName)
 
         sikdangName.text = storeInfo.store_name
+        Glide.with(this).load(storeInfo.store_image).into(sikdangImage)
 
         supportFragmentManager.beginTransaction().replace(R.id.bookFragment, WaitFragment()).commit()
         supportFragmentManager.beginTransaction().replace(R.id.bookFragment, TimeBookFragment(bookTime)).commit()

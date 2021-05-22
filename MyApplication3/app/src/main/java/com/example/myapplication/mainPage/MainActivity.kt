@@ -56,18 +56,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_profile-> {
                     Toast.makeText(this, "My Profile clicked", Toast.LENGTH_SHORT).show()
                     selectedFragment = MyPage()
-                    var store_info = StoreInfo(
-                            "https://firebasestorage.googleapis.com/v0/b/my-application-62b86.appspot.com/o/%ED%99%8D%EC%BD%A9%EB%B0%98%EC%A0%900410%2F%ED%99%8D%EC%BD%A9%EB%B0%98%EC%A0%900410.png?alt=media&token=f0f530ad-0e7e-435c-977b-feba82e5d65c",
-                        "010-1348-6825",
-                        "-MZLWlJ0ySb1PSa3C2yN",
-                        "홍콩반점0410",
-                        "중식"
-                    )
-
-
-                    var _intent = Intent(this, StoreActivity::class.java)
-                    _intent.putExtra("store_info", store_info)
-                    startActivity(_intent)
 
                     /*
                     val _intent = Intent(this, EditReviewActivity::class.java)

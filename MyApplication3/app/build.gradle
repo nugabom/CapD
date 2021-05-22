@@ -101,4 +101,9 @@ dependencies {
 
     //Cropper
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
+
+    // Zcweng Switch
+    implementation 'com.github.zcweng:switch-button:0.0.3@aar'
+
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
 }

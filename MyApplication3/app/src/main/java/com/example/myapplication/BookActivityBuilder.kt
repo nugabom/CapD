@@ -159,6 +159,7 @@ data class _Ingredient(
 @IgnoreExtraProperties
 data class IsFull(val current : Int? = null, val max : Int? = null)
 
+@IgnoreExtraProperties
 data class _Table(
         val x : Double? = null,
         val y : Double? = null,

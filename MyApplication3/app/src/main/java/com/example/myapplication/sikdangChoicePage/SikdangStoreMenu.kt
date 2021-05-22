@@ -19,7 +19,8 @@ class SikdangStoreMenu(
         val id : String,
         val name : String,
         val dist : Int,
-        val store_image: String? = null
+        val store_image: String? = null,
+        val store_type: String
 ) {
 
 }

@@ -215,7 +215,7 @@ class MapActivity : AppCompatActivity(),
                 Log.d("onClick", "${(marker.tag as Store).name} is Double Clicked?")
                 val sikdangId = (marker.tag as Store).id
                 var intent = Intent(this, BookActivity::class.java)
-                val result = BookActivityBuilder(sikdangId, "중식", this).build()
+                val result = BookActivityBuilder(sikdangId, (marker.tag as Store).category, this).build()
                 Log.d("Map clicked", "${result}")
                 infoWindow?.close()
             } else {

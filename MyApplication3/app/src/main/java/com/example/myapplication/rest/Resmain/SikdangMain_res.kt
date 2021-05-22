@@ -199,6 +199,10 @@ class SikdangMain_res:AppCompatActivity() {
         vpAdapter.notifyDataSetChanged()
     }
 
+    public fun renewalOrder(){
+        messageRVAdapter.notifyDataSetChanged()
+    }
+
 
     private fun showSikdangSettingDialog(){
         Log.d("확인 showSikdangSettingDialog()", "ㅁㅁ")

@@ -68,11 +68,13 @@ class OrderMessageDialog(context: Context, var orderNum:Int, var orederId:String
     //데이터베이스 접속해서 이 예약 등록
     public fun orderPermit(){
 
+        sikdangmainRes.renewalOrder()
         this.dismiss()
     }
     //데이터베이스 접속해서 이 예약 거절
     public fun orderDeny(){
 
+        sikdangmainRes.renewalOrder()
         this.dismiss()
     }
 }

@@ -11,7 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import com.example.myapplication.R
-import com.example.sikdangbook_rest.SikdangMain_res
+import com.example.myapplication.rest.Resmain.SikdangMain_res
 import java.text.SimpleDateFormat
 import java.util.*
 

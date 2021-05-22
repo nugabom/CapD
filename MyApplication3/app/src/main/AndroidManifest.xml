@@ -89,9 +89,9 @@
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Theme.AppCompat" />
 
-        <activity android:name="com.example.sikdangbook_rest.MainActivity_res" />
-        <activity android:name="com.example.sikdangbook_rest.SikdangMain_res" />
-        <activity android:name="com.example.sikdangbook_rest.ChoiceSikdangPage_res" />
+        <activity android:name=".rest.Resmain.MainActivity_res" />
+        <activity android:name=".rest.Resmain.SikdangMain_res" />
+        <activity android:name=".rest.Resmain.ChoiceSikdangPage_res" />
         <activity android:name=".rest.ResInfo.ResInfoActivity" />
         <activity android:name=".rest.ResInfo.SellInfoActivity" />
         <activity android:name=".rest.ResInfo.ResPrivateSettingActivity" />

@@ -1,11 +1,10 @@
-package com.example.sikdangbook_rest
+package com.example.myapplication.rest.Resmain
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import com.example.myapplication.R
-import com.example.sikdangbook_rest.Table.TableData_res
 
 
 class MainActivity_res : AppCompatActivity() {

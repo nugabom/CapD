@@ -1,4 +1,4 @@
-package com.example.sikdangbook_rest
+package com.example.myapplication.rest.Resmain
 
 import android.os.Bundle
 import android.util.Log
@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 import com.example.myapplication.rest.AddRest.AddRestDialog
-import com.example.myapplication.rest.RestMain.SikdangSetting.SikdangSettingDialog
 
 class ChoiceSikdangPage_res:AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

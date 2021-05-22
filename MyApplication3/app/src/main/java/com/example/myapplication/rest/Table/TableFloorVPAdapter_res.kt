@@ -3,7 +3,7 @@ package com.example.sikdangbook_rest.Table
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.sikdangbook_rest.SikdangMain_res
+import com.example.myapplication.rest.Resmain.SikdangMain_res
 
 //SikdangMain_res 에서 사용
 class TableFloorVPAdapter_res(fa:FragmentActivity, val sikdangmainRes: SikdangMain_res): FragmentStateAdapter(fa) {

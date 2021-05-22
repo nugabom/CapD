@@ -8,8 +8,7 @@ import android.os.Build
 import android.widget.Button
 import android.widget.Toast
 import com.example.myapplication.mainPage.MainActivity
-import com.example.myapplication.mainPage.Sikdang_main
-import com.example.sikdangbook_rest.MainActivity_res
+import com.example.myapplication.rest.Resmain.MainActivity_res
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 

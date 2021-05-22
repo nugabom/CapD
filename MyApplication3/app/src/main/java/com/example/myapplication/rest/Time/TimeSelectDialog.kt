@@ -6,9 +6,9 @@ import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
-import com.example.sikdangbook_rest.SikdangMain_res
+import com.example.myapplication.rest.Resmain.SikdangMain_res
 
-class TimeSelectDialog(context: Context, var sikdangMain_res:SikdangMain_res): Dialog(context)  {
+class TimeSelectDialog(context: Context, var sikdangMain_res: SikdangMain_res): Dialog(context)  {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.res_timeselect_dialog)

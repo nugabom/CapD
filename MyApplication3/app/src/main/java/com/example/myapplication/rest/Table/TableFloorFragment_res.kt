@@ -12,11 +12,11 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.example.myapplication.R
 import com.example.myapplication.rest.Table.IsBooked.TableStateIsBookedDialog_res
-import com.example.sikdangbook_rest.SikdangMain_res
+import com.example.myapplication.rest.Resmain.SikdangMain_res
 
 //한 층의 정보 세팅
 //TableFloorVPAdapter 에서 사용
-class TableFloorFragment_res(var floorNum:Int,val sikdangmainRes: SikdangMain_res, val timeNum:String):Fragment() {
+class TableFloorFragment_res(var floorNum:Int, val sikdangmainRes: SikdangMain_res, val timeNum:String):Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var view = inflater.inflate(R.layout.res_table_floor_fragment, container, false)

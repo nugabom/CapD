@@ -68,7 +68,7 @@ class TimeLineAdapter (var context: Context?,
 
     private fun timeset():String {
         val now = LocalDateTime.now()
-        val timeFormatter = DateTimeFormatter.ofPattern(":mm a")
+        val timeFormatter = DateTimeFormatter.ofPattern("hh:mm a")
         var current = now.format(timeFormatter)
         Log.d("timeset", current)
 
@@ -141,9 +141,6 @@ class TimeLineAdapter (var context: Context?,
 
     fun compareTime(current_time : String, table_time : String) : Boolean{
         var current = current_time
-        if(current_time.length == 6) {
-            current = "00" + current
-        }
 
         var table = table_time
         if(table_time.substring(0, 2).compareTo("12") == 0) {
@@ -153,7 +150,7 @@ class TimeLineAdapter (var context: Context?,
         Log.d("compareTime", "${table}")
         Log.d("compareTime", "${current}, ${table}")
 
-        if(current.takeLast(1).compareTo(table.takeLast(1)) > 0) return true
+        if(current.last() > table.last()) return true
         return current.compareTo(table, false) >= 0
     }
 }

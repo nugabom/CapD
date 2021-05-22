@@ -1,4 +1,4 @@
 package com.dsna19.capstone.Dataclass
 
-class HotItem {
+class User {
 }

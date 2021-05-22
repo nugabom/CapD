@@ -43,7 +43,8 @@ class SikdangChoiceMenuViewPagerAdapter (
         if(this.range == range) return
 
         this.range = range
-        current_page = position
+        if(position != -1)
+            current_page = position
         fragmentList[current_page].updateMenu(range)
     }
 }

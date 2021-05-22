@@ -42,10 +42,8 @@ class MyPage : Fragment() {
 
         my_setting = view.findViewById(R.id.mp_privateSettingTV)
         my_setting.setOnClickListener {
-            FirebaseAuth.getInstance().signOut()
-            var _intent = Intent(requireContext(), CustomerLogInActivity::class.java)
-            _intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            requireContext().startActivity(_intent)
+            val _intent = Intent(requireContext(), MySettingActivity::class.java)
+            startActivity(_intent)
         }
 
         my_coupon = view.findViewById(R.id.mp_couponTV)
@@ -72,6 +70,10 @@ class MyPage : Fragment() {
         }
 
         app_setting = view.findViewById(R.id.mp_appSettingTV)
+        app_setting.setOnClickListener {
+            val intent = Intent(requireContext(), AppSettingActivity::class.java)
+            requireContext().startActivity(intent)
+        }
 
     }
 

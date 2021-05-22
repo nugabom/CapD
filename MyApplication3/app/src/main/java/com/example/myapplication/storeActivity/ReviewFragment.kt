@@ -58,7 +58,7 @@ class ReviewFragment(var storeInfo: StoreInfo) : Fragment() {
         FirebaseDatabase.getInstance().getReference("Review")
             .child(storeInfo.store_id!!)
             .child("Comments")
-            .addListenerForSingleValueEvent(object : ValueEventListener{
+            .addValueEventListener(object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
                     review_list.clear()
                     for (reviews in snapshot.children) {

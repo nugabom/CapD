@@ -1,7 +1,9 @@
 package com.example.myapplication.sikdangChoicePage
 
 import android.content.Context
+import android.content.Intent
 import android.provider.ContactsContract
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +13,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.myapplication.R
+import com.example.myapplication.dataclass.StoreInfo
+import com.example.myapplication.storeActivity.StoreActivity
+import com.example.myapplication.storeActivity.StoreMenu
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class SikdangChoiceMenuAdapter (
     var context: Context,
@@ -28,6 +37,24 @@ class SikdangChoiceMenuAdapter (
         holder.sikdangName.text = store.name
         Glide.with(context).load(store.store_image).into(holder.sikdangImage)
         holder.sikdangChoice_menuLine_dist.text = store.dist.toString()
+        holder.itemView.setOnClickListener {
+            FirebaseDatabase.getInstance().getReference("Restaurants")
+                    .child(store.store_type)
+                    .child(store.id)
+                    .child("info")
+                    .addValueEventListener(object :ValueEventListener{
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            val store_info = snapshot.getValue(StoreInfo::class.java)
+                            val _intent = Intent(context, StoreActivity::class.java)
+                            _intent.putExtra("store_info", store_info)
+                            Log.d("store_info", "${store_info}")
+                            context.startActivity(_intent)
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                        }
+                    })
+        }
     }
 
     override fun getItemCount(): Int {

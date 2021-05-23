@@ -15,7 +15,10 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MyApplication">
+
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
+
         <activity android:name=".mypage.MySettingActivity"></activity>
         <activity android:name=".mypage.AppSettingActivity" />
         <activity
@@ -96,6 +99,14 @@
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Theme.AppCompat" />
+
+        <activity android:name=".rest.Resmain.MainActivity_res" />
+        <activity android:name=".rest.Resmain.SikdangMain_res" />
+        <activity android:name=".rest.Resmain.ChoiceSikdangPage_res" />
+        <activity android:name=".rest.ResInfo.ResInfoActivity" />
+        <activity android:name=".rest.ResInfo.SellInfoActivity" />
+        <activity android:name=".rest.ResInfo.ResPrivateSettingActivity" />
+
 
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"

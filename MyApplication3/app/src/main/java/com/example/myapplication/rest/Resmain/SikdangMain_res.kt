@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.myapplication.R
 import com.example.myapplication.rest.ResInfo.ResInfoActivity
+import com.example.myapplication.rest.RestMain.SikdangSetting.EditSikdangImageDialog
 import com.example.myapplication.rest.RestMain.SikdangSetting.MenuEditDialog
 import com.example.myapplication.rest.RestMain.SikdangSetting.SikdangSettingDialog
 import com.example.myapplication.rest.RestMain.SikdangSetting.TableSetting.ChangeFloorImageDialog
@@ -46,6 +47,7 @@ class SikdangMain_res:AppCompatActivity() {
     var sikdangimgCheckNum = 0
     lateinit var menuEditDialog:MenuEditDialog
     lateinit var changeFloorImageDialog:ChangeFloorImageDialog
+    lateinit var editSikdangImageDialog:EditSikdangImageDialog
 
 
     private var timeNum = ""
@@ -336,11 +338,32 @@ class SikdangMain_res:AppCompatActivity() {
                     Log.d("확인 onActivityResult2", sikdangimg.toString())
                     sikdangimgCheckNum=1
                     //saveBitmap(img)
-                    imageView4.setImageBitmap(sikdangimg)
+                    //imageView4.setImageBitmap(sikdangimg)
                     changeFloorImageDialog.setNewImg()
 
                 } catch (e: Exception) {
                     Log.d("확인 onActivityResult2.e", sikdangimg.toString())
+                    sikdangimgCheckNum=1
+                }
+            } else if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show()
+                sikdangimgCheckNum=2
+            }
+        }
+        else if (requestCode == 3){
+            if (resultCode == RESULT_OK) {
+                try {
+                    val ins: InputStream? = contentResolver.openInputStream(data?.data!!)
+                    sikdangimg = BitmapFactory.decodeStream(ins)
+                    ins?.close()
+                    Log.d("확인 onActivityResult3", sikdangimg.toString())
+                    sikdangimgCheckNum=1
+                    //saveBitmap(img)
+                    //imageView4.setImageBitmap(sikdangimg)
+                    editSikdangImageDialog.setNewImg()
+
+                } catch (e: Exception) {
+                    Log.d("확인 onActivityResult3.e", sikdangimg.toString())
                     sikdangimgCheckNum=1
                 }
             } else if (resultCode == RESULT_CANCELED) {

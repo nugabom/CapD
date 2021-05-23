@@ -29,6 +29,11 @@ class SikdangSettingDialog(context: Context, val sikdangNum:String, var sikdangm
             showEditSikdangExpDialog()
         }
 
+        var editSikdangImageBtn:Button = findViewById(R.id.editSikdangImageBtn)
+        editSikdangImageBtn.setOnClickListener {
+            showEditSikdangImageDialog()
+        }
+
         var editMenuBtn:Button = findViewById(R.id.editMenuBtn)
         editMenuBtn.setOnClickListener {
             showEditMenuDialog()
@@ -75,6 +80,11 @@ class SikdangSettingDialog(context: Context, val sikdangNum:String, var sikdangm
 
     private fun showBookTimeSettingDialog(){
         var customDialog = BookTimeSettingDialog(context,sikdangNum)
+        customDialog!!.show()
+    }
+
+    private fun showEditSikdangImageDialog(){
+        var customDialog = EditSikdangImageDialog(context,sikdangNum, sikdangmainRes)
         customDialog!!.show()
     }
 

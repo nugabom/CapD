@@ -5,12 +5,14 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import com.example.myapplication.R
 import com.example.myapplication.dataclass.User
 import com.example.myapplication.start.CustomerLogInActivity
+import com.example.myapplication.start.SelectLoginActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -76,7 +78,11 @@ class AppSettingActivity : AppCompatActivity() {
         }
 
         btn_logout = findViewById(R.id.btn_logout)
-        btn_logout.setOnClickListener { log_out() }
+        btn_logout.setOnClickListener {
+            //Toast.makeText(this, "로그아웃", Toast.LENGTH_SHORT).show()
+            //Log.d("확인 로그아웃버튼", "sdsds")
+            log_out()
+        }
 
         btn_change_password = findViewById(R.id.btn_change_password)
         btn_change_password.setOnClickListener {
@@ -103,8 +109,11 @@ class AppSettingActivity : AppCompatActivity() {
     }
 
     private fun log_out() {
-        var intent = Intent(this, CustomerLogInActivity::class.java)
+        //Log.d("확인 로그아웃버튼", "sdsds")
+        //Toast.makeText(this, "로그아웃", Toast.LENGTH_SHORT).show()
+        var intent = Intent(this, SelectLoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        //Log.d("확인 로그아웃버튼", "2")
         startActivity(intent)
     }
 

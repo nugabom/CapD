@@ -108,6 +108,10 @@
         <activity android:name=".rest.ResInfo.ResPrivateSettingActivity" />
 
 
+
+        <activity android:name=".start.SelectLoginActivity" />
+
+
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="x806jwcpgr" />

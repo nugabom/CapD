@@ -7,13 +7,14 @@ import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
+import com.example.myapplication.rest.Resmain.SikdangMain_res
 import com.example.myapplication.rest.RestMain.SikdangSetting.AddMenuIngRVAdapter
 import com.example.sikdangbook_rest.Table.TableData_res
 import com.example.sikdangbook_rest.Table.Table_res
 
 //SikdangSettingDialog 에서 사용
 //테이블 층수 선택 / 테이블 층 추가 가능
-class TableFloorSettingDialog(context: Context, val sikdangNum: String): Dialog(context) {
+class TableFloorSettingDialog(context: Context, val sikdangNum: String, var sikdangmainRes: SikdangMain_res): Dialog(context) {
 
     lateinit var floorListRV:RecyclerView
     lateinit var RVAdapter:FloorListRVAdapter
@@ -58,7 +59,7 @@ class TableFloorSettingDialog(context: Context, val sikdangNum: String): Dialog(
     //일단 TableData_res의 구조때문에 둘다 받는데 층만으로 데이터 받아올 수 있으면 굳이 FloorNum 사용할 필요 없음
 
     public fun showTableSettingDialog(floorNum:Int, floor:Int){
-        var customDialog = TableSettingDialog(context,sikdangNum, floorNum)
+        var customDialog = TableSettingDialog(context,sikdangNum, floorNum, sikdangmainRes)
         customDialog!!.show()
     }
 

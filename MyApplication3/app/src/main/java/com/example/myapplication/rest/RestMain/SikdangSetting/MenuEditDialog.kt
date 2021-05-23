@@ -1,27 +1,34 @@
 package com.example.myapplication.rest.RestMain.SikdangSetting
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 import com.example.myapplication._Ingredient
 import com.example.myapplication.bookActivity.MenuData
+import com.example.myapplication.rest.Resmain.SikdangMain_res
 
 
 //EditMenuRVAdapter 에서 사용
 //선택된 메뉴의 상세 내용 수정하는 다이얼로그
 
-class MenuEditDialog(context: Context, val sikdangNum: String, val menuNum: Int, val menuData: MenuData): Dialog(context) {
+class MenuEditDialog(context: Context, val sikdangNum: String, val menuNum: Int, val menuData: MenuData, var sikdangmainRes: SikdangMain_res): Dialog(context) {
+
+    private final var REQUEST_CODE = 0
 
     var afterIngAL=ArrayList<_Ingredient>()
 
     lateinit var RVAdapter2:AfterIngRVAdapter
+
+    lateinit var afterChangeImage:ImageView
 
     init{
         afterIngAL=menuData.ingredients
@@ -36,6 +43,7 @@ class MenuEditDialog(context: Context, val sikdangNum: String, val menuNum: Int,
         entLayout.setOnClickListener {
             closeKeyBoard()
         }
+        sikdangmainRes.menuEditDialog=this
 
         setCanceledOnTouchOutside(false)
 
@@ -70,7 +78,7 @@ class MenuEditDialog(context: Context, val sikdangNum: String, val menuNum: Int,
 
 
 
-        var afterChangeImage : ImageView=findViewById(R.id.afterChangeImage)
+        afterChangeImage =findViewById(R.id.afterChangeImage)
         //afterChangeImage.setImageResource()
 
         var imageRes:Int=beforeImgRes
@@ -79,9 +87,28 @@ class MenuEditDialog(context: Context, val sikdangNum: String, val menuNum: Int,
         afterChangeImage.setOnClickListener {
             //갤러리에서 이미지 불러오는 코드
             //imageRes에 변경할 이미지 저장
-            afterChangeImage.setImageResource(imageRes)
+            val intent = Intent()
+            intent.type = "image/*"
+            intent.action = Intent.ACTION_GET_CONTENT
+            sikdangmainRes.startActivityForResult(intent, 1)
+            //getContext().startActivity(intent);
+            //getActivity().startActivityForResult(intent, 1)
+            //(getContext() as Activity).startActivityForResult(intent, 1)
+            //getContext().startActivityForResult(intent, 1)
+            //startActivityForResult(intent, 1)
+            /*
+            while(sikdangmainRes.sikdangimgCheckNum==0){
+                Log.d("확인 대기", sikdangmainRes.sikdangimgCheckNum.toString())
+                Thread.sleep(1_000)
+            }*/
+
+
+
             //imgUrl 에 정보 집어넣음
+            //setNewImg() 에서 데이터 베이스 접근하도록 수정
         }
+
+
 
         var afterIngRV :RecyclerView = findViewById(R.id.afterIngRV)
 
@@ -144,6 +171,13 @@ class MenuEditDialog(context: Context, val sikdangNum: String, val menuNum: Int,
     }
 
 
+
+    //override fun onActivity
+
+
+
+
+
     /*
     override fun onTouchEvent(event: MotionEvent): Boolean {
         when (event.action) {
@@ -161,6 +195,19 @@ class MenuEditDialog(context: Context, val sikdangNum: String, val menuNum: Int,
         return true
     }*/
 
+
+    public fun setNewImg(){
+
+        if(sikdangmainRes.sikdangimgCheckNum==1){
+            afterChangeImage.setImageBitmap(sikdangmainRes.sikdangimg)
+            var imageRes=afterChangeImage.imageAlpha
+
+            sikdangmainRes.sikdangimgCheckNum=0
+
+            //afterChangeImage.setImageResource(imageRes)
+        }
+
+    }
 
     fun closeKeyBoard(){
         var view = this.currentFocus
@@ -182,7 +229,7 @@ class MenuEditDialog(context: Context, val sikdangNum: String, val menuNum: Int,
     }
 
 
-    private fun menuChange(newName:String, imgUrl:String, newPrice:Int, newEXP:String, newIng:ArrayList<_Ingredient>){
+    private fun menuChange(newName: String, imgUrl: String, newPrice: Int, newEXP: String, newIng: ArrayList<_Ingredient>){
         var newMenu = MenuData(newName, imgUrl, newPrice, newEXP, newIng)
         //newData를 데이터베이스로 보내서 수정
     }

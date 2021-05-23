@@ -1,13 +1,10 @@
 package com.example.myapplication.rest.ResInfo
 
 import android.content.Intent
-import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.R
-import com.example.myapplication.rest.RestMain.SikdangSetting.BookTimeSetting.BookTimeSettingRVAdapter
 
 
 //SikdangMain_res 에서 사용
@@ -21,6 +18,8 @@ class ResInfoActivity: AppCompatActivity() {
         setContentView(R.layout.res_infoactivity)
 
         setName()
+
+
 
         var ip_resNameTV:TextView=findViewById(R.id.ip_resNameTV)
         ip_resNameTV.setText(sikdangName)

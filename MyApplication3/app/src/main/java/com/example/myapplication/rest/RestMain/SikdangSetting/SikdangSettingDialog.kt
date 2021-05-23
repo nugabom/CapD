@@ -5,13 +5,14 @@ import android.content.Context
 import android.os.Bundle
 import android.widget.Button
 import com.example.myapplication.R
+import com.example.myapplication.rest.Resmain.SikdangMain_res
 import com.example.myapplication.rest.RestMain.SikdangSetting.BookTimeSetting.BookTimeSettingDialog
 import com.example.myapplication.rest.RestMain.SikdangSetting.TableSetting.TableFloorSettingDialog
 import com.example.myapplication.rest.RestMain.SikdangSetting.TableSetting.TableSettingDialog
 
 //SikdangMain_res 에서 사용
 //식당 정보 수정 - 어떤거 수정할기 고르는 다이얼로그
-class SikdangSettingDialog(context: Context, val sikdangNum:String): Dialog(context) {
+class SikdangSettingDialog(context: Context, val sikdangNum:String, var sikdangmainRes: SikdangMain_res): Dialog(context) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.res_sikdangsetting_dialog)
@@ -63,12 +64,12 @@ class SikdangSettingDialog(context: Context, val sikdangNum:String): Dialog(cont
     }
 
     private fun showEditMenuDialog(){
-        var customDialog = EditMenuDialog(context,sikdangNum)
+        var customDialog = EditMenuDialog(context,sikdangNum, sikdangmainRes)
         customDialog!!.show()
     }
 
     private fun showTableFloorSettingDialog(){
-        var customDialog = TableFloorSettingDialog(context,sikdangNum)
+        var customDialog = TableFloorSettingDialog(context,sikdangNum, sikdangmainRes)
         customDialog!!.show()
     }
 

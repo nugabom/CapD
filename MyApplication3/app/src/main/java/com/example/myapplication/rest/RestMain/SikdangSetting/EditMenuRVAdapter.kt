@@ -11,10 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 import com.example.myapplication._Ingredient
 import com.example.myapplication.bookActivity.MenuData
+import com.example.myapplication.rest.Resmain.SikdangMain_res
 
 //EditMenuDialog 에서 사용
 //메뉴 여러개 리사이클러뷰에 넣어줌
-class EditMenuRVAdapter(var context: Context, val sikdangNum:String): RecyclerView.Adapter<EditMenuRVAdapter.Holder>() {
+class EditMenuRVAdapter(var context: Context, val sikdangNum:String, var sikdangmainRes: SikdangMain_res): RecyclerView.Adapter<EditMenuRVAdapter.Holder>() {
 
     var menuDataAL = ArrayList<MenuData>()
 
@@ -78,7 +79,7 @@ class EditMenuRVAdapter(var context: Context, val sikdangNum:String): RecyclerVi
     }
 
     public fun showMenuEditDialog(pos:Int){
-        var customDialog = MenuEditDialog(context, sikdangNum, pos, menuDataAL[pos])
+        var customDialog = MenuEditDialog(context, sikdangNum, pos, menuDataAL[pos], sikdangmainRes)
         customDialog!!.show()
     }
 

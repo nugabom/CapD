@@ -8,11 +8,12 @@ import android.widget.EditText
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
+import com.example.myapplication.rest.Resmain.SikdangMain_res
 import com.example.myapplication.rest.Table.OrderInfoRVAdapter
 
 //SikdangSettingDialog 에서 사용
 //메뉴 리스트 보여주고 거기서 하나 선택해서 그 메뉴 수정하는 다이얼로그
-class EditMenuDialog (context: Context, val sikdangNum:String): Dialog(context) {
+class EditMenuDialog (context: Context, val sikdangNum:String, var sikdangmainRes: SikdangMain_res): Dialog(context) {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,7 +21,7 @@ class EditMenuDialog (context: Context, val sikdangNum:String): Dialog(context) 
         setContentView(R.layout.res_editmenu_dialog)
 
         var menuRV : RecyclerView = findViewById(R.id.em_rv)
-        var RVAdapter = EditMenuRVAdapter(context, sikdangNum)
+        var RVAdapter = EditMenuRVAdapter(context, sikdangNum, sikdangmainRes)
         menuRV.adapter = RVAdapter
 
 

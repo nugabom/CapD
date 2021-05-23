@@ -2,18 +2,25 @@ package com.example.myapplication.rest.RestMain.SikdangSetting.TableSetting
 
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
+import com.bumptech.glide.load.engine.Resource
 import com.example.myapplication.R
+import com.example.myapplication.rest.Resmain.SikdangMain_res
 
 //TableSettingDialog에서 사용
 //층 단면도 변경 다이얼로그
 //
-class ChangeFloorImageDialog(context: Context, val sikdangNum: String, val floor: Int, var tableSettingDialog: TableSettingDialog): Dialog(context) {
+class ChangeFloorImageDialog(context: Context, val sikdangNum: String, val floor: Int, var tableSettingDialog: TableSettingDialog, var sikdangmainRes: SikdangMain_res): Dialog(context) {
     //var newUrl:String=""
-    var newImg:Int=0
+    lateinit var newImg:Bitmap
     var isImeSetted = false
     lateinit var cfi_newIV:ImageView
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +31,7 @@ class ChangeFloorImageDialog(context: Context, val sikdangNum: String, val floor
 
         var cfi_getImgBtn:Button=findViewById(R.id.cfi_getImgBtn)
         cfi_getImgBtn.setOnClickListener {
-            setNewImg()
+            setImgOnGall()
         }
 
         var cfi_changeBtn:Button = findViewById(R.id.cfi_changeBtn)
@@ -51,13 +58,47 @@ class ChangeFloorImageDialog(context: Context, val sikdangNum: String, val floor
     }
 
     //이미지 갤러리에서 찾아와서 newImg에 넣는다.
-    private fun setNewImg(){
+    private fun setImgOnGall(){
         //아래는 임시로 넣음
+
+
+        sikdangmainRes.changeFloorImageDialog=this
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        sikdangmainRes.startActivityForResult(intent, 2)
+
+
+        /*
         newImg = R.drawable.store_layout_example
         cfi_newIV.setImageResource(newImg)
 
         if(true){//갤러리에서 가져오기 성공시
             isImeSetted = true
+        }*/
+    }
+
+    public fun setNewImg(){
+        if(sikdangmainRes.sikdangimgCheckNum==1){
+            Log.d("확인 setNewImg()", "이미지 변경1")
+            cfi_newIV.setImageBitmap(sikdangmainRes.sikdangimg)
+            //newImg=sikdangmainRes.sikdangimg.toString().toInt()
+
+            sikdangmainRes.sikdangimgCheckNum=0
+
+            //afterChangeImage.setImageResource(imageRes)
+
+            //cfi_newIV.setImageResource(newImg)
+
+            //var btd:Drawable = BitmapDrawable(sikdangmainRes.sikdangimg)
+            newImg=sikdangmainRes.sikdangimg
+            Log.d("확인 setNewImg()", "이미지 변경2")
+            isImeSetted = true
+
+        }
+        else{
+            Log.d("확인 setNewImg()", sikdangmainRes.sikdangimgCheckNum.toString())
+            isImeSetted = false
         }
     }
 

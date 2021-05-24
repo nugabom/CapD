@@ -3,6 +3,7 @@ package com.example.myapplication.start
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
@@ -67,10 +68,10 @@ class RegisterActivity : AppCompatActivity() {
         })
 
         register.setOnClickListener {
-            val str_username = username.text.toString()
-            val str_phone_number = phone_number.text.toString()
-            val str_email = email.text.toString()
-            val str_password = password.text.toString()
+            val str_username = username.text.toString().trim()
+            val str_phone_number = phone_number.text.toString().trim()
+            val str_email = email.text.toString().trim()
+            val str_password = password.text.toString().trim()
 
             if (TextUtils.isEmpty(str_username) || TextUtils.isEmpty(str_phone_number)
                 || TextUtils.isEmpty(str_email) || TextUtils.isEmpty(str_password)) {
@@ -85,10 +86,11 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun register (username : String, phone_number : String,
                           email : String, password : String) {
+        Log.d("register", "${email} :${password}")
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (!task.isSuccessful) {
-                    Toast.makeText(this, "가입 실패", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "가입 실패1", Toast.LENGTH_SHORT).show()
                     return@addOnCompleteListener;
                 } else {
                     val firebaseUser = auth.currentUser
@@ -114,7 +116,7 @@ class RegisterActivity : AppCompatActivity() {
                             startActivity(intent)
 
                         } else {
-                            Toast.makeText(this@RegisterActivity, "가입실패", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@RegisterActivity, "가입실패2", Toast.LENGTH_SHORT).show()
                             firebaseUser.delete()
                         }
                     }

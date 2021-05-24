@@ -313,7 +313,7 @@ class PayActivity : AppCompatActivity() {
         var complete = false
         var sem = Semaphore(1)
         while (!isCached) {
-            var store_ref = FirebaseDatabase.getInstance().getReference("Tables")
+            FirebaseDatabase.getInstance().getReference("Tables")
                 .child(storeInfo.store_id!!)
                 .child("Booked")
                 .runTransaction(object :Transaction.Handler{
@@ -352,9 +352,9 @@ class PayActivity : AppCompatActivity() {
 
 
                             }
-                            complete = true
-                        }
 
+                        }
+                        complete = true
                         reservate()
                         use_up_coupons()
                         val _intent = Intent(this@PayActivity, PayCompleteSuccess::class.java)
@@ -420,6 +420,7 @@ class PayActivity : AppCompatActivity() {
             .child(current_date)
             .push()
             .setValue(reservation)
+
     }
 
     private fun use_up_coupons() {

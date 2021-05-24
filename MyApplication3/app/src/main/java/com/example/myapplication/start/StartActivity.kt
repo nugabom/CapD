@@ -8,7 +8,9 @@ import android.os.Build
 import android.widget.Button
 import android.widget.Toast
 import com.example.myapplication.mainPage.MainActivity
+import com.example.myapplication.rest.Resmain.ChoiceSikdangPage_res
 import com.example.myapplication.rest.Resmain.MainActivity_res
+import com.example.myapplication.rest.Resmain.ResLoginActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
@@ -39,7 +41,7 @@ class StartActivity : AppCompatActivity() {
 
         manufacturer_login.setOnClickListener {
             //Toast.makeText(this, "미구현", Toast.LENGTH_SHORT).show()
-            startActivity(Intent(this@StartActivity, MainActivity_res::class.java))
+            startActivity(Intent(this@StartActivity, ResLoginActivity::class.java))
             finish()
         }
     }
@@ -55,7 +57,8 @@ class StartActivity : AppCompatActivity() {
 
         if(firebaseUser != null) {
             //startActivity(Intent(this, SelectLoginActivity::class.java))
-            startActivity(Intent(this, MainActivity::class.java))
+            //startActivity(Intent(this, MainActivity::class.java))
+            startActivity(Intent(this, ChoiceSikdangPage_res::class.java))
             finish()
         }
 

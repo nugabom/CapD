@@ -1,4 +1,4 @@
-package com.example.myapplication.start
+package com.example.myapplication.rest.Resmain
 
 import android.content.Intent
 import android.os.Bundle
@@ -14,9 +14,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.myapplication.R
 import com.example.myapplication.mainPage.Sikdang_main
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 
-class RegisterActivity : AppCompatActivity() {
+class ResRegister : AppCompatActivity() {
     lateinit var username : EditText
     lateinit var phone_number : EditText
     lateinit var email : EditText
@@ -54,10 +55,10 @@ class RegisterActivity : AppCompatActivity() {
 
 
                     if (TextUtils.isEmpty(str_username) || TextUtils.isEmpty(str_phone_number)
-                        || TextUtils.isEmpty(str_email) || TextUtils.isEmpty(str_password)) {
-                        Toast.makeText(this@RegisterActivity, "빈칸을 채워주세요!!", Toast.LENGTH_SHORT).show()
+                            || TextUtils.isEmpty(str_email) || TextUtils.isEmpty(str_password)) {
+                        Toast.makeText(this@ResRegister, "빈칸을 채워주세요!!", Toast.LENGTH_SHORT).show()
                     } else if (str_password.length < 6) {
-                        Toast.makeText(this@RegisterActivity, "패스워드는 6글자 이상입니다!!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@ResRegister, "패스워드는 6글자 이상입니다!!", Toast.LENGTH_SHORT).show()
                     } else {
                         register(str_username, str_phone_number, str_email, str_password)
                     }
@@ -74,10 +75,10 @@ class RegisterActivity : AppCompatActivity() {
             val str_password = password.text.toString()
 
             if (TextUtils.isEmpty(str_username) || TextUtils.isEmpty(str_phone_number)
-                || TextUtils.isEmpty(str_email) || TextUtils.isEmpty(str_password)) {
-                Toast.makeText(this@RegisterActivity, "빈칸을 채워주세요!!", Toast.LENGTH_SHORT).show()
+                    || TextUtils.isEmpty(str_email) || TextUtils.isEmpty(str_password)) {
+                Toast.makeText(this, "빈칸을 채워주세요!!", Toast.LENGTH_SHORT).show()
             } else if (str_password.length < 6) {
-                Toast.makeText(this@RegisterActivity, "패스워드는 6글자 이상입니다!!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "패스워드는 6글자 이상입니다!!", Toast.LENGTH_SHORT).show()
             } else {
                 register(str_username, str_phone_number, str_email, str_password)
             }
@@ -87,42 +88,43 @@ class RegisterActivity : AppCompatActivity() {
     private fun register (username : String, phone_number : String,
                           email : String, password : String) {
         auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                if (!task.isSuccessful) {
-                    Toast.makeText(this, "가입 실패", Toast.LENGTH_SHORT).show()
-                    return@addOnCompleteListener;
-                } else {
-                    val firebaseUser = auth.currentUser
-                    val userid = firebaseUser!!.uid
-                    reference = FirebaseDatabase.getInstance().getReference()
-                        .child("Users")
-                        .child(userid)
+                .addOnCompleteListener { task ->
+                    if (!task.isSuccessful) {
+                        Log.d("확인 애드 실패", "1")
+                        Toast.makeText(this, "가입 실패", Toast.LENGTH_SHORT).show()
+                        return@addOnCompleteListener;
+                    } else {
+                        val firebaseUser = auth.currentUser
+                        val userid = firebaseUser!!.uid
+                        reference = FirebaseDatabase.getInstance().getReference()
+                                .child("Users")
+                                .child(userid)
 
-                    var phone = phone_number
-                    if (phone == null) phone = "Null"
+                        var phone = phone_number
+                        if (phone == null) phone = "Null"
 
-                    val userInfo = hashMapOf<String, Any>(
-                        "id" to userid,
-                        "username" to username.toLowerCase(),
-                        "phone_number" to phone,
-                        "email" to firebaseUser.email.toString()
-                    )
+                        val userInfo = hashMapOf<String, Any>(
+                                "id" to userid,
+                                "username" to username.toLowerCase(),
+                                "phone_number" to phone,
+                                "email" to firebaseUser.email.toString()
 
+                        )
 
+                        reference.setValue(userInfo).addOnCompleteListener {
+                            if (task.isSuccessful) {
+                                Log.d("확인 가입 성공", "ㅁㅁㅁㅁㅁ")
+                                var intent = Intent(this, ChoiceSikdangPage_res::class.java)
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                                startActivity(intent)
 
-                    reference.setValue(userInfo).addOnCompleteListener {
-                        if (task.isSuccessful) {
-                            Log.d("확인 가입 성공", "ㅁㅁㅁㅁㅁ")
-                            var intent = Intent(this, Sikdang_main::class.java)
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                            startActivity(intent)
-
-                        } else {
-                            Toast.makeText(this@RegisterActivity, "가입실패", Toast.LENGTH_SHORT).show()
-                            firebaseUser.delete()
+                            } else {
+                                Log.d("확인 애드 실패", "2")
+                                Toast.makeText(this@ResRegister, "가입실패", Toast.LENGTH_SHORT).show()
+                                firebaseUser.delete()
+                            }
                         }
                     }
                 }
-            }
     }
 }

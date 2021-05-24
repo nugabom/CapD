@@ -166,7 +166,7 @@ class SikdangMain_res:AppCompatActivity() {
             backPressed = true
         } else {
             var seconds = (System.currentTimeMillis() - pressedTime).toInt();
-            if (seconds > 2000) {
+            if (seconds > 10000) {
                 Log.d("확인 종료 안됨", seconds.toString())
                 Toast.makeText(this, " 한 번 더 누르면 종료됩니다.", Toast.LENGTH_LONG).show();
                 backPressed = true;

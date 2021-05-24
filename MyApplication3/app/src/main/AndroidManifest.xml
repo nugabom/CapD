@@ -106,6 +106,7 @@
         <activity android:name=".rest.ResInfo.ResInfoActivity" />
         <activity android:name=".rest.ResInfo.SellInfoActivity" />
         <activity android:name=".rest.ResInfo.ResPrivateSettingActivity" />
+        <activity android:name=".rest.Resmain.ResLoginActivity" />
 
 
 

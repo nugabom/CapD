@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.myapplication.R
 import com.example.myapplication.rest.Resmain.MainActivity_res
+import com.example.myapplication.rest.Resmain.ResLoginActivity
 import com.google.firebase.auth.FirebaseUser
 
 class SelectLoginActivity: AppCompatActivity() {
@@ -34,8 +35,7 @@ class SelectLoginActivity: AppCompatActivity() {
             }
             else{
                 //startActivity(Intent(this@StartActivity, Sikdang_main::class.java))
-                startActivity(Intent(this, MainActivity_res::class.java))
-                //startActivity(Intent(this, CustomerLogInActivity::class.java))
+                startActivity(Intent(this, CustomerLogInActivity::class.java))
                 finish()
             }
         }
@@ -44,7 +44,7 @@ class SelectLoginActivity: AppCompatActivity() {
         manufacturer_login.setOnClickListener {
             Log.d("확인 셀렉트 로그인", "4")
             //Toast.makeText(this, "미구현", Toast.LENGTH_SHORT).show()
-            startActivity(Intent(this, MainActivity_res::class.java))
+            startActivity(Intent(this, ResLoginActivity::class.java))
             finish()
         }
 

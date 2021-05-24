@@ -11,7 +11,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 
-class ChoiceMySikdangRVAdapter(var context: Context):RecyclerView.Adapter<ChoiceMySikdangRVAdapter.Holder>() {
+class ChoiceMySikdangRVAdapter(var context: Context, val choicesikdangpageRes: ChoiceSikdangPage_res):RecyclerView.Adapter<ChoiceMySikdangRVAdapter.Holder>() {
 
 
 
@@ -22,7 +22,7 @@ class ChoiceMySikdangRVAdapter(var context: Context):RecyclerView.Adapter<Choice
     }
 
     override fun getItemCount(): Int {
-        return 2
+        return choicesikdangpageRes.sikdangInfoList.size
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
@@ -31,9 +31,6 @@ class ChoiceMySikdangRVAdapter(var context: Context):RecyclerView.Adapter<Choice
 
 
 
-    public fun getDate(){
-
-    }
 
 
     //데이터베이스 접속해 식당 정보 불러온다.
@@ -44,6 +41,10 @@ class ChoiceMySikdangRVAdapter(var context: Context):RecyclerView.Adapter<Choice
             var sikdangLine_NameTV:TextView = itemView.findViewById(R.id.sikdangLine_NameTV)
             var sikdangLine_addr:TextView = itemView.findViewById(R.id.sikdangLine_addr)
             var sikdangLine_number:TextView = itemView.findViewById(R.id.sikdangLine_number)
+
+            sikdangLine_NameTV.setText(choicesikdangpageRes.sikdangInfoList[pos].store_name)
+            sikdangLine_number.setText(choicesikdangpageRes.sikdangInfoList[pos].phone_number)
+
             itemView.setOnClickListener {
                 Log.d("확인 ChoiceMySikdangRVAdapter", "ㅁㅁ")
                 val intent = Intent(itemView.context, SikdangMain_res::class.java)

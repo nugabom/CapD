@@ -1,5 +1,6 @@
 package com.example.myapplication.rest.Resmain
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -9,20 +10,27 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
+import com.example.myapplication.dataclass.StoreInfo
 import com.example.myapplication.rest.AddRest.AddRestDialog
+import com.example.myapplication.storeActivity.Review
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_notification.*
 
 class ChoiceSikdangPage_res:AppCompatActivity() {
+
+    var sikdangList = ArrayList<SikdangId>()
+    var sikdangInfoList=ArrayList<SikdangInfo>()
+
+    lateinit var mySikdangRV:RecyclerView
+    lateinit var choiceMySikdangRVAdapter :ChoiceMySikdangRVAdapter
 
     lateinit var addRestDialog: AddRestDialog
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.res_choice_sikdang_page)
-        var mySikdangRV:RecyclerView = findViewById(R.id.mySikdangRV)
-        var choiceMySikdangRVAdapter = ChoiceMySikdangRVAdapter(this)
+        mySikdangRV = findViewById(R.id.mySikdangRV)
+        choiceMySikdangRVAdapter = ChoiceMySikdangRVAdapter(this, this)
         mySikdangRV.adapter = choiceMySikdangRVAdapter
 
         var RVLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -30,10 +38,105 @@ class ChoiceSikdangPage_res:AppCompatActivity() {
         mySikdangRV.setHasFixedSize(true)
 
 
+        setSikdangList()
+
         var addMarcket:Button = findViewById(R.id.addMarcket)
         addMarcket.setOnClickListener {
             showAddRestDialog()
         }
+
+
+    }
+
+    public fun setSikdangList(){
+        //Log.d("확인 setSikdangList", "1")
+        val uid = FirebaseAuth.getInstance().currentUser.uid
+        val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
+                .child("Users").child(uid).child("sikdangList")
+        //var query = ref.orderByChild("sikdangId")
+        //Log.d("확인 setSikdangList", query.toString())
+        var a =ref.key
+        //Log.d("확인 setSikdangList", a.toString())
+
+
+
+        ref.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                sikdangList.clear()
+                //Log.d("확인 setSikdangList", "2")
+                for (sikdang in snapshot.children) {
+                    //var a =snapshot.children
+                    //Log.d("확인 setSikdangList", snapshot.children.toString())
+                    val sikdangid = sikdang.getValue(SikdangId::class.java)
+                    if(sikdangid == null) continue
+                    //Log.d("확인 setSikdangList", "3")
+                    //Log.d("확인 ReviewFragment", "getFromDB : ${sikdangid}")
+                    sikdangList.add(sikdangid)
+                }
+                //Log.d("확인 ReviewFragment", "getFromDB : ${sikdangList}")
+                setSikdangListInfo()
+                //choiceMySikdangRVAdapter.notifyDataSetChanged()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("ReviewFragment", "getFromDB : ${error}")
+            }
+        })
+
+        /*
+        for (i in 0..sikdangList.size-1){
+            Log.d("확인 setSikdangList", "반복")
+            Log.d("확인 setSikdangList", i.toString()+" "+ sikdangList[i].sikdangId)
+        }*/
+
+
+
+    }
+
+    public fun setSikdangListInfo(){
+        sikdangInfoList.clear()
+        //Log.d("확인 setSikdangListInfo()", "1")
+        for(k in 0..sikdangList.size-1){
+            //Log.d("확인 setSikdangListInfo()", "2"+sikdangList[k].store_type!!+sikdangList[k].sikdangId!!)
+            //val uid = FirebaseAuth.getInstance().currentUser.uid
+            val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
+                    .child("Restaurants").child(sikdangList[k].store_type!!).child(sikdangList[k].sikdangId!!)
+            //var query = ref.orderByChild("sikdangId")
+            //Log.d("확인 setSikdangList", query.toString())
+            //var a =ref.key
+            //Log.d("확인 setSikdangList", a.toString())
+
+            ref.addValueEventListener(object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    //Log.d("확인 setSikdangList", "2")
+                    for (sikdangInfo in snapshot.children) {
+                        //var a =snapshot.children
+                        //Log.d("확인 setSikdangListInfo()", "3"+snapshot.children.toString())
+                        val newsikdangInfo = sikdangInfo.getValue(SikdangInfo::class.java)
+                        //Log.d("확인 setSikdangListInfo()", "3.5")
+                        if(newsikdangInfo!!.store_name == "") continue
+                        //Log.d("확인 setSikdangListInfo()", "4")
+                        //Log.d("확인 setSikdangListInfo()", "getFromDB : ${newsikdangInfo}")
+                        sikdangInfoList.add(newsikdangInfo)
+                    }
+                    Log.d("확인 setSikdangListInfo()", "getFromDB : ${sikdangInfoList}")
+                    //Log.d("확인 setSikdangListInfo()", "6")
+
+                    choiceMySikdangRVAdapter.notifyDataSetChanged()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.d("확인 setSikdangListInfo()", "5 getFromDB : ${error}")
+                }
+            })
+
+            /*
+            for (i in 0..sikdangList.size-1){
+                Log.d("확인 setSikdangList", "반복")
+                Log.d("확인 setSikdangList", i.toString()+" "+ sikdangList[i].sikdangId)
+            }*/
+        }
+
     }
 
     private fun showAddRestDialog(){
@@ -43,18 +146,6 @@ class ChoiceSikdangPage_res:AppCompatActivity() {
     }
 
     public fun setNewSikdang(){
-        /*
-        FirebaseDatabase.getInstance().getReference("Users")
-                .child(FirebaseAuth.getInstance().uid!!)
-                .setValue(addRestDialog.newRes)
-                .addOnSuccessListener {
-                    finish()
-                }.addOnFailureListener {
-                    Toast.makeText(this, "죄송합니다. 다시 시도해 주세요.", Toast.LENGTH_SHORT).show()
-                    runOnUiThread{
-                        loading.visibility = View.INVISIBLE
-                    }
-                }*/
 
         var cat =addRestDialog.getCat()
         if (cat == 999){
@@ -72,6 +163,8 @@ class ChoiceSikdangPage_res:AppCompatActivity() {
         val pushedPostRef: DatabaseReference = ref.push()
         val postId = pushedPostRef.key
 
+
+
         var newRes = hashMapOf<String, Any>(
                 "phone_number" to addRestDialog.ar_pnET.text.toString(),
                 "store_id" to postId!!,
@@ -84,6 +177,7 @@ class ChoiceSikdangPage_res:AppCompatActivity() {
                 .addOnSuccessListener {
                     upMenu(ref, postId)
                     upTable(postId)
+                    upSikdangOnUser(postId, cat)
                     //finish()
                 }.addOnFailureListener {
                     Toast.makeText(this, "식당 업데이트 실패.", Toast.LENGTH_SHORT).show()
@@ -118,8 +212,6 @@ class ChoiceSikdangPage_res:AppCompatActivity() {
         Log.d("확인 ChoiceSikdangPage_res", "메뉴 업데이트")
     }
 
-
-
     public fun upIng(ref:DatabaseReference, postId:String, menuPostId:String ){
         val tempIng = hashMapOf<String, Any>(
                 "country" to "임시원산지",
@@ -147,8 +239,6 @@ class ChoiceSikdangPage_res:AppCompatActivity() {
 
     }
 
-
-
     public fun upLoc(postId: String){
         val locRef: DatabaseReference = FirebaseDatabase.getInstance().getReference()
                 .child("Locations")
@@ -165,7 +255,7 @@ class ChoiceSikdangPage_res:AppCompatActivity() {
         locPushedPostRef.setValue(newResLoc)
                 .addOnSuccessListener {
                     //finish()
-                    upSikdangOnUser(postId)
+                    //upSikdangOnUser(postId)
                 }.addOnFailureListener {
                     Toast.makeText(this, "위치 업데이트 실패.", Toast.LENGTH_SHORT).show()
                     runOnUiThread{
@@ -176,14 +266,15 @@ class ChoiceSikdangPage_res:AppCompatActivity() {
         Log.d("확인 ChoiceSikdangPage_res", "위치 업데이트")
     }
 
-    public fun upSikdangOnUser(postId:String){
+    public fun upSikdangOnUser(postId:String, cat:Int){
         //val userid = firebaseAuth.currentUser!!.uid
         val uid = FirebaseAuth.getInstance().currentUser.uid
         val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
                 .child("Users").child(uid).child("sikdangList").child(postId)
 
         var newSikdang = hashMapOf<String, Any>(
-                "sikdangId" to postId
+                "sikdangId" to postId,
+                "store_type" to addRestDialog.catAL[cat]
         )
 
         ref.setValue(newSikdang)
@@ -236,6 +327,7 @@ class ChoiceSikdangPage_res:AppCompatActivity() {
                 .addOnSuccessListener {
                     //finish()
                     //upSikdangOnUser(postId)
+
                 }.addOnFailureListener {
                     Toast.makeText(this, "bookinfo 업데이트 실패.", Toast.LENGTH_SHORT).show()
                     runOnUiThread{

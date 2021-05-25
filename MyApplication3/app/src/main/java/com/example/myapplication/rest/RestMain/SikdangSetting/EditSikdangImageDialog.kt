@@ -101,7 +101,6 @@ class EditSikdangImageDialog(context: Context, val sikdangNum: String, var sikda
 
     val requestOptions : RequestOptions by lazy {
         RequestOptions()
-
     }
 
     public fun setNewImg(){

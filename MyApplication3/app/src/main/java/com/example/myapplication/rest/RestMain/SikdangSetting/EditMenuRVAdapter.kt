@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.myapplication.R
 import com.example.myapplication._Ingredient
 import com.example.myapplication.bookActivity.MenuData
@@ -15,13 +17,9 @@ import com.example.myapplication.rest.Resmain.SikdangMain_res
 
 //EditMenuDialog 에서 사용
 //메뉴 여러개 리사이클러뷰에 넣어줌
-class EditMenuRVAdapter(var context: Context, val sikdangNum:String, var sikdangmainRes: SikdangMain_res): RecyclerView.Adapter<EditMenuRVAdapter.Holder>() {
+class EditMenuRVAdapter(var context: Context, val sikdangNum:String, var sikdangmainRes: SikdangMain_res, var editMenuDialog: EditMenuDialog): RecyclerView.Adapter<EditMenuRVAdapter.Holder>() {
 
-    var menuDataAL = ArrayList<MenuData>()
 
-    init{
-        setMenuData()
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val view = LayoutInflater.from(context).inflate(R.layout.res_menuline, parent, false)
@@ -35,7 +33,7 @@ class EditMenuRVAdapter(var context: Context, val sikdangNum:String, var sikdang
     override fun getItemCount(): Int {
         //메뉴 개수
         //Log.d("확인 EditMenuRVAdapter", menuDataAL.size.toString())
-        return menuDataAL.size
+        return editMenuDialog.menuDataAL.size
         //return 2
     }
 
@@ -48,15 +46,22 @@ class EditMenuRVAdapter(var context: Context, val sikdangNum:String, var sikdang
 
         public fun bind(pos:Int){
             Log.d("확인 BeforeIngRVAdapter","###############################")
-            menuImage.setBackgroundResource(R.drawable.food_placeholder)
-            menuName.setText(menuDataAL[pos].product)
-            menuExp.setText(menuDataAL[pos].product)
-            menuPrice.setText(menuDataAL[pos].price.toString()+" 원")
+            if(editMenuDialog.menuDataAL[pos].image_url == ""){menuImage.setBackgroundResource(R.drawable.food_placeholder)}
+            else{
+                Glide.with(context)
+                        .load(editMenuDialog.menuDataAL[pos].image_url)
+                        .apply(RequestOptions())
+                        .into(menuImage)
+            }
+
+            menuName.setText(editMenuDialog.menuDataAL[pos].product)
+            menuExp.setText(editMenuDialog.menuDataAL[pos].product)
+            menuPrice.setText(editMenuDialog.menuDataAL[pos].price.toString()+" 원")
             var ing=""
-            for (i in 0 until menuDataAL[pos].ingredients.size){
-                ing +=menuDataAL[pos].ingredients[i].ing
+            for (i in 0 until editMenuDialog.menuDataAL[pos].ingredients.size){
+                ing +=editMenuDialog.menuDataAL[pos].ingredients[i].ing
                 ing+=":"
-                ing +=menuDataAL[pos].ingredients[i].country
+                ing +=editMenuDialog.menuDataAL[pos].ingredients[i].country
                 ing += " "
             }
             menuIng.setText(ing)
@@ -67,19 +72,10 @@ class EditMenuRVAdapter(var context: Context, val sikdangNum:String, var sikdang
         }
     }
 
-    private fun setMenuData(){
-        var ing1= _Ingredient("보리", "땅")
-        var ing2= _Ingredient("파인애플", "땅")
-        var ingAL=ArrayList<_Ingredient>()
-        ingAL.add(ing1)
-        ingAL.add(ing2)
-        menuDataAL.add(MenuData("맥콜", "image_url",1000, "ㅁㅁㅁㅁ", ingAL))
-        menuDataAL.add(MenuData("파인애플피자","image_url", 15000, "파아인애프으응ㄹㅁ", ingAL))
 
-    }
 
     public fun showMenuEditDialog(pos:Int){
-        var customDialog = MenuEditDialog(context, sikdangNum, pos, menuDataAL[pos], sikdangmainRes)
+        var customDialog = MenuEditDialog(context, sikdangNum, pos, editMenuDialog.menuDataAL[pos], sikdangmainRes)
         customDialog!!.show()
     }
 

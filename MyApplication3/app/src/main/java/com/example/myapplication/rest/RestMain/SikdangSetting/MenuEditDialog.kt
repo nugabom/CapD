@@ -18,6 +18,7 @@ import com.example.myapplication._Ingredient
 import com.example.myapplication.bookActivity.MenuData
 import com.example.myapplication.rest.Resmain.SikdangMain_res
 import com.google.firebase.database.*
+import com.google.firebase.storage.FirebaseStorage
 
 
 //EditMenuRVAdapter 에서 사용
@@ -143,6 +144,7 @@ class MenuEditDialog(context: Context, val sikdangNum: String, val menuNum: Int,
             //afterExpET : 변경된 메뉴 설명
             //afterIngAL _ingredient 의 ArrayList : 변경된 재료
             //imageRes : 변경할 메뉴 이미지
+            Log.d("확인  MenuEditDialog.menuChange() : 변경버튼클릭 ", "1")
             menuChange(afterNameET.text.toString(), sikdangmainRes.newMenuImgUri.toString(), afterPriceET.text.toString().toInt(), afterExpET.text.toString(), afterIngAL)
             this.dismiss()
         }
@@ -242,7 +244,7 @@ class MenuEditDialog(context: Context, val sikdangNum: String, val menuNum: Int,
     }
 
     private fun showIngEditDialog(){
-        var customDialog = IngEditDialog(context, sikdangNum, this)
+        var customDialog = IngEditDialog(context, sikdangNum, menuNum, this, editMenuDialog)
         customDialog!!.show()
 
     }
@@ -253,7 +255,9 @@ class MenuEditDialog(context: Context, val sikdangNum: String, val menuNum: Int,
 
 
     private fun menuChange(newName: String, imgUrl: String, newPrice: Int, newEXP: String, newIng: ArrayList<_Ingredient>){
+        Log.d("확인  MenuEditDialog.menuChange() : editMenuDialog.ingKeyAL.size ", "시작")
         //var newMenu = MenuData(newName, imgUrl, newPrice, newEXP, newIng)
+        var sRef = FirebaseStorage.getInstance().getReference()
 
         var check1=false
         var check2 = false
@@ -263,9 +267,14 @@ class MenuEditDialog(context: Context, val sikdangNum: String, val menuNum: Int,
         ref.child("price").setValue(newPrice)
         ref.child("product_exp").setValue(newEXP)
 
-        Log.d("확인  MenuEditDialog.menuChange() : editMenuDialog.ingKeyAL.size ", editMenuDialog.ingKeyAL.size.toString())
+        if (isnewImageSetted== true) setNewImgOnDB()
+
+        Log.d("확인  MenuEditDialog.menuChange() : editMenuDialog.ingKeyAL.size ", editMenuDialog.ingKeyAL[menuNum].size.toString())
+
+        //for(i in 0..editMenuDialog.deleteIngAL.size-1)
 
         for (i in 0..editMenuDialog.ingKeyAL[menuNum].size-1){
+            Log.d("확인  MenuEditDialog.menuChange() : 이쓴ㄴ 재료 넣음 ", editMenuDialog.ingKeyAL[menuNum].size.toString())
             ref.child("ingredients").child(editMenuDialog.ingKeyAL[menuNum][i]).child("ing").setValue(newIng[i].ing)
             ref.child("ingredients").child(editMenuDialog.ingKeyAL[menuNum][i]).child("country").setValue(newIng[i].country)
             if(i == editMenuDialog.ingKeyAL.size-1){
@@ -277,16 +286,19 @@ class MenuEditDialog(context: Context, val sikdangNum: String, val menuNum: Int,
         }
         Log.d("확인  MenuEditDialog.menuChange() : editMenuDialog.newIng.size ", newIng.size.toString())
 
-        for (j in editMenuDialog.ingKeyAL.size..newIng.size-1){
+        var k = editMenuDialog.ingKeyAL[menuNum].size
+        while (k < newIng.size){
+            Log.d("확인  MenuEditDialog.menuChange() : 재료 추가", newIng.size.toString())
             var pushRef = ref.child("ingredients").push()
-            pushRef.child("ing").setValue(newIng[j].ing)
-            pushRef.child("country").setValue(newIng[j].country)
-            if(j == newIng.size-1){
+            pushRef.child("ing").setValue(newIng[k].ing)
+            pushRef.child("country").setValue(newIng[k].country)
+            if(k == newIng.size-1){
                 check2 = true
                 if (check1 == true){
                     editMenuDialog.getMenuDataOnDB()
                 }
             }
+            k+=1
         }
 
 
@@ -294,6 +306,34 @@ class MenuEditDialog(context: Context, val sikdangNum: String, val menuNum: Int,
 
         //newData를 데이터베이스로 보내서 수정
     }
+
+
+
+    public fun setNewImgOnDB(){
+        var newUrl = ""
+        val storageRef = FirebaseStorage.getInstance().getReference()
+        var file = sikdangmainRes.newMenuImgUri
+        val riversRef = storageRef.child(sikdangmainRes.sikdangName + "/" + editMenuDialog.menuDataAL[menuNum].product+".jpg")
+        val uploadTask = riversRef.putFile(file!!).addOnSuccessListener {
+            val imgurl = riversRef.downloadUrl.addOnSuccessListener {
+                uri -> Log.d("확인 ★★★★★★★★11111", uri.toString())
+                newUrl=uri.toString()
+                upUrlOnDB(newUrl)
+            }.toString()
+        }
+        //upUrlOnDB(newUrl)
+
+    }
+
+    public fun upUrlOnDB(newUrl:String){
+        val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
+                .child("Restaurants").child(sikdangmainRes.sikdangType).child(sikdangmainRes.sikdangId).child("menu").child(editMenuDialog.menuKeyAL[menuNum]).child("image_url")
+        //Log.d("확인 upUrlOnDB()", sikdangmainRes.sikdangId)
+        //Log.d("확인 upUrlOnDB()", newUrl.toString())
+        ref.setValue(newUrl)
+    }
+
+
 
     private fun deleteMenu(){
         //이 메뉴 삭제

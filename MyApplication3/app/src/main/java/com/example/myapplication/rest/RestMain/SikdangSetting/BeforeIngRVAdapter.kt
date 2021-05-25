@@ -28,14 +28,14 @@ class BeforeIngRVAdapter(val context: Context, val menuData: MenuData): Recycler
     }
 
     override fun getItemCount(): Int {
-        Log.d("확인 BeforeIngRVAdapter", menuData.ingredients.size.toString())
+        //Log.d("확인 BeforeIngRVAdapter", menuData.ingredients.size.toString())
         return menuData.ingredients.size
     }
 
     inner class Holder(itemView: View): RecyclerView.ViewHolder(itemView){
 
         public fun bind(pos:Int){
-            Log.d("확인 BeforeIngRVAdapter","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+            //Log.d("확인 BeforeIngRVAdapter","@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
             var gItemTV:TextView=itemView.findViewById(R.id.gItemTV)
             var tempText=""
             tempText+=menuData.ingredients[pos].ing

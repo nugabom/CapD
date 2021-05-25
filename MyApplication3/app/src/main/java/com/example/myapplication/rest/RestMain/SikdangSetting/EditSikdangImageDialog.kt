@@ -126,7 +126,8 @@ class EditSikdangImageDialog(context: Context, val sikdangNum: String, var sikda
 
     public fun setNewImgOnDB(){
         var newUrl = ""
-        val storageRef = FirebaseStorage.getInstance().getReference()
+        val storageRef = FirebaseStorage.getInstance().getReference().child(sikdangmainRes.sikdangName)
+        //storageRef.
         var file = sikdangmainRes.newSikdangImgUri
         val riversRef = storageRef.child(sikdangmainRes.sikdangName + "/" + "sikdangImg.jpg")
         val uploadTask = riversRef.putFile(file!!).addOnSuccessListener {

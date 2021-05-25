@@ -527,7 +527,7 @@ class SikdangMain_res:AppCompatActivity() {
 
             var result = CropImage.getActivityResult(data)
             newMenuImgUri = result.uri
-            Log.d("확인 sikdangMainRes", "식당사진 셋 uri : "+newMenuImgUri.toString())
+            Log.d("확인 sikdangMainRes", "메뉴사진 셋 uri : "+newMenuImgUri.toString())
             if(newMenuImgUri == null) return
             menuEditDialog.setNewImg()
 

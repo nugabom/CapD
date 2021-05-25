@@ -13,7 +13,7 @@ import com.example.myapplication._Ingredient
 
 //IngEditDialog 에서 사용
 //재료 수정하는 다이얼로그에 재료와 연산지 들어간 에딧 텍스트 두개 한ㅁ 줄에 바인드
-class IngredientEditRVAdapter(var context: Context, var ingEditDialog: IngEditDialog): RecyclerView.Adapter<IngredientEditRVAdapter.Holder>() {
+class IngredientEditRVAdapter(var context: Context, var menuNum:Int,  var ingEditDialog: IngEditDialog, var editMenuDialog: EditMenuDialog): RecyclerView.Adapter<IngredientEditRVAdapter.Holder>() {
     var ingETAL = ArrayList<EditText>()
     var countryETAL = ArrayList<EditText>()
 
@@ -99,6 +99,11 @@ class IngredientEditRVAdapter(var context: Context, var ingEditDialog: IngEditDi
     public fun deleteIng(pos:Int){
         //Log.d("확인 IngredientEditRVAdapter.deleteIng()", pos.toString()+" 삭제 "+ingETAL[pos].text.toString())
         setIng()
+
+        //editMenuDialog.deleteIngAL.add(editMenuDialog.ingKeyAL[menuNum][pos])
+        //Log.d("확인  MenuEditDialog.menuChange() : editMenuDialog.newIng.size ", newIng.size.toString())
+        //editMenuDialog.ingKeyAL[menuNum].remove(editMenuDialog.ingKeyAL[menuNum][pos])
+
         ingEditDialog.changedIng.remove(ingEditDialog.changedIng[pos])
         ingEditDialog.renewalRV()
     }

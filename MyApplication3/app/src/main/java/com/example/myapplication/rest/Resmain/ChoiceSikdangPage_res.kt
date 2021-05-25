@@ -111,7 +111,7 @@ class ChoiceSikdangPage_res:AppCompatActivity() {
                         //Log.d("확인 setSikdangListInfo()", "getFromDB : ${newsikdangInfo}")
                         sikdangInfoList.add(newsikdangInfo)
                     }
-                    Log.d("확인 setSikdangListInfo()", "getFromDB : ${sikdangInfoList}")
+                    //Log.d("확인 setSikdangListInfo()", "getFromDB : ${sikdangInfoList}")
 
                     choiceMySikdangRVAdapter.notifyDataSetChanged()
                 }

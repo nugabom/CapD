@@ -12,7 +12,7 @@ import com.example.myapplication._Ingredient
 
 //MenuEditDialog에서 사용
 //재료들 수정할 수 있는 라인 바인드
-class IngEditDialog(context: Context, val sikgangNum: String, var menuEditDialog: MenuEditDialog): Dialog(context) {
+class IngEditDialog(context: Context, val sikgangNum: String, var menuNum:Int, var menuEditDialog: MenuEditDialog, var editMenuDialog: EditMenuDialog): Dialog(context) {
 
     var changedIng = ArrayList<_Ingredient>()
     lateinit var ie_RV:RecyclerView
@@ -31,7 +31,7 @@ class IngEditDialog(context: Context, val sikgangNum: String, var menuEditDialog
 
         ie_RV  = findViewById(R.id.ie_RV)
 
-        rVAdapter = IngredientEditRVAdapter(context, this)
+        rVAdapter = IngredientEditRVAdapter(context, menuNum, this, editMenuDialog)
         ie_RV.adapter = rVAdapter
 
         var LM = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)

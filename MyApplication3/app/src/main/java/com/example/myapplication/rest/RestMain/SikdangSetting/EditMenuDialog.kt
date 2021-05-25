@@ -24,6 +24,8 @@ class EditMenuDialog (context: Context, val sikdangNum:String, var sikdangmainRe
     lateinit var menuRV : RecyclerView
     lateinit var RVAdapter: EditMenuRVAdapter
 
+    var deleteIngAL = ArrayList<String>()
+
     //현재 진행중인 가져오기 무엇인지 나타냄
     var lineNum = 0
 
@@ -197,9 +199,11 @@ class EditMenuDialog (context: Context, val sikdangNum:String, var sikdangmainRe
                         ingKeyAL.clear()
                         var tempingKeyAL=ArrayList<String>()
                         for (menuData2 in snapshot2.children) {
+                            Log.d("확인 EditMenuDialog.getIngKey", "재료 키 추가")
                             tempingKeyAL.add(menuData2.key.toString())
                             //Log.d("확인 2getMenuDataByMenuId()", "내용확인 : ${ingredients}")
                         }
+                        Log.d("확인 EditMenuDialog.getIngKey", "재료 키 배열 추가")
                         ingKeyAL.add(tempingKeyAL)
 
                         if(i == menuKeyAL.size-1){
@@ -292,15 +296,15 @@ class EditMenuDialog (context: Context, val sikdangNum:String, var sikdangmainRe
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if(lineNum ==3){
                         menuDataAL.clear()
-                        Log.d("확인  getMenuByMenuKey()", "2")
+                        //Log.d("확인  getMenuByMenuKey()", "2")
                         var product:String = ""
                         var image_url : String = ""
                         var price : Int = 0
                         var product_exp: String = ""
                         //var ingredients : ArrayList<_Ingredient> = ArrayList()
-                        Log.d("확인  getMenuByMenuKey()", "3")
+                        //Log.d("확인  getMenuByMenuKey()", "3")
                         for (menuData in snapshot.children) {
-                            Log.d("확인  getMenuByMenuKey()", "4")
+                            //Log.d("확인  getMenuByMenuKey()", "4")
                             if(menuData.key.toString() == "product") product=menuData.value.toString()
                             if(menuData.key.toString() == "image_url") image_url=menuData.value.toString()
                             if(menuData.key.toString() == "price") price=menuData.value.toString().toInt()
@@ -308,13 +312,13 @@ class EditMenuDialog (context: Context, val sikdangNum:String, var sikdangmainRe
                             //if(menuData.key.toString() == "ingredients") ingredients=menuData.value.
                             //menuKeyAL.add(menuData.key.toString())
                         }
-                        Log.d("확인  getMenuByMenuKey()", "5"+i.toString()+"/"+ingAL.size.toString())
+                        //Log.d("확인  getMenuByMenuKey()", "5"+i.toString()+"/"+ingAL.size.toString())
 
                         var tempMenuData = MenuData(product, image_url, price, product_exp, ingAL[i])
-                        Log.d("확인  getMenuByMenuKey()", "6")
+                        //Log.d("확인  getMenuByMenuKey()", "6")
                         menuDataAL.add(tempMenuData)
                         if(i==menuKeyAL.size-1) {
-                            Log.d("확인  getMenuByMenuKey()", "7")
+                            //Log.d("확인  getMenuByMenuKey()", "7")
                             lineNum = 0
                             renewalMenus()
                         }

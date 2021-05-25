@@ -1,9 +1,11 @@
 package com.example.myapplication.rest.Resmain
 
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
@@ -26,6 +28,7 @@ import com.example.sikdangbook_rest.Table.TableFloorVPAdapter_res
 import com.example.sikdangbook_rest.Table.Table_res
 import com.example.sikdangbook_rest.Time.TimeSelectDialog
 import com.google.firebase.database.*
+import com.theartofdev.edmodo.cropper.CropImage
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -70,6 +73,8 @@ class SikdangMain_res:AppCompatActivity() {
     var tableNumAL=ArrayList<Int>() // 층별로 테이블 각각 몇개인지
     var accumTableNumList = ArrayList<Int>()//테이블 개수 축적
     var tableIsBookedAL = ArrayList<Int>()
+
+    var newSikdangImgUri : Uri? = null
 
 
 
@@ -503,8 +508,12 @@ class SikdangMain_res:AppCompatActivity() {
 
 
 
+    //이미지 받아옴
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
+
+
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 try {
@@ -525,7 +534,7 @@ class SikdangMain_res:AppCompatActivity() {
                 sikdangimgCheckNum=2
             }
         }
-        else if (requestCode == 2){
+        if (requestCode == 2){
             if (resultCode == RESULT_OK) {
                 try {
                     val ins: InputStream? = contentResolver.openInputStream(data?.data!!)
@@ -546,6 +555,29 @@ class SikdangMain_res:AppCompatActivity() {
                 sikdangimgCheckNum=2
             }
         }
+        else if(requestCode == 3 && resultCode == Activity.RESULT_OK) {
+            Log.d("확인 sikdangMainRes", "식당사진 셋")
+            if (data == null) return
+            sikdangimgCheckNum=1
+            newSikdangImgUri = data.data
+            editSikdangImageDialog.setNewImg()
+            Log.d("확인 sikdangMainRes", "식당사진 셋 uri : "+newSikdangImgUri.toString())
+        } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE
+                && resultCode == RESULT_OK) {
+            var result = CropImage.getActivityResult(data)
+            sikdangimgCheckNum=1
+            newSikdangImgUri = result.uri
+            Log.d("확인 sikdangMainRes", "식당사진 셋 uri : "+newSikdangImgUri.toString())
+            if(newSikdangImgUri == null) return
+            editSikdangImageDialog.setNewImg()
+        } else  {
+            sikdangimgCheckNum=2
+            Toast.makeText(this, "죄송합니다. 다시 시도해주세요", Toast.LENGTH_SHORT).show()
+        }
+
+
+
+        /*
         else if (requestCode == 3){
             if (resultCode == RESULT_OK) {
                 try {
@@ -566,10 +598,25 @@ class SikdangMain_res:AppCompatActivity() {
                 Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show()
                 sikdangimgCheckNum=2
             }
-        }
+        }*/
 
     }
 
+    /*
+    val requestOptions : RequestOptions by lazy {
+        RequestOptions()
+                .placeholder(R.drawable.profile_placeholder)
+                .transforms(CenterCrop())
+    }
+
+    private fun set_profile_image(url : String?) {
+        Log.d("확인 set_profile_image", "url: "+url)
+        Glide.with(this)
+                .load(url)
+                .apply(requestOptions)
+                .into(imageView4)
+    }
+*/
 
 
     private fun saveBitmap(bitmap: Bitmap): String

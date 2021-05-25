@@ -64,7 +64,7 @@ class SikdangSettingDialog(context: Context, val sikdangNum:String, var sikdangm
     }
 
     private fun showEditSikdangExpDialog(){
-        var customDialog = EditSikdangExpDialog(context,sikdangNum)
+        var customDialog = EditSikdangExpDialog(context,sikdangNum, sikdangmainRes)
         customDialog!!.show()
     }
 

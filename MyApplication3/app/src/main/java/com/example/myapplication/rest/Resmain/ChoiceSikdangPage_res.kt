@@ -207,7 +207,7 @@ class ChoiceSikdangPage_res:AppCompatActivity() {
         val ingPushedPostRef: DatabaseReference = ref.child(postId!!)
                 .child("menu")
                 .child(menuPostId!!)
-                .child("ingredients")
+                .child("ingredients").push()
 
 
         ingPushedPostRef.setValue(tempIng)
@@ -228,7 +228,7 @@ class ChoiceSikdangPage_res:AppCompatActivity() {
     public fun upLoc(postId: String){
         val locRef: DatabaseReference = FirebaseDatabase.getInstance().getReference()
                 .child("Locations")
-        val locPushedPostRef: DatabaseReference = locRef.push()
+        val locPushedPostRef: DatabaseReference = locRef.child(postId)
         val locPostId = locPushedPostRef.key
 
         var newResLoc = hashMapOf<String, Any>(

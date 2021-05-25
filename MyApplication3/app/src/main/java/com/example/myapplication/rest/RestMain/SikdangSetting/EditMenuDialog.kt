@@ -21,6 +21,7 @@ class EditMenuDialog (context: Context, val sikdangNum:String, var sikdangmainRe
 
     var menuDataAL = ArrayList<MenuData>()
     var menuKeyAL = ArrayList<String>()
+    var ingKeyAL = ArrayList<String>()
     lateinit var menuRV : RecyclerView
     lateinit var RVAdapter: EditMenuRVAdapter
 
@@ -109,23 +110,42 @@ class EditMenuDialog (context: Context, val sikdangNum:String, var sikdangmainRe
                     }
                     //Log.d("확인  getMenuDataByMenuId()", product.toString())
                     //Log.d("확인  getMenuDataByMenuId()", "4")
-
                     ref.child("ingredients").addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(snapshot2: DataSnapshot) {
                             for (menuData2 in snapshot2.children) {
-                                ingredients.add(_Ingredient(menuData2.key.toString(), menuData2.value.toString()))
+                                ingKeyAL.add(menuData2.key.toString())
+                                Log.d("확인 2getMenuDataByMenuId()", "내용확인 : ${ingredients}")
                             }
-                            //Log.d("확인 2getMenuDataByMenuId()", "내용확인 : ${ingredients}")
-                            //여기서 한번에 MenuData 하나 만들어서 ArrayList에 넣는다.
-                            var tempMenuData = MenuData(product, image_url, price, product_exp, ingredients)
-                            menuDataAL.add(tempMenuData)
-                            Log.d("확인 getMenuDataByMenuId()", "불러오기 완료")
-                            renewalMenus()
+
+                            for (k in 0..ingKeyAL.size-1){
+                                ref.child("ingredients").child(ingKeyAL[k]).addValueEventListener(object : ValueEventListener {
+                                    override fun onDataChange(snapshot3: DataSnapshot) {
+                                        for (menuData3 in snapshot3.children) {
+                                            ingredients.add(_Ingredient(menuData3.key.toString(), menuData3.value.toString()))
+                                        }
+                                        //Log.d("확인 2getMenuDataByMenuId()", "내용확인 : ${ingredients}")
+                                        //여기서 한번에 MenuData 하나 만들어서 ArrayList에 넣는다.
+                                        var tempMenuData = MenuData(product, image_url, price, product_exp, ingredients)
+                                        menuDataAL.add(tempMenuData)
+                                        Log.d("확인 getMenuDataByMenuId()", "불러오기 완료")
+                                        renewalMenus()
+                                    }
+                                    override fun onCancelled(error: DatabaseError) {
+                                        Log.d("확인 2getMenuDataByMenuId()", "5 getFromDB : ${error}")
+                                    }
+                                })
+
+                            }
+
+
+
+
                         }
                         override fun onCancelled(error: DatabaseError) {
                             Log.d("확인 2getMenuDataByMenuId()", "5 getFromDB : ${error}")
                         }
                     })
+
 
                     //setTableData()
                 }

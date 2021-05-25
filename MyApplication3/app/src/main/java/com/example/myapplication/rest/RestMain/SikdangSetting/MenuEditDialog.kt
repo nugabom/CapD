@@ -20,7 +20,7 @@ import com.example.myapplication.rest.Resmain.SikdangMain_res
 //EditMenuRVAdapter 에서 사용
 //선택된 메뉴의 상세 내용 수정하는 다이얼로그
 
-class MenuEditDialog(context: Context, val sikdangNum: String, val menuNum: Int, val menuData: MenuData, var sikdangmainRes: SikdangMain_res): Dialog(context) {
+class MenuEditDialog(context: Context, val sikdangNum: String, val menuNum: Int, val menuData: MenuData, var editMenuDialog: EditMenuDialog, var sikdangmainRes: SikdangMain_res): Dialog(context) {
 
     private final var REQUEST_CODE = 0
 
@@ -231,6 +231,8 @@ class MenuEditDialog(context: Context, val sikdangNum: String, val menuNum: Int,
 
     private fun menuChange(newName: String, imgUrl: String, newPrice: Int, newEXP: String, newIng: ArrayList<_Ingredient>){
         var newMenu = MenuData(newName, imgUrl, newPrice, newEXP, newIng)
+
+
         //newData를 데이터베이스로 보내서 수정
     }
 

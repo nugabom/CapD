@@ -75,7 +75,7 @@ class EditMenuRVAdapter(var context: Context, val sikdangNum:String, var sikdang
 
 
     public fun showMenuEditDialog(pos:Int){
-        var customDialog = MenuEditDialog(context, sikdangNum, pos, editMenuDialog.menuDataAL[pos], sikdangmainRes)
+        var customDialog = MenuEditDialog(context, sikdangNum, pos, editMenuDialog.menuDataAL[pos], editMenuDialog, sikdangmainRes)
         customDialog!!.show()
     }
 

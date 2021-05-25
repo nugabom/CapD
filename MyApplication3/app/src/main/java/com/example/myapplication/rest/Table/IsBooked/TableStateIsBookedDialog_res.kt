@@ -15,7 +15,7 @@ import com.example.sikdangbook_rest.Table.TableData_res
 class TableStateIsBookedDialog_res(context: Context, val tableNum:Int): Dialog(context) {
     var userBookData = UserBookData(tableNum)
 
-    var tableData= TableData_res("0900")
+    var tableData= TableData_res()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -29,33 +29,33 @@ class TableFloorFragment_res(var floorNum:Int, val sikdangmainRes: SikdangMain_r
     //여기세 각 층 정보를 넣는다.
     public fun bind(view:View){
         Log.d("확인 TableFloorFragment floorNum", floorNum.toString())
-        var tableData = TableData_res(timeNum)
+        //var tableData = TableData_res()
         var tableLayout:ConstraintLayout = view.findViewById(R.id.tableCL)
 
         var floorNumTV = view.findViewById<TextView>(R.id.floorNumTV)
         //floorNumTV.setText(tableData.floorList[floorNum])
-        floorNumTV.setText(tableData.floorList[floorNum].toString()+"층")
+        floorNumTV.setText(sikdangmainRes.tableData.floorList[floorNum].toString()+"층")
         var i = 0
-        while(i<tableData.tableNumList[floorNum]){
+        while(i<sikdangmainRes.tableData.tableNumList[floorNum]){
             Log.d("확인 TableFloorFragment i", i.toString())
             var count = i
             if (floorNum == 0){
                 count = i
             }
             else{
-                count = i+tableData.accumTableNumList[floorNum-1]//테이블리스트의 몇번째인가
+                count = i+sikdangmainRes.tableData.accumTableNumList[floorNum-1]//테이블리스트의 몇번째인가
             }
 
             Log.d("확인 TableFloorFragment 카운트", count.toString())
             var button= Button(getContext())
-            if (tableData.tableList[count].isCircle == true)//원형테이블
+            if (sikdangmainRes.tableData.tableList[count].isCircle == true)//원형테이블
             {
 
                 var roundDrawable = resources.getDrawable(R.drawable.button_round_gray, null)
-                if (tableData.tableList[count].isBooked == true) {//예약이 돼있으면
+                if (sikdangmainRes.tableData.tableList[count].isBooked == true) {//예약이 돼있으면
                     roundDrawable = resources.getDrawable(R.drawable.button_round_red, null)
                     button.setOnClickListener {
-                        showDialogIsBooked(tableData.tableList[count].maxP, count)
+                        showDialogIsBooked(sikdangmainRes.tableData.tableList[count].maxP, count)
                         //val myToast = Toast.makeText(context, "테이블이 이미 예약되어있습니다.", Toast.LENGTH_SHORT).show()
                     }
                 }else {//예약 안되어있으면
@@ -66,30 +66,30 @@ class TableFloorFragment_res(var floorNum:Int, val sikdangmainRes: SikdangMain_r
                 }
                 button.background = roundDrawable
             } else {//사각 테이블
-                if (tableData.tableList[count].isBooked == true) {//이미 예약 된 경우
+                if (sikdangmainRes.tableData.tableList[count].isBooked == true) {//이미 예약 된 경우
                     button.setBackgroundColor(Color.parseColor("#CC5555"))
                     button.setOnClickListener {
                         //val myToast = Toast.makeText(context, "테이블이 이미 예약되어있습니다.", Toast.LENGTH_SHORT).show()
-                        showDialogIsBooked(tableData.tableList[count].maxP, count)
+                        showDialogIsBooked(sikdangmainRes.tableData.tableList[count].maxP, count)
                     }
                 } else {//dialogFragment 검색 or kotlin popup
                     button.setBackgroundColor(Color.parseColor("#CCCCCC"))
                     button.setOnClickListener {
-                        showDialogNotBooked(tableData.tableList[count].maxP, count)
+                        showDialogNotBooked(sikdangmainRes.tableData.tableList[count].maxP, count)
                     }
                 }
 
 
             }
-            var layoutParams = ConstraintLayout.LayoutParams(dpToPx(tableData.tableList[i].lengX), dpToPx(tableData.tableList[i].lengY))
+            var layoutParams = ConstraintLayout.LayoutParams(dpToPx(sikdangmainRes.tableData.tableList[i].lengX), dpToPx(sikdangmainRes.tableData.tableList[i].lengY))
             //with와 height에 픽셀값 들어감 => dp를 픽셀값으로 변환한 값 들어가야 한다.
 
             layoutParams.startToStart = ConstraintLayout.LayoutParams.PARENT_ID
             layoutParams.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
             layoutParams.topToTop = ConstraintLayout.LayoutParams.PARENT_ID
             layoutParams.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
-            layoutParams.horizontalBias = tableData.tableList[count].locX//0.5가 중앙
-            layoutParams.verticalBias = tableData.tableList[count].locy
+            layoutParams.horizontalBias = sikdangmainRes.tableData.tableList[count].locX//0.5가 중앙
+            layoutParams.verticalBias = sikdangmainRes.tableData.tableList[count].locy
 
             button.setLayoutParams(layoutParams)
             tableLayout.addView(button)

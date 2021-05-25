@@ -48,6 +48,10 @@ class ChoiceMySikdangRVAdapter(var context: Context, val choicesikdangpageRes: C
             itemView.setOnClickListener {
                 Log.d("확인 ChoiceMySikdangRVAdapter", "ㅁㅁ")
                 val intent = Intent(itemView.context, SikdangMain_res::class.java)
+                intent.putExtra("sikdangId", choicesikdangpageRes.sikdangList[pos].sikdangId)
+                intent.putExtra("sikdangType", choicesikdangpageRes.sikdangInfoList[pos].store_type)
+                intent.putExtra("sikdangName", choicesikdangpageRes.sikdangInfoList[pos].store_name)
+
                 context.startActivity(intent)
 
             }

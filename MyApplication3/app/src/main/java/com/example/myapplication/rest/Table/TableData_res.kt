@@ -7,8 +7,10 @@ import java.io.Serializable
 
 //TableStateIsBookedDialog_res 와 TableStateNotBookedDialog_res, TableFloorFragment_res 에서 생성
 //시간대에 따라 다르게 불러와야 함
-class TableData_res(val bookTime:String):Serializable {
+class TableData_res():Serializable {
     //가로좌표 세로좌표 가로길이 세로길이
+
+
 
 
 
@@ -26,6 +28,7 @@ class TableData_res(val bookTime:String):Serializable {
     //tableList 만 채워주면 된다
     private fun setData(){
 
+        /*
         floorList.add(1)
         floorList.add(3)
 
@@ -41,7 +44,7 @@ class TableData_res(val bookTime:String):Serializable {
         tableList.add(Table_res(0.2F, 0.6F, 60, 30, 6, 3, false, false))
         tableList.add(Table_res(0.35F, 0.6F, 60, 30, 3, 3, true, false))
         tableList.add(Table_res(0.35F, 0.75F, 60, 30, 3, 3, false, false))
-        setFloorTable()
+        setFloorTable()*/
 
     }
     //층별 테이블 수 계산

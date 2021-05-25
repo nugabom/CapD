@@ -103,7 +103,7 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="식당 이름"
+            android:text="식당 번호"
             android:textSize="24sp" />
 
         <EditText

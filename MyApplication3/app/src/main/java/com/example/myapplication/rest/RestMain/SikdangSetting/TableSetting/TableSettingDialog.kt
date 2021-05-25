@@ -302,7 +302,7 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
 
 
     private fun getTableData(){
-        tableData = TableData_res("09:30")
+        tableData = TableData_res()
     }
 
     private fun tableDataSet(){

@@ -9,7 +9,7 @@ import com.example.myapplication.rest.Resmain.SikdangMain_res
 class TableFloorVPAdapter_res(fa:FragmentActivity, val sikdangmainRes: SikdangMain_res): FragmentStateAdapter(fa) {
     //가계 층수
     override fun getItemCount(): Int {
-        return 2
+        return sikdangmainRes.floorList.size
     }
 
     override fun createFragment(position: Int): Fragment {

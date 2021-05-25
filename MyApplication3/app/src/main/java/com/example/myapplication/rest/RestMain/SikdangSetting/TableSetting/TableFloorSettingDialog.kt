@@ -47,7 +47,7 @@ class TableFloorSettingDialog(context: Context, val sikdangNum: String, var sikd
     //데이터베이스 접속
     private fun getTableData(){
         //테이블정보만 가져오면 됨
-        tableData = TableData_res("0900")
+        tableData = TableData_res()
     }
 
 

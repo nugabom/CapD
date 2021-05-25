@@ -10,12 +10,13 @@ data class SikdangId(
 
 
 ){
+    /*
     fun toMap(): Map<String, Any?> {
         return mapOf(
                 "sikdangId" to sikdangId,
                 "store_type" to store_type
         )
-    }
+    }*/
 }
 
 

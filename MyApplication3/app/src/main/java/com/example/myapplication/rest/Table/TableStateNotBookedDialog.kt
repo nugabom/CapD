@@ -33,7 +33,7 @@ class TableStateNotBookedDialog(context: Context, val sikdangmainRes: SikdangMai
     //lateinit var floorNumTV_dialog:TextView
     //lateinit var tableNumTV_dialog:TextView
 
-    var tableData = TableData_res("0900")
+    var tableData = TableData_res()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

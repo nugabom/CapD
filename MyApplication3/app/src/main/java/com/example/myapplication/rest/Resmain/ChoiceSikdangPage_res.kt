@@ -97,30 +97,21 @@ class ChoiceSikdangPage_res:AppCompatActivity() {
         sikdangInfoList.clear()
         //Log.d("확인 setSikdangListInfo()", "1")
         for(k in 0..sikdangList.size-1){
-            //Log.d("확인 setSikdangListInfo()", "2"+sikdangList[k].store_type!!+sikdangList[k].sikdangId!!)
+
             //val uid = FirebaseAuth.getInstance().currentUser.uid
             val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
                     .child("Restaurants").child(sikdangList[k].store_type!!).child(sikdangList[k].sikdangId!!)
-            //var query = ref.orderByChild("sikdangId")
-            //Log.d("확인 setSikdangList", query.toString())
-            //var a =ref.key
-            //Log.d("확인 setSikdangList", a.toString())
 
             ref.addValueEventListener(object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    //Log.d("확인 setSikdangList", "2")
+
                     for (sikdangInfo in snapshot.children) {
-                        //var a =snapshot.children
-                        //Log.d("확인 setSikdangListInfo()", "3"+snapshot.children.toString())
                         val newsikdangInfo = sikdangInfo.getValue(SikdangInfo::class.java)
-                        //Log.d("확인 setSikdangListInfo()", "3.5")
                         if(newsikdangInfo!!.store_name == "") continue
-                        //Log.d("확인 setSikdangListInfo()", "4")
                         //Log.d("확인 setSikdangListInfo()", "getFromDB : ${newsikdangInfo}")
                         sikdangInfoList.add(newsikdangInfo)
                     }
                     Log.d("확인 setSikdangListInfo()", "getFromDB : ${sikdangInfoList}")
-                    //Log.d("확인 setSikdangListInfo()", "6")
 
                     choiceMySikdangRVAdapter.notifyDataSetChanged()
                 }
@@ -130,11 +121,6 @@ class ChoiceSikdangPage_res:AppCompatActivity() {
                 }
             })
 
-            /*
-            for (i in 0..sikdangList.size-1){
-                Log.d("확인 setSikdangList", "반복")
-                Log.d("확인 setSikdangList", i.toString()+" "+ sikdangList[i].sikdangId)
-            }*/
         }
 
     }
@@ -295,6 +281,22 @@ class ChoiceSikdangPage_res:AppCompatActivity() {
         val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
                 .child("Tables").child(postId)
 
+        /*
+        var tempFlootInfo =hashMapOf<String, Any>(
+                "floor" to 1
+        )
+
+        ref.child("TableInfo").child("floor_1").setValue(tempFlootInfo)
+                .addOnSuccessListener {
+                    //finish()
+                    //upSikdangOnUser(postId)
+                }.addOnFailureListener {
+                    Toast.makeText(this, "위치 업데이트 실패.", Toast.LENGTH_SHORT).show()
+                    runOnUiThread{
+                        loading.visibility = View.INVISIBLE
+                    }
+                }*/
+
 
         var tempTable = hashMapOf<String, Any>(
                 "capacity" to 2,
@@ -304,7 +306,8 @@ class ChoiceSikdangPage_res:AppCompatActivity() {
                 "y" to 0.5
         )
 
-        ref.child("TableInfo").child("floor_1").setValue(tempTable)
+
+        ref.child("TableInfo").child("floor_1").child("table_1").setValue(tempTable)
                 .addOnSuccessListener {
                     //finish()
                     //upSikdangOnUser(postId)

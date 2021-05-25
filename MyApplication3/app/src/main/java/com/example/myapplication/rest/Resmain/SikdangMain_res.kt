@@ -20,9 +20,12 @@ import com.example.myapplication.rest.RestMain.SikdangSetting.EditSikdangImageDi
 import com.example.myapplication.rest.RestMain.SikdangSetting.MenuEditDialog
 import com.example.myapplication.rest.RestMain.SikdangSetting.SikdangSettingDialog
 import com.example.myapplication.rest.RestMain.SikdangSetting.TableSetting.ChangeFloorImageDialog
+import com.example.myapplication.rest.Table.TableFromDBData
+import com.example.sikdangbook_rest.Table.TableData_res
 import com.example.sikdangbook_rest.Table.TableFloorVPAdapter_res
+import com.example.sikdangbook_rest.Table.Table_res
 import com.example.sikdangbook_rest.Time.TimeSelectDialog
-import kotlinx.android.synthetic.main.res_sikdangmain.*
+import com.google.firebase.database.*
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -52,9 +55,24 @@ class SikdangMain_res:AppCompatActivity() {
 
     private var timeNum = ""
     var sikdangName = "식다아아아앙이름"
-    var sikdangNum = "10987654321"
+    var sikdangId = "10987654321"
+    var sikdangType=""
+
+    var showTime="09:00 오전"
 
     var messages = ArrayList<MessageData>()
+
+    var tableData = TableData_res()
+
+    var floorList = ArrayList<String>()  //테이블 각각 몇층에 있는지
+    var intFloorIist = ArrayList<Int>()
+    var tableFromDBDataAL=ArrayList<TableFromDBData>() // 테이블 모두 저장
+    var tableNumAL=ArrayList<Int>() // 층별로 테이블 각각 몇개인지
+    var accumTableNumList = ArrayList<Int>()//테이블 개수 축적
+    var tableIsBookedAL = ArrayList<Int>()
+
+
+
 
     //전체 알림인지 처리전 알림인지 체크크
     var isAll: Boolean = true
@@ -64,12 +82,16 @@ class SikdangMain_res:AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        Log.d("확인 CSikdangMain_res", "1")
         setContentView(R.layout.res_sikdangmain)
-        Log.d("확인 CSikdangMain_res", "2")
+
+        var myIntent = getIntent()
+        sikdangId = myIntent.getStringExtra("sikdangId")!!
+        sikdangName = myIntent.getStringExtra("sikdangName")!!
+        sikdangType = myIntent.getStringExtra("sikdangType")!!
+
+        getTableDataFromDB()
 
         sm_drawerLayout = findViewById(R.id.sm_drawerLayout)
-        Log.d("확인 CSikdangMain_res", "3")
         val time = System.currentTimeMillis()
         val dateFormat = SimpleDateFormat("kk:mm")
         val curTime = dateFormat.format(Date(time))
@@ -81,8 +103,7 @@ class SikdangMain_res:AppCompatActivity() {
 
         Log.d("확인 CSikdangMain_res", "5")
 
-        setSikdangInfo()
-        setTable()
+        //setTable()
 
         setMessage()
 
@@ -109,7 +130,7 @@ class SikdangMain_res:AppCompatActivity() {
             selectedTimeTV.setText(curTime.toString())
 
         }
-
+        Log.d("확인 CSikdangMain_res", "7")
         var sm_infoBtn: Button = findViewById(R.id.sm_infoBtn)
         sm_infoBtn.setOnClickListener {
             val intent = Intent(this, ResInfoActivity::class.java)
@@ -153,6 +174,8 @@ class SikdangMain_res:AppCompatActivity() {
         sm_messageRV.setHasFixedSize(true)
 
 
+        Log.d("확인 CSikdangMain_res", "8")
+
 
     }
 
@@ -181,11 +204,184 @@ class SikdangMain_res:AppCompatActivity() {
 
     }
 
-    //데이터베이스에서 식당이름 불러온다
-    public fun setSikdangInfo() {
-        sikdangName = "불러온식당이름"
-        sikdangNum = "109876543210"
+    //데이터베이스에서 테이블 목록
+
+
+    //데이터베이스에서 층을 받음
+    public fun getTableDataFromDB(){
+        Log.d("확인  getTableDataFromDB()", "시작")
+        val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
+                .child("Tables").child(sikdangId).child("TableInfo")
+
+        floorList.clear()
+
+        ref.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+
+                for (tableInfo in snapshot.children) {
+                    Log.d("확인  getTableDataFromDB()", "getFromDB : "+tableInfo.key.toString())
+                    floorList.add(tableInfo.key.toString())
+                }
+                getTableOnFloor()
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("확인 setSikdangListInfo()", "5 getFromDB : ${error}")
+            }
+        })
+
     }
+
+    //데이터베이스에서 받은 층 토대로 테이블 가져옴옴
+    public fun getTableOnFloor(){
+        tableFromDBDataAL.clear()
+        tableNumAL.clear()
+        val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
+                .child("Tables").child(sikdangId).child("TableInfo")
+
+
+        /*
+        var ttttt=0
+        for (i in 0..10000000){
+            ttttt+=1
+            ttttt=ttttt*2/ttttt
+        }*/
+
+        Log.d("확인  getTableOnFloor()", "층수"+floorList.size)
+        for (i in 0..floorList.size-1){
+            Log.d("확인  getTableOnFloor()", "테이블별"+ floorList[i])
+
+            ref.child(floorList[i]).addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    var tableNum = 0
+                    Log.d("확인  getTableOnFloor()", " 1")
+                    for (tableInfo in snapshot.children) {
+                        Log.d("확인  getTableOnFloor()", "getFromDB : "+snapshot.key.toString())
+                        //floorList.add(tableInfo.key.toString())
+                        val newsikdangInfo = tableInfo.getValue(TableFromDBData::class.java)
+                        Log.d("확인  getTableOnFloor()", "데이터 가져옴")
+                        if(newsikdangInfo!! == null) continue
+                        Log.d("확인 getTableOnFloor()", "getFromDB : ${newsikdangInfo}")
+                        tableFromDBDataAL.add(newsikdangInfo)
+                        tableNum +=1
+                    }
+                    tableNumAL.add(tableNum)
+                    Log.d("확인  getTableOnFloor()", "getFromDB : ${tableFromDBDataAL}")
+                    setAccum()
+                    getTableBookedInfo()
+                    //choiceMySikdangRVAdapter.notifyDataSetChanged()
+                    //getTableBookedInfo()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.d("확인 setSikdangListInfo()", "5 getFromDB : ${error}")
+                }
+            })
+
+        }
+
+
+    }
+
+    public fun setAccum(){
+        accumTableNumList.clear()
+        accumTableNumList.add(tableNumAL[0])
+        //Log.d("확인 tableAccum", accumTableNumList[i].toString())
+        for (i in 0..tableNumAL.size-2){
+            accumTableNumList.add(accumTableNumList[i]+tableNumAL[i+1])
+            //Log.d("확인 tableAccum", accumTableNumList[i].toString())
+        }
+
+    }
+
+    //예약 현황 가져옴
+    public fun getTableBookedInfo(){
+        val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
+                .child("Tables").child(sikdangId).child("Booked")
+
+        tableIsBookedAL.clear()
+        var floorIt = 0
+        //var calTableNum = tableNumAL[0]
+        for (i in 0..tableFromDBDataAL.size-1){
+            Log.d("확인  getTableBookedInfo()", "for문 시작"+" table"+(i+1).toString())
+            //ref.child(floorList[floorIt]).child(showTime).child("BookInfo").child(("table"+(i+1).toString())).addValueEventListener(object : ValueEventListener {
+            ref.child(floorList[floorIt]).child(showTime).child(("table"+(i+1).toString())).addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (tableBooked in snapshot.children) {
+                        Log.d("확인  getTableBookedInfo()", "getFromDB : "+tableBooked.value.toString())
+                        tableIsBookedAL.add(tableBooked.value.toString().toInt())
+                    }
+                    setTableData()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.d("확인 getTableBookedInfo()", "5 getFromDB : ${error}")
+                }
+            })
+
+
+
+
+
+            if (i>=accumTableNumList[floorIt]-1) floorIt+=1
+
+        }
+    }
+
+
+
+    public fun setTableData(){
+
+        Log.d("확인  setTableData()", "1")
+        tableData.tableList=ArrayList()//각 테이블 정보 담긴 리스트
+        Log.d("확인  setTableData()", "1.1")
+        //tableData.floorList = ArrayList<Int>()//식당 각 몇층인지 1층과 3층이 있으면 1, 3 의 값을 갖는다.
+        tableData.tableNumList = tableNumAL//각 층에 테이블 몇개인지
+        Log.d("확인  setTableData()", "1.2")
+        tableData.accumTableNumList = accumTableNumList//테이블 개수 축적
+
+        Log.d("확인  setTableData()", "1.5")
+        for (i in 0..floorList.size-1){
+            Log.d("확인  setTableData()", " 1for문 "+floorList[i]+"  "+i.toString())
+            intFloorIist.add(floorList[i].slice(IntRange(6, 6)).toInt())
+        }
+        tableData.floorList=intFloorIist
+
+        Log.d("확인  setTableData()", "2")
+
+        for (i in 0..tableFromDBDataAL.size-1){
+            var calNum = 0
+            var floorIt = 0
+            var tempFloor = intFloorIist[floorIt]
+
+            Log.d("확인  setTableData()", "3")
+            for (j in 0..tableNumAL.size-1){
+                calNum+=tableNumAL[j]
+                if (i<calNum) break
+            }
+            var tempIsCircle = true
+            if (tableFromDBDataAL[i].shape == "circle") tempIsCircle = true
+
+            var tempIsBooked = true
+            if (tableIsBookedAL[i] == 1) tempIsBooked = true
+
+            Log.d("확인  setTableData()", "4")
+
+            tableData.tableList.add(Table_res(tableFromDBDataAL[i].x!!, tableFromDBDataAL[i].y!!, tableFromDBDataAL[i].width!!, tableFromDBDataAL[i].height!!,
+                    tableFromDBDataAL[i].capacity!!, tempFloor, tempIsBooked, tempIsCircle))
+
+            if (i>=accumTableNumList[floorIt]-1) floorIt+=1
+        }
+
+        setTable()
+
+
+
+    }
+
+
+
 
     public fun setTable() {
         //각 층 들어가는 뷰페이저
@@ -216,7 +412,7 @@ class SikdangMain_res:AppCompatActivity() {
 
     private fun showSikdangSettingDialog() {
         Log.d("확인 showSikdangSettingDialog()", "ㅁㅁ")
-        var customDialog = SikdangSettingDialog(this, sikdangNum, this)
+        var customDialog = SikdangSettingDialog(this, sikdangId, this)
         customDialog!!.show()
     }
 

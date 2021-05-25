@@ -11,10 +11,13 @@ import android.widget.*
 import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.myapplication.R
 import com.example.myapplication._Ingredient
 import com.example.myapplication.bookActivity.MenuData
 import com.example.myapplication.rest.Resmain.SikdangMain_res
+import com.google.firebase.database.*
 
 
 //EditMenuRVAdapter 에서 사용
@@ -29,6 +32,11 @@ class MenuEditDialog(context: Context, val sikdangNum: String, val menuNum: Int,
     lateinit var RVAdapter2:AfterIngRVAdapter
 
     lateinit var afterChangeImage:ImageView
+
+    lateinit var beforeChangeImage : ImageView
+
+    var isnewImageSetted = false
+
 
     init{
         afterIngAL=menuData.ingredients
@@ -72,18 +80,15 @@ class MenuEditDialog(context: Context, val sikdangNum: String, val menuNum: Int,
             //Log.d("확인 MenuEditDialog","리사이클러뷰 클릭시")
         }
 
-        var beforeChangeImage : ImageView=findViewById(R.id.beforeChangeImage)
-        var beforeImgRes = R.drawable.foodimage
-        beforeChangeImage.setImageResource(beforeImgRes)
-
-
+        beforeChangeImage =findViewById(R.id.beforeChangeImage)
 
         afterChangeImage =findViewById(R.id.afterChangeImage)
+        setImgOnView()
         //afterChangeImage.setImageResource()
 
-        var imageRes:Int=beforeImgRes
+        //var imageRes:Int=beforeImgRes
         var imgUrl=""
-        afterChangeImage.setImageResource(imageRes)
+        //afterChangeImage.setImageResource(imageRes)
         afterChangeImage.setOnClickListener {
             //갤러리에서 이미지 불러오는 코드
             //imageRes에 변경할 이미지 저장
@@ -91,21 +96,9 @@ class MenuEditDialog(context: Context, val sikdangNum: String, val menuNum: Int,
             intent.type = "image/*"
             intent.action = Intent.ACTION_GET_CONTENT
             sikdangmainRes.startActivityForResult(intent, 1)
-            //getContext().startActivity(intent);
-            //getActivity().startActivityForResult(intent, 1)
-            //(getContext() as Activity).startActivityForResult(intent, 1)
-            //getContext().startActivityForResult(intent, 1)
-            //startActivityForResult(intent, 1)
-            /*
-            while(sikdangmainRes.sikdangimgCheckNum==0){
-                Log.d("확인 대기", sikdangmainRes.sikdangimgCheckNum.toString())
-                Thread.sleep(1_000)
-            }*/
 
 
 
-            //imgUrl 에 정보 집어넣음
-            //setNewImg() 에서 데이터 베이스 접근하도록 수정
         }
 
 
@@ -150,7 +143,7 @@ class MenuEditDialog(context: Context, val sikdangNum: String, val menuNum: Int,
             //afterExpET : 변경된 메뉴 설명
             //afterIngAL _ingredient 의 ArrayList : 변경된 재료
             //imageRes : 변경할 메뉴 이미지
-            menuChange(afterNameET.text.toString(), imgUrl, afterPriceET.text.toString().toInt(), afterExpET.text.toString(), afterIngAL)
+            menuChange(afterNameET.text.toString(), sikdangmainRes.newMenuImgUri.toString(), afterPriceET.text.toString().toInt(), afterExpET.text.toString(), afterIngAL)
             this.dismiss()
         }
 
@@ -172,42 +165,72 @@ class MenuEditDialog(context: Context, val sikdangNum: String, val menuNum: Int,
 
 
 
-    //override fun onActivity
 
-
-
-
-
-    /*
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-            }
-            MotionEvent.ACTION_MOVE -> {
-            }
-            MotionEvent.ACTION_UP -> {
-            }
-            MotionEvent.ACTION_CANCEL -> {
-            }
-            else -> {
-            }
-        }
-        return true
-    }*/
 
 
     public fun setNewImg(){
-
+        isnewImageSetted=true
         if(sikdangmainRes.sikdangimgCheckNum==1){
-            afterChangeImage.setImageBitmap(sikdangmainRes.sikdangimg)
-            var imageRes=afterChangeImage.imageAlpha
-
-            sikdangmainRes.sikdangimgCheckNum=0
-
-            //afterChangeImage.setImageResource(imageRes)
+            Glide.with(context)
+                    .load(sikdangmainRes.newMenuImgUri)
+                    .apply(RequestOptions())
+                    .into(afterChangeImage)
         }
 
     }
+
+
+    //이미지뷰에 기존의 이미지 넣음
+
+    public fun setImgOnView(){
+        Log.d("확인  setImgOnView()", "1")
+
+
+        if(editMenuDialog.menuDataAL[menuNum].image_url == "") {
+            var beforeImgRes = R.drawable.foodimage
+            beforeChangeImage.setImageResource(beforeImgRes)
+            afterChangeImage.setImageResource(beforeImgRes)
+        }
+        else{
+            Glide.with(context)
+                    .load(editMenuDialog.menuDataAL[menuNum].image_url)
+                    .apply(RequestOptions())
+                    .into(beforeChangeImage)
+            Glide.with(context)
+                    .load(editMenuDialog.menuDataAL[menuNum].image_url)
+                    .apply(RequestOptions())
+                    .into(afterChangeImage)
+        }
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     fun closeKeyBoard(){
         var view = this.currentFocus
@@ -230,7 +253,43 @@ class MenuEditDialog(context: Context, val sikdangNum: String, val menuNum: Int,
 
 
     private fun menuChange(newName: String, imgUrl: String, newPrice: Int, newEXP: String, newIng: ArrayList<_Ingredient>){
-        var newMenu = MenuData(newName, imgUrl, newPrice, newEXP, newIng)
+        //var newMenu = MenuData(newName, imgUrl, newPrice, newEXP, newIng)
+
+        var check1=false
+        var check2 = false
+        val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
+                .child("Restaurants").child(sikdangmainRes.sikdangType).child(sikdangmainRes.sikdangId).child("menu").child(editMenuDialog.menuKeyAL[menuNum])
+        ref.child("product").setValue(newName)
+        ref.child("price").setValue(newPrice)
+        ref.child("product_exp").setValue(newEXP)
+
+        Log.d("확인  MenuEditDialog.menuChange() : editMenuDialog.ingKeyAL.size ", editMenuDialog.ingKeyAL.size.toString())
+
+        for (i in 0..editMenuDialog.ingKeyAL[menuNum].size-1){
+            ref.child("ingredients").child(editMenuDialog.ingKeyAL[menuNum][i]).child("ing").setValue(newIng[i].ing)
+            ref.child("ingredients").child(editMenuDialog.ingKeyAL[menuNum][i]).child("country").setValue(newIng[i].country)
+            if(i == editMenuDialog.ingKeyAL.size-1){
+                check1 = true
+                if (check2 == true){
+                    editMenuDialog.getMenuDataOnDB()
+                }
+            }
+        }
+        Log.d("확인  MenuEditDialog.menuChange() : editMenuDialog.newIng.size ", newIng.size.toString())
+
+        for (j in editMenuDialog.ingKeyAL.size..newIng.size-1){
+            var pushRef = ref.child("ingredients").push()
+            pushRef.child("ing").setValue(newIng[j].ing)
+            pushRef.child("country").setValue(newIng[j].country)
+            if(j == newIng.size-1){
+                check2 = true
+                if (check1 == true){
+                    editMenuDialog.getMenuDataOnDB()
+                }
+            }
+        }
+
+
 
 
         //newData를 데이터베이스로 보내서 수정

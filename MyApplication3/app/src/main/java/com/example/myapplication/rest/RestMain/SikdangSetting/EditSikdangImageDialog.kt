@@ -20,6 +20,7 @@ import com.google.firebase.storage.FirebaseStorage
 class EditSikdangImageDialog(context: Context, val sikdangNum: String, var sikdangmainRes: SikdangMain_res): Dialog(context) {
 
     var isImgAdded = false
+    var newUrl = ""
 
     lateinit var esi_newSikdangImgIV:ImageView
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +45,7 @@ class EditSikdangImageDialog(context: Context, val sikdangNum: String, var sikda
         var esi_editBtn:Button = findViewById(R.id.esi_editBtn)
         esi_editBtn.setOnClickListener {
             setNewImgOnDB()
+            //upUrlOnDB()
             this.dismiss()
         }
     }
@@ -54,6 +56,7 @@ class EditSikdangImageDialog(context: Context, val sikdangNum: String, var sikda
         val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
                 .child("Restaurants").child(sikdangmainRes.sikdangType).child(sikdangmainRes.sikdangId).child("info")
 
+
         var setUrl = ""
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -62,6 +65,7 @@ class EditSikdangImageDialog(context: Context, val sikdangNum: String, var sikda
                     if(tableInfo.key =="sikdangImageUrl"){
                         setUrl = tableInfo.value.toString()
                         Log.d("확인  setImgOnView()", "url : " + setUrl)
+                        newUrl=setUrl
                     }
                     Log.d("확인  setImgOnView()", tableInfo.key.toString())
                     //setUrl = tableInfo.key.toString()
@@ -105,10 +109,12 @@ class EditSikdangImageDialog(context: Context, val sikdangNum: String, var sikda
 
     public fun setNewImg(){
         Log.d("확인 EditSikdangImageDialog.setNewImage", sikdangmainRes.sikdangimgCheckNum.toString())
+        Log.d("확인 EditSikdangImageDialog.setNewImage", sikdangmainRes.newSikdangImgUri.toString())
         if(sikdangmainRes.sikdangimgCheckNum==1){
-
+            Log.d("확인 EditSikdangImageDialog.setNewImage", "수행")
             //esi_newSikdangImgIV.setImageBitmap(sikdangmainRes.sikdangimg)
-            esi_newSikdangImgIV.setImageURI(sikdangmainRes.newSikdangImgUri)
+            //esi_newSikdangImgIV.setImageURI(sikdangmainRes.newSikdangImgUri)
+            setImgOnView2(sikdangmainRes.newSikdangImgUri.toString())
             sikdangmainRes.sikdangimgCheckNum=0
 
             isImgAdded = true
@@ -130,12 +136,15 @@ class EditSikdangImageDialog(context: Context, val sikdangNum: String, var sikda
                 upUrlOnDB(newUrl)
             }.toString()
         }
+        //upUrlOnDB(newUrl)
 
     }
 
     public fun upUrlOnDB(newUrl:String){
         val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
                 .child("Restaurants").child(sikdangmainRes.sikdangType).child(sikdangmainRes.sikdangId).child("info").child("sikdangImageUrl")
+        Log.d("확인 upUrlOnDB()", sikdangmainRes.sikdangId)
+        Log.d("확인 upUrlOnDB()", newUrl.toString())
         ref.setValue(newUrl)
     }
 

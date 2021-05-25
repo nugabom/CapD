@@ -75,6 +75,7 @@ class SikdangMain_res:AppCompatActivity() {
     var tableIsBookedAL = ArrayList<Int>()
 
     var newSikdangImgUri : Uri? = null
+    public var newMenuImgUri : Uri? = null
 
 
 
@@ -514,25 +515,27 @@ class SikdangMain_res:AppCompatActivity() {
 
 
 
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                try {
-                    val ins: InputStream? = contentResolver.openInputStream(data?.data!!)
-                    sikdangimg = BitmapFactory.decodeStream(ins)
-                    ins?.close()
-                    Log.d("확인 onActivityResult1", sikdangimg.toString())
-                    sikdangimgCheckNum=1
-                    //saveBitmap(img)
-                    //imageView3.setImageBitmap(img)
-                    menuEditDialog.setNewImg()
-                } catch (e: Exception) {
-                    Log.d("확인 onActivityResult1.e", sikdangimg.toString())
-                    sikdangimgCheckNum=1
-                }
-            } else if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show()
-                sikdangimgCheckNum=2
-            }
+        if (requestCode == 1&& resultCode == Activity.RESULT_OK) { // 메뉴의 이미지 변경
+            if (data == null) return
+            sikdangimgCheckNum=1
+            newMenuImgUri = data.data
+            menuEditDialog.setNewImg()
+
+
+        }
+        else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+
+            var result = CropImage.getActivityResult(data)
+            newMenuImgUri = result.uri
+            Log.d("확인 sikdangMainRes", "식당사진 셋 uri : "+newMenuImgUri.toString())
+            if(newMenuImgUri == null) return
+            menuEditDialog.setNewImg()
+
+            sikdangimgCheckNum=1
+        }
+        else{
+
+            sikdangimgCheckNum=2
         }
         if (requestCode == 2){
             if (resultCode == RESULT_OK) {

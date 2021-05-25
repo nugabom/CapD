@@ -33,6 +33,7 @@ class EditMenuRVAdapter(var context: Context, val sikdangNum:String, var sikdang
     override fun getItemCount(): Int {
         //메뉴 개수
         //Log.d("확인 EditMenuRVAdapter", menuDataAL.size.toString())
+        //Log.d("확인 바인드 될 메뉴 라인 수",editMenuDialog.menuDataAL.size.toString())
         return editMenuDialog.menuDataAL.size
         //return 2
     }
@@ -45,7 +46,7 @@ class EditMenuRVAdapter(var context: Context, val sikdangNum:String, var sikdang
         var menuIng : TextView = itemView.findViewById(R.id.ml_ingTV)
 
         public fun bind(pos:Int){
-            Log.d("확인 BeforeIngRVAdapter","###############################")
+            //Log.d("확인 BeforeIngRVAdapter","###############################")
             if(editMenuDialog.menuDataAL[pos].image_url == ""){menuImage.setBackgroundResource(R.drawable.food_placeholder)}
             else{
                 Glide.with(context)

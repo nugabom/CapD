@@ -111,7 +111,7 @@ class TableFloorFragment_res(var floorNum:Int, val sikdangmainRes: SikdangMain_r
     }
 
     public fun showDialogIsBooked(tablePerson:Int, tableNum: Int){
-        var customDialog = TableStateIsBookedDialog_res(this!!.requireContext(), tableNum)
+        var customDialog = TableStateIsBookedDialog_res(this!!.requireContext(), tableNum, sikdangmainRes)
         customDialog!!.show()
     }
 }

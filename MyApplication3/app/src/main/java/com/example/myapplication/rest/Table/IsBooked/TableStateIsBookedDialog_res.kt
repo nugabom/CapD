@@ -6,16 +6,17 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import com.example.myapplication.R
+import com.example.myapplication.rest.Resmain.SikdangMain_res
 import com.example.myapplication.rest.Table.UserBookData
 import com.example.sikdangbook_rest.Table.TableData_res
 
 //TableFloorFragment_res 에서 사용
 //예약된 테이블 선택하면 가장 먼저 나오는 다이얼로그
 //여기서 여러 기능 선택
-class TableStateIsBookedDialog_res(context: Context, val tableNum:Int): Dialog(context) {
+class TableStateIsBookedDialog_res(context: Context, val tableNum:Int, val sikdangmainRes: SikdangMain_res): Dialog(context) {
     var userBookData = UserBookData(tableNum)
 
-    var tableData= TableData_res()
+    //var tableData= TableData_res()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +25,7 @@ class TableStateIsBookedDialog_res(context: Context, val tableNum:Int): Dialog(c
         var floorNumTV_BookedDialog = findViewById<TextView>(R.id.floorNumTV_BookedDialog)
         var tableNumTV_BookedDialog = findViewById<TextView>(R.id.tableNumTV_BookedDialog)
 
-        floorNumTV_BookedDialog.setText(tableData.tableList[tableNum].floor.toString()+" 층")
+        floorNumTV_BookedDialog.setText(sikdangmainRes.tableData.tableList[tableNum].floor.toString()+" 층")
         tableNumTV_BookedDialog.setText(tableNum.toString()+" 번 테이블")
 
         var bookNumberTV = findViewById<TextView>(R.id.bookNumberTV)

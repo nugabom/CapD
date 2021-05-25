@@ -33,7 +33,7 @@ class TableStateNotBookedDialog(context: Context, val sikdangmainRes: SikdangMai
     //lateinit var floorNumTV_dialog:TextView
     //lateinit var tableNumTV_dialog:TextView
 
-    var tableData = TableData_res()
+    //var tableData = TableData_res()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,12 +54,14 @@ class TableStateNotBookedDialog(context: Context, val sikdangmainRes: SikdangMai
         mupBtn2=findViewById(R.id.mupBtn2)
         mdownBtn1=findViewById(R.id.mdownBtn1)
         mdownBtn2=findViewById(R.id.mdownBtn2)
+        //Log.d("확인 TableStateNotBookedDialog", "다이얼로그는 열림")
 
         var floorNumTV_dialog = findViewById<TextView>(R.id.floorNumTV_dialog)
         var tableNumTV_dialog = findViewById<TextView>(R.id.tableNumTV_dialog)
 
-        floorNumTV_dialog.setText(tableData.tableList[tableNum].floor.toString()+" 층")
+        floorNumTV_dialog.setText(sikdangmainRes.tableData.tableList[tableNum].floor.toString()+" 층")
         tableNumTV_dialog.setText(tableNum.toString()+" 번 테이블")
+        //Log.d("확인 TableStateNotBookedDialog", "2")
 
         //시간 설정 관련 부분
 
@@ -306,6 +308,7 @@ class TableStateNotBookedDialog(context: Context, val sikdangmainRes: SikdangMai
         }
 
 
+        Log.d("확인 TableStateNotBookedDialog", "3")
 
 
         var plusBookBtn:Button = findViewById(R.id.plusBookBtn)
@@ -331,6 +334,7 @@ class TableStateNotBookedDialog(context: Context, val sikdangmainRes: SikdangMai
             
         }
 
+        Log.d("확인 TableStateNotBookedDialog", "4")
 
 
 

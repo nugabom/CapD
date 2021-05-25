@@ -59,7 +59,7 @@ class SikdangSettingDialog(context: Context, val sikdangNum:String, var sikdangm
 
 
     private fun showChangeSikdangNameDialog(){
-        var customDialog = ChangeSikdangNameDialog(context,sikdangNum)
+        var customDialog = ChangeSikdangNameDialog(context,sikdangNum, sikdangmainRes)
         customDialog!!.show()
     }
 

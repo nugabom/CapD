@@ -379,6 +379,8 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
 
 
         for(i in 0..changedTableAL.size-1){
+            var tempShape = "Circle"
+
             var tempTableHashMap =hashMapOf<String, Any>(
                 "capacity" to changedTableAL[i].maxP,
                 "height" to changedTableAL[i].lengY,
@@ -386,6 +388,8 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
                 "x" to changedTableAL[i].locX,
                 "y" to changedTableAL[i].locy
             )
+            if (changedTableAL[i].isCircle) tempTableHashMap.put("shape", tempShape)
+
             tableHashMap.put("table"+(i+1).toString(), tempTableHashMap)
             if(i == changedTableAL.size-1) getTimeAtBooked()
 
@@ -449,8 +453,10 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
                     "current" to changedTableAL[i].maxP,
                     "max" to changedTableAL[i].maxP
             )
+            Log.d("확인 getTimeAtBooked() 예약 시간 가져오기 ", "${timeHashMap}")
             timeHashMap.put("BookInfo", tempBookInfo)
-            ref.child(timeAL[1]).setValue(timeHashMap).addOnCompleteListener {
+            ref.child(timeAL[i]).setValue(timeHashMap).addOnCompleteListener {
+                Log.d("확인 getTimeAtBooked() 예약 시간 가져오기 ", "올리기 성공")
                 sikdangmainRes.getTableDataLineNum = 0
                 sikdangmainRes.getTableDataFromDB()
             }

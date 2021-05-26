@@ -18,8 +18,7 @@ import com.example.myapplication.R
 import com.example.myapplication.rest.Resmain.SikdangMain_res
 import com.example.sikdangbook_rest.Table.TableData_res
 import com.example.sikdangbook_rest.Table.Table_res
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_notification.*
 
 //TableFloorSettingDialog 에서 사용
@@ -36,6 +35,8 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
     var buttonAL=ArrayList<Button>()
 
     var changedTableAL = ArrayList<Table_res>()
+
+    var timeAL = ArrayList<String>()
 
 
 
@@ -385,7 +386,8 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
                 "x" to changedTableAL[i].locX,
                 "y" to changedTableAL[i].locy
             )
-            tableHashMap.put("table"+i.toString(), tempTableHashMap)
+            tableHashMap.put("table"+(i+1).toString(), tempTableHashMap)
+            if(i ==changedTableAL.size-1) getTimeAtBooked()
 
         }
         ref.setValue(tableHashMap).addOnSuccessListener {
@@ -406,6 +408,36 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
 
         //다시 불러오지 않고 그냥 다이얼로그 닫게 할 수도 있음
         this.dismiss()
+    }
+
+    public fun getTimeAtBooked(){
+        val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
+                .child("Tables").child(sikdangmainRes.sikdangId).child("Booked").child("floor_"+sikdangmainRes.tableData.floorList[floorNum])
+
+        ref.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (tableBooked in snapshot.children) {
+                    Log.d("확인 getTimeAtBooked() 예약 시간 가져오기 ", tableBooked.key.toString())
+                    timeAL.add(tableBooked.key.toString())
+                }
+                setTableOnTime()
+
+            }
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("확인 getTableBookedInfo()", "5 getFromDB : ${error}")
+            }
+        })
+    }
+
+    public fun setTableOnTime(){
+        val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
+                .child("Tables").child(sikdangmainRes.sikdangId).child("Booked").child("floor_"+sikdangmainRes.tableData.floorList[floorNum])
+        for (i in 0..timeAL.size-1){
+            for (j in 0..changedTableAL.size-1){
+                ref.child(timeAL[i]).child("table"+(j+1).toString()).child("mutex").setValue(1)
+            }
+        }
+
     }
 
 

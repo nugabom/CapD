@@ -307,7 +307,7 @@ class ChoiceSikdangPage_res:AppCompatActivity() {
         )
 
 
-        ref.child("TableInfo").child("floor_1").child("table_1").setValue(tempTable)
+        ref.child("TableInfo").child("floor_1").child("table1").setValue(tempTable)
                 .addOnSuccessListener {
                     //finish()
                     //upSikdangOnUser(postId)

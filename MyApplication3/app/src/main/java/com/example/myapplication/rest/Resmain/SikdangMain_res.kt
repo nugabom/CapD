@@ -261,14 +261,14 @@ class SikdangMain_res:AppCompatActivity() {
             ref.child(floorList[i]).addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     var tableNum = 0
-                    Log.d("확인  getTableOnFloor()", " 1")
+                    //Log.d("확인  getTableOnFloor()", " 1")
                     for (tableInfo in snapshot.children) {
-                        Log.d("확인  getTableOnFloor()", "getFromDB : "+snapshot.key.toString())
+                        //Log.d("확인  getTableOnFloor()", "getFromDB : "+snapshot.key.toString())
                         //floorList.add(tableInfo.key.toString())
                         val newsikdangInfo = tableInfo.getValue(TableFromDBData::class.java)
-                        Log.d("확인  getTableOnFloor()", "데이터 가져옴")
+                        //Log.d("확인  getTableOnFloor()", "데이터 가져옴")
                         if(newsikdangInfo!! == null) continue
-                        Log.d("확인 getTableOnFloor()", "getFromDB : ${newsikdangInfo}")
+                        Log.d("확인 getTableOnFloor()", "getFromDB 테이블 추가 : ${newsikdangInfo}")
                         tableFromDBDataAL.add(newsikdangInfo)
                         tableNum +=1
                     }
@@ -310,21 +310,26 @@ class SikdangMain_res:AppCompatActivity() {
         var floorIt = 0
         //var calTableNum = tableNumAL[0]
         for (i in 0..tableFromDBDataAL.size-1){
-            Log.d("확인  getTableBookedInfo()", "for문 시작"+" table"+(i+1).toString())
+            Log.d("확인  getTableBookedInfo()", "for문 시작"+" table"+(i+1).toString() + floorList[floorIt].toString() + " " +floorIt )
             //ref.child(floorList[floorIt]).child(showTime).child("BookInfo").child(("table"+(i+1).toString())).addValueEventListener(object : ValueEventListener {
+
             ref.child(floorList[floorIt]).child(showTime).child(("table"+(i+1).toString())).addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
+                    Log.d("확인 getTableBookedInfo() 가져오기 전",i.toString() )
                     for (tableBooked in snapshot.children) {
-                        Log.d("확인  getTableBookedInfo()", "getFromDB : "+tableBooked.value.toString())
+                        Log.d("확인  getTableBookedInfo()", "get tableIsBookedAL FromDB : "+tableBooked.value.toString())
                         tableIsBookedAL.add(tableBooked.value.toString().toInt())
+                        if (tableBooked == null) tableIsBookedAL.add(1)
                     }
-                    setTableData()
+                    Log.d("확인 getTableBookedInfo() 가져오기 후",i.toString() )
+                    if(i == tableFromDBDataAL.size-1) setTableData()
                 }
 
                 override fun onCancelled(error: DatabaseError) {
                     Log.d("확인 getTableBookedInfo()", "5 getFromDB : ${error}")
                 }
             })
+            //ref.child(floorList[floorIt]).child(showTime).child(("table"+(i+1).toString())).child("mutex")
 
 
 
@@ -370,9 +375,11 @@ class SikdangMain_res:AppCompatActivity() {
                 calNum+=tableNumAL[j]
                 if (i<calNum) break
             }
+            Log.d("확인  setTableData()", "3.1")
             var tempIsCircle = true
             if (tableFromDBDataAL[i].shape == "circle") tempIsCircle = true
 
+            Log.d("확인  setTableData()", "3.2")
             var tempIsBooked = true
             if (tableIsBookedAL[i] == 1) tempIsBooked = true
 

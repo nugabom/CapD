@@ -188,7 +188,7 @@ class MenuEditDialog(context: Context, val sikdangNum: String, val menuNum: Int,
         Log.d("확인  setImgOnView()", "1")
 
 
-        if(editMenuDialog.menuDataAL[menuNum].image_url == "") {
+        if((editMenuDialog.menuDataAL[menuNum].image_url == "")||editMenuDialog.menuDataAL[menuNum].image_url == "Null") {
             var beforeImgRes = R.drawable.foodimage
             beforeChangeImage.setImageResource(beforeImgRes)
             afterChangeImage.setImageResource(beforeImgRes)
@@ -327,7 +327,7 @@ class MenuEditDialog(context: Context, val sikdangNum: String, val menuNum: Int,
 
     public fun upUrlOnDB(newUrl:String){
         val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
-                .child("Restaurants").child(sikdangmainRes.sikdangType).child(sikdangmainRes.sikdangId).child("menu").child(editMenuDialog.menuKeyAL[menuNum]).child("image_url")
+                .child("Restaurants").child(sikdangmainRes.sikdangType).child(sikdangmainRes.sikdangId).child("menu").child(editMenuDialog.menuKeyAL[menuNum]).child("image")
         //Log.d("확인 upUrlOnDB()", sikdangmainRes.sikdangId)
         //Log.d("확인 upUrlOnDB()", newUrl.toString())
         ref.setValue(newUrl)

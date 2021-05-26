@@ -308,7 +308,7 @@ class EditMenuDialog (context: Context, val sikdangNum:String, var sikdangmainRe
                         for (menuData in snapshot.children) {
                             //Log.d("확인  getMenuByMenuKey()", "4")
                             if(menuData.key.toString() == "product") product=menuData.value.toString()
-                            if(menuData.key.toString() == "image_url") image_url=menuData.value.toString()
+                            if(menuData.key.toString() == "image") image_url=menuData.value.toString()
                             if(menuData.key.toString() == "price") price=menuData.value.toString().toInt()
                             if(menuData.key.toString() == "product_exp") product_exp=menuData.value.toString()
                             //if(menuData.key.toString() == "ingredients") ingredients=menuData.value.

@@ -23,22 +23,31 @@ class BookActivityBuilder(val sikdangId : String, val category: String, var cont
     private lateinit var floor_tables : HashMap<String, HashMap<String, Table>>
 
     fun build(){
+        Log.d("확인 BookActivityBuilder", "build 호출")
         var StoreInfoReference = FirebaseDatabase.getInstance().getReference("Restaurants")
                 .child(category)
                 .child(sikdangId)
 
+        Log.d("확인 BookActivityBuilder", "build 2")
         StoreInfoReference.addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
+                Log.d("확인 BookActivityBuilder", "build 3")
                 val done1 = getStoreInfo(snapshot)
+                Log.d("확인 BookActivityBuilder", "build 3.1")
                 if(!done1) {Log.d("getStoreInfo", "1fail"); return}
+                Log.d("확인 BookActivityBuilder", "build 3.2")
                 val done2 = getMenu(snapshot)
+                Log.d("확인 BookActivityBuilder", "build 3.3")
                 if(!done2){Log.d("getMenu", "2fail"); return}
+                Log.d("확인 BookActivityBuilder", "build 4")
 
                 var TableInfo = FirebaseDatabase.getInstance().getReference("Tables")
                         .child(sikdangId)
 
+                Log.d("확인 BookActivityBuilder", "build 5")
                 TableInfo.addListenerForSingleValueEvent(object : ValueEventListener{
                     override fun onDataChange(table_snapshot: DataSnapshot) {
+                        Log.d("확인 BookActivityBuilder", "build 6")
                         val nfloor = table_snapshot.childrenCount
                         val done3 = getBookTime(table_snapshot.child("Booked"))
                         if(!done3) return
@@ -51,12 +60,14 @@ class BookActivityBuilder(val sikdangId : String, val category: String, var cont
                         intent.putExtra("menuList", menus)
                         intent.putExtra("storeInfo", storeInfo)
                         intent.putExtra("TableMetaData", floor_tables)
+                        Log.d("확인 BookActivityBuilder", "BookActivity 호출")
                         context.startActivity(intent)
 
                     }
 
+
                     override fun onCancelled(error: DatabaseError) {
-                        TODO("Not yet implemented")
+                        Log.d("확인 BookActivityBuilder", "BookActivity.onCancelled")
                     }
                 })
             }
@@ -76,18 +87,28 @@ class BookActivityBuilder(val sikdangId : String, val category: String, var cont
 
     fun getMenu(menu_snapshot: DataSnapshot) :Boolean {
         for (menu_data in menu_snapshot.child("menu").children) {
+            Log.d("확인 BookActivityBuilder.getMenu", "for문")
             val product = menu_data.getValue(_Menu::class.java)
+            Log.d("확인 BookActivityBuilder.getMenu", "for문2")
             if(product == null) return false
+            Log.d("확인 BookActivityBuilder.getMenu", "for문3")
 
+            Log.d("확인 BookActivityBuilder.getMenu", "for문4")
             var ingredients = arrayListOf<_Ingredient>()
             for (ingredient_data in menu_data.child("ingredients").children) {
+                Log.d("확인 BookActivityBuilder.getMenu", "for문5")
                 val ing = ingredient_data.getValue(_Ingredient::class.java)
+                Log.d("확인 BookActivityBuilder.getMenu", "for문6")
                 if(ing == null) return false
+                Log.d("확인 BookActivityBuilder.getMenu", "for문7")
                 ingredients.add(ing)
             }
 
+            Log.d("확인 BookActivityBuilder.getMenu", "for문8")
             menus.add(MenuData(product, ingredients))
+            Log.d("확인 BookActivityBuilder.getMenu", "for문9")
         }
+        Log.d("확인 BookActivityBuilder.getMenu", "for문 끝")
 
         return true
     }

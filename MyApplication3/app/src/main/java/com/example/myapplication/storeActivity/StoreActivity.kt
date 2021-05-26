@@ -53,6 +53,7 @@ class StoreActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_store)
+        Log.d("확인 StoreActivity", "시작")
 
         store_info = intent.getSerializableExtra("store_info") as StoreInfo
         init_DB()
@@ -109,6 +110,7 @@ class StoreActivity : AppCompatActivity() {
 
         reserve_now = findViewById(R.id.btn_reserve)
         reserve_now.setOnClickListener {
+            Log.d("확인 예약 버튼 누름", "시작")
             BookActivityBuilder(store_info.store_id!!, store_info.store_type!!, this).build()
         }
     }

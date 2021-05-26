@@ -2,6 +2,7 @@ package com.example.myapplication.bookActivity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.ActivityChooserView
@@ -22,6 +23,7 @@ class BookActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_book)
+        Log.d("확인 BookActivity", "시작")
 
         storeInfo = intent.getSerializableExtra("storeInfo") as StoreInfo
         bookTime = intent.getSerializableExtra("bookTime") as BookTime

@@ -150,9 +150,13 @@ class EditSikdangImageDialog(context: Context, val sikdangNum: String, var sikda
     public fun upUrlOnDB(newUrl:String){
         val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
                 .child("Restaurants").child(sikdangmainRes.sikdangType).child(sikdangmainRes.sikdangId).child("info").child("sikdangImageUrl")
-        Log.d("확인 upUrlOnDB()", sikdangmainRes.sikdangId)
-        Log.d("확인 upUrlOnDB()", newUrl.toString())
+        //Log.d("확인 upUrlOnDB()", sikdangmainRes.sikdangId)
+        //Log.d("확인 upUrlOnDB()", newUrl.toString())
         ref.setValue(newUrl)
+
+        var ref2: DatabaseReference = FirebaseDatabase.getInstance().getReference()
+                .child("Locations").child(sikdangmainRes.sikdangId).child("store_image")
+        ref2.setValue(newUrl)
     }
 
 

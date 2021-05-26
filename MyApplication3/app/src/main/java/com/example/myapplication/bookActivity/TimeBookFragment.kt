@@ -27,7 +27,7 @@ class TimeBookFragment(val bookTime: BookTime) : Fragment() {
     ): View? {
         var view = inflater.inflate(R.layout.booktime_fragment, container, false)
         sikdangId = (activity as BookActivity).storeInfo.store_id!!
-        Log.d("TimeBookFragment", sikdangId)
+        Log.d("확인 TimeBookFragment", sikdangId)
 
         recyclerView = view.findViewById(R.id.bookTimeRV2)
         recyclerView.setHasFixedSize(true)

@@ -335,9 +335,12 @@ class SikdangMain_res:AppCompatActivity() {
                             tableIsBookedAL.add(tableBooked.value.toString().toInt())
                             if (tableBooked == null) tableIsBookedAL.add(1)
                         }
-                        Log.d("확인 getTableBookedInfo() 가져오기 후",i.toString() )
-                        getTableDataLineNum=3
-                        if(i == tableFromDBDataAL.size-1) setTableData()
+                        Log.d("확인 getTableBookedInfo() 가져오기 후",i.toString()+" / " +tableFromDBDataAL.size )
+
+                        if(i == tableFromDBDataAL.size-1) {
+                            getTableDataLineNum=3
+                            setTableData()
+                        }
                     }
 
                 }
@@ -346,6 +349,7 @@ class SikdangMain_res:AppCompatActivity() {
                     Log.d("확인 getTableBookedInfo()", "5 getFromDB : ${error}")
                 }
             })
+            Log.d("확인 getTableBookedInfo() 가져오기 후 for문 끝",i.toString()+" / " +tableFromDBDataAL.size )
             //ref.child(floorList[floorIt]).child(showTime).child(("table"+(i+1).toString())).child("mutex")
 
 

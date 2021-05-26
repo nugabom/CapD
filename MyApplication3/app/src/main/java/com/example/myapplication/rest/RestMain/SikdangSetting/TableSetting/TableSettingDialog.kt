@@ -438,7 +438,7 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
         var timeHashMap =hashMapOf<String, Any>()
 
         for (i in 0..timeAL.size-1){
-            Log.d("확인 getTimeAtBooked() 예약 시간 가져오기 ", timeAL.size.toString())
+            Log.d("확인 getTimeAtBooked() 예약 시간 가져오기 ", "시간수"+ timeAL.size.toString() + "테이블수"+changedTableAL.size.toString())
             for (j in 0..changedTableAL.size-1) {
                 var tempTimeHashMap = hashMapOf<String, Any>(
                         "mutex" to 1
@@ -446,16 +446,17 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
                 timeHashMap.put("table" + (j + 1).toString(), tempTimeHashMap)
             }
             var tempBookInfo = hashMapOf<String, Any>(
-                    "current" to changedTableAL.size,
-                    "max" to changedTableAL.size
+                    "current" to changedTableAL[i].maxP,
+                    "max" to changedTableAL[i].maxP
             )
             timeHashMap.put("BookInfo", tempBookInfo)
+            ref.child(timeAL[1]).setValue(timeHashMap).addOnCompleteListener {
+                sikdangmainRes.getTableDataLineNum = 0
+                sikdangmainRes.getTableDataFromDB()
+            }
 
         }
-        ref.setValue(timeHashMap).addOnCompleteListener {
-            sikdangmainRes.getTableDataLineNum = 0
-            sikdangmainRes.getTableDataFromDB()
-        }
+
 
 
     }

@@ -319,8 +319,42 @@ class AddTimeDialog(context: Context,  var bookTimeSettingDialog: BookTimeSettin
 
         var at_addTimeBtn:Button = findViewById(R.id.at_addTimeBtn)
         at_addTimeBtn.setOnClickListener {
-            var newTime:String = hET1.text.toString()+hET2.text.toString()+mET1.text.toString()+mET2.text.toString()
-            var addChecked = bookTimeSettingDialog.addTime(newTime)
+            var timeString:String = hET1.text.toString()+hET2.text.toString()+mET1.text.toString()+mET2.text.toString()
+
+
+
+            var tempTimeInt = timeString.toInt()
+            //Log.d("확인 timeSet() 변형 ", timeString+" "+tempTimeInt.toString())
+            if (tempTimeInt > 1200) {
+                tempTimeInt -= 1200
+                if(tempTimeInt < 10) timeString="00:0"+tempTimeInt.toString().slice(IntRange(0, 0))+" 오후"
+                else if(tempTimeInt < 100)timeString="00:"+tempTimeInt.toString().slice(IntRange(0, 1))+" 오후"
+                else if(tempTimeInt < 1000){
+                    timeString="0"+tempTimeInt.toString().slice(IntRange(0, 0)) +":"+tempTimeInt.toString().slice(IntRange(1, 2))+" 오후"
+                }
+                else{
+                    timeString=tempTimeInt.toString().slice(IntRange(0, 1)) +":"+tempTimeInt.toString().slice(IntRange(2, 3))+" 오후"
+                }
+            }
+            else{
+                if(tempTimeInt < 10) timeString="00:0"+tempTimeInt.toString().slice(IntRange(0, 0))+" 오후"
+                else if(tempTimeInt < 100)timeString="00:"+tempTimeInt.toString().slice(IntRange(0, 1))+" 오후"
+                else if(tempTimeInt < 1000){
+                    timeString="0"
+                    timeString+=tempTimeInt.toString().slice(IntRange(0, 0))
+                    timeString+=":"
+                    timeString+=tempTimeInt.toString().slice(IntRange(1, 2))
+                    timeString+=" 오전"
+                }
+                else{
+                    timeString=tempTimeInt.toString().slice(IntRange(0, 1)) +":"+tempTimeInt.toString().slice(IntRange(2, 3))+" 오전"
+                }
+                //Log.d("확인 timeSet() 변형3 ", timeString+" "+tempTimeInt.toString())
+            }
+
+
+            Log.d("확인 AddTime. 추가 버튼 클릭 ", timeString)
+            var addChecked = bookTimeSettingDialog.addTime(timeString)
             if (addChecked==true){
                 this.dismiss()
             }

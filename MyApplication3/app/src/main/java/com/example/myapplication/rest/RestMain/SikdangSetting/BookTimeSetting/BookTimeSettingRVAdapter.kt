@@ -16,7 +16,7 @@ import java.util.*
 //시간 나타내는 네개의 버튼 한 줄에 바인드
 class BookTimeSettingRVAdapter(var context: Context, val bookTimeSettingDialog: BookTimeSettingDialog): RecyclerView.Adapter<BookTimeSettingRVAdapter.Holder>() {
 
-    var timeNumMax = bookTimeSettingDialog.tempTimeClass.timeArrayList.size
+    var timeNumMax = bookTimeSettingDialog.tempTimeAL.size
     //var timePoint = timeSet()
     //var vartimePoint=timePoint
     var vartimePoint=0
@@ -40,7 +40,7 @@ class BookTimeSettingRVAdapter(var context: Context, val bookTimeSettingDialog: 
     }
 
     override fun getItemCount(): Int {
-        timeNumMax = bookTimeSettingDialog.tempTimeClass.timeArrayList.size
+        timeNumMax = bookTimeSettingDialog.tempTimeAL.size
         var i =timeNumMax
         //Log.d("확인 getItemCount ", i.toString()+" "+(i/2).toString())
         return (i+3)/4
@@ -54,7 +54,7 @@ class BookTimeSettingRVAdapter(var context: Context, val bookTimeSettingDialog: 
             //Log.d("확인 바인드  ", pos.toString()+"/"+bookTimeSettingDialog.tempTimeClass.timeArrayList.size)
 
             var button1: Button = itemView.findViewById(R.id.timebtn1)
-            val timeText = bookTimeSettingDialog.tempTimeClass.timeArrayList[vartimePoint]
+            val timeText = bookTimeSettingDialog.tempTimeAL[vartimePoint]
             button1.setText(timeText)
             //Log.d("확인 바인드  ", "1")
 
@@ -73,7 +73,7 @@ class BookTimeSettingRVAdapter(var context: Context, val bookTimeSettingDialog: 
             var button2: Button = itemView.findViewById(R.id.timebtn2)
             vartimePoint+=1
             if (vartimePoint<timeNumMax){
-                button2.setText(bookTimeSettingDialog.tempTimeClass.timeArrayList[vartimePoint])
+                button2.setText(bookTimeSettingDialog.tempTimeAL[vartimePoint])
 
             }
             else{
@@ -95,7 +95,7 @@ class BookTimeSettingRVAdapter(var context: Context, val bookTimeSettingDialog: 
             var button3: Button = itemView.findViewById(R.id.timebtn3)
             vartimePoint+=1
             if (vartimePoint<timeNumMax){
-                button3.setText(bookTimeSettingDialog.tempTimeClass.timeArrayList[vartimePoint])
+                button3.setText(bookTimeSettingDialog.tempTimeAL[vartimePoint])
             }
             else{
                 button3.setText("")
@@ -116,7 +116,7 @@ class BookTimeSettingRVAdapter(var context: Context, val bookTimeSettingDialog: 
             var button4: Button = itemView.findViewById(R.id.timebtn4)
             vartimePoint+=1
             if (vartimePoint<timeNumMax){
-                button4.setText(bookTimeSettingDialog.tempTimeClass.timeArrayList[vartimePoint])
+                button4.setText(bookTimeSettingDialog.tempTimeAL[vartimePoint])
                 vartimePoint+=1
             }
             else{
@@ -146,8 +146,8 @@ class BookTimeSettingRVAdapter(var context: Context, val bookTimeSettingDialog: 
         buttonAl=ArrayList<Button>()
     }
     public fun setButtonText(){
-        for (i in 0..bookTimeSettingDialog.tempTimeClass.timeArrayList.size-2){
-            buttonAl[i].setText(bookTimeSettingDialog.tempTimeClass.timeArrayList[i])
+        for (i in 0..bookTimeSettingDialog.tempTimeAL.size-2){
+            buttonAl[i].setText(bookTimeSettingDialog.tempTimeAL[i])
         }
     }
 
@@ -159,14 +159,14 @@ class BookTimeSettingRVAdapter(var context: Context, val bookTimeSettingDialog: 
         timeString=timeString+curTime[0]+curTime[1]+curTime[3]+curTime[4]
 
         var i = 0
-        while (i<bookTimeSettingDialog.tempTimeClass.timeArrayList.size){
-            if(timeString <= bookTimeSettingDialog.tempTimeClass.timeArrayList[i]){
+        while (i<bookTimeSettingDialog.tempTimeAL.size){
+            if(timeString <= bookTimeSettingDialog.tempTimeAL[i]){
                 break
             }
             //Log.d("확인 time 현재 다음 ", timeString+" "+bookTimeData.getTimeArrayList()[i])
             i++
         }
-        if(i==bookTimeSettingDialog.tempTimeClass.timeArrayList.size){
+        if(i==bookTimeSettingDialog.tempTimeAL.size){
             //이경우는 하루 영업이 끝남
             val myToast = Toast.makeText(context, "영업끝", Toast.LENGTH_SHORT).show()
             Log.d("확인 time 현재 다음 ", timeString+"영업끝")

@@ -79,7 +79,7 @@ class SikdangSettingDialog(context: Context, val sikdangNum:String, var sikdangm
     }
 
     private fun showBookTimeSettingDialog(){
-        var customDialog = BookTimeSettingDialog(context,sikdangNum)
+        var customDialog = BookTimeSettingDialog(context,sikdangNum, sikdangmainRes)
         customDialog!!.show()
     }
 

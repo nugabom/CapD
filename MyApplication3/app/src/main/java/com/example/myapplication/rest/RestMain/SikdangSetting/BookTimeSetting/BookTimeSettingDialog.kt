@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
+import com.example.myapplication.rest.Resmain.SikdangMain_res
 import com.example.myapplication.rest.Time.TempTimeClass
 import com.example.sikdangbook_rest.Time.TimeLineAdapter
 
@@ -18,14 +19,17 @@ import com.example.sikdangbook_rest.Time.TimeLineAdapter
 //추가버튼으로 추가 가능
 //텀 변경 버튼으로 예약 텀 변경 가능
 //저장버튼 클릭시 변경사항 저장
-class BookTimeSettingDialog(context: Context, val sikdangNum:String): Dialog(context) {
+class BookTimeSettingDialog(context: Context, val sikdangNum:String, var sikdangmainRes: SikdangMain_res): Dialog(context) {
 
     lateinit var bookTimeSettingRV : RecyclerView
     lateinit var bookTimeSettingRVAdapter:BookTimeSettingRVAdapter
 
-    lateinit var tempTimeClass:TempTimeClass
+
+    //lateinit var tempTimeClass:TempTimeClass
 
     public var nowTerm:String ="0000"
+
+    var tempTimeAL = sikdangmainRes.timeAL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +37,9 @@ class BookTimeSettingDialog(context: Context, val sikdangNum:String): Dialog(con
 
         getTime()
         getTerm()
+
+        //sikdangmainRes.timeAL
+
 
 
         bookTimeSettingRV  = findViewById(R.id.bookTimeSettingRV)
@@ -72,7 +79,7 @@ class BookTimeSettingDialog(context: Context, val sikdangNum:String): Dialog(con
     }
 
     public fun deleteTime(slectedTime:String){
-        tempTimeClass.timeArrayList.remove(slectedTime)
+        tempTimeAL.remove(slectedTime)
         renewalRV()
     }
     public fun renewalRV(){
@@ -85,38 +92,70 @@ class BookTimeSettingDialog(context: Context, val sikdangNum:String): Dialog(con
 
     //데이터베이스에서 시간 정보 가져온다.
     public fun getTime(){
-        tempTimeClass = TempTimeClass(1111)
+        //tempTimeClass = TempTimeClass(1111)
     }
 
     public fun addTime(newTime:String):Boolean{
-        for (i in 0..tempTimeClass.timeArrayList.size-2){
-            var nowTime = tempTimeClass.timeArrayList[i]
-            var nextTime = tempTimeClass.timeArrayList[i+1]
-            if (newTime.toInt() == nowTime.toInt()){
+        for (i in 0..tempTimeAL.size-2){
+            var nowTime = tempTimeAL[i]
+            var nextTime = tempTimeAL[i+1]
+
+            var nowTimeToInt:Int = 0
+            var newTimeToInt = 0
+            var nextTimeToInt = 0
+
+            if(nowTime.slice(IntRange(6, 7))=="오전"){
+                nowTimeToInt =(nowTime.slice(IntRange(0, 1))+nowTime.slice(IntRange(3, 4))).toInt()
+            }
+            else{
+                nowTimeToInt =(nowTime.slice(IntRange(0, 1))+nowTime.slice(IntRange(3, 4))).toInt() + 1200
+            }
+
+            if(newTime.slice(IntRange(6, 7))=="오전"){
+                newTimeToInt =(newTime.slice(IntRange(0, 1))+newTime.slice(IntRange(3, 4))).toInt()
+            }
+            else{
+                newTimeToInt =(newTime.slice(IntRange(0, 1))+newTime.slice(IntRange(3, 4))).toInt() + 1200
+            }
+
+
+            if(nextTime.slice(IntRange(6, 7))=="오전"){
+                nextTimeToInt =(nextTime.slice(IntRange(0, 1))+nextTime.slice(IntRange(3, 4))).toInt()
+            }
+            else{
+                nextTimeToInt =(nextTime.slice(IntRange(0, 1))+nextTime.slice(IntRange(3, 4))).toInt() + 1200
+            }
+
+            Log.d("확인 AddTime", "now : " + nowTimeToInt.toString() + " new : "+newTimeToInt.toString())
+
+
+
+            if (newTimeToInt == nowTimeToInt.toInt()){
                 val myToast = Toast.makeText(context, "이미 설정되어있는 시간입니다.", Toast.LENGTH_SHORT).show()
                 return false
             }
-            else if (newTime.toInt() < nextTime.toInt()){
+            else if (newTimeToInt.toInt() < nextTimeToInt){
                 Log.d("확인 AddTime", "중간에 추가"+i.toString())
                 var newTimeAL = ArrayList<String>()
-                if(newTime.toInt() < nowTime.toInt()){
+                if(newTimeToInt.toInt() < nowTimeToInt.toInt()){
                     Log.d("확인 AddTime", newTime+" / "+nextTime+" 처음에 추가"+i.toString())
                     newTimeAL.add(newTime)
-                    for (j in i..tempTimeClass.timeArrayList.size-1){
-                        newTimeAL.add(tempTimeClass.timeArrayList[j])
+                    for (j in i..tempTimeAL.size-1){
+                        newTimeAL.add(tempTimeAL[j])
                     }
                 }
                 else{
+                    Log.d("확인 AddTime", "다음으로 넘어감")
                     for (j in 0..i){
-                        newTimeAL.add(tempTimeClass.timeArrayList[j])
+                        newTimeAL.add(tempTimeAL[j])
                     }
                     newTimeAL.add(newTime)
-                    for (j in i+1..tempTimeClass.timeArrayList.size-1){
-                        newTimeAL.add(tempTimeClass.timeArrayList[j])
+                    for (j in i+1..tempTimeAL.size-1){
+                        newTimeAL.add(tempTimeAL[j])
                     }
                 }
-                tempTimeClass.timeArrayList=newTimeAL
-                Log.d("확인 AddTime", tempTimeClass.timeArrayList.size.toString())
+                tempTimeAL=newTimeAL
+                Log.d("확인 AddTime", tempTimeAL.size.toString())
                 renewalRV()
                 return true
             }
@@ -124,7 +163,7 @@ class BookTimeSettingDialog(context: Context, val sikdangNum:String): Dialog(con
         }
         Log.d("확인 AddTime", "마지막 추가")
         renewalRV()
-        tempTimeClass.timeArrayList.add(newTime)
+        tempTimeAL.add(newTime)
 
         return true
 

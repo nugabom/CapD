@@ -22,6 +22,7 @@ class ChoiceMySikdangRVAdapter(var context: Context, val choicesikdangpageRes: C
     }
 
     override fun getItemCount(): Int {
+        Log.d("확인 ChoiceMySikdangRVAdapter", choicesikdangpageRes.sikdangInfoList.size.toString())
         return choicesikdangpageRes.sikdangInfoList.size
     }
 

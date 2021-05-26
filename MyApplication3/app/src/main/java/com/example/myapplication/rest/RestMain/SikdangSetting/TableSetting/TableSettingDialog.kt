@@ -387,7 +387,7 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
                 "y" to changedTableAL[i].locy
             )
             tableHashMap.put("table"+(i+1).toString(), tempTableHashMap)
-            if(i ==changedTableAL.size-1) getTimeAtBooked()
+            if(i == changedTableAL.size-1) getTimeAtBooked()
 
         }
         ref.setValue(tableHashMap).addOnSuccessListener {
@@ -411,6 +411,7 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
     }
 
     public fun getTimeAtBooked(){
+        Log.d("확인 getTimeAtBooked() 예약 시간 가져오기 ", "작동 하는가? 층수 : "+sikdangmainRes.tableData.floorList[floorNum].toString())
         val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
                 .child("Tables").child(sikdangmainRes.sikdangId).child("Booked").child("floor_"+sikdangmainRes.tableData.floorList[floorNum])
 
@@ -430,13 +431,32 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
     }
 
     public fun setTableOnTime(){
+        Log.d("확인 setTableOnTime() 장동 시기 확인 ", "작동 하는가? 시간 수 : "+timeAL.toString())
         val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
                 .child("Tables").child(sikdangmainRes.sikdangId).child("Booked").child("floor_"+sikdangmainRes.tableData.floorList[floorNum])
+
+        var timeHashMap =hashMapOf<String, Any>()
+
         for (i in 0..timeAL.size-1){
-            for (j in 0..changedTableAL.size-1){
-                ref.child(timeAL[i]).child("table"+(j+1).toString()).child("mutex").setValue(1)
+            Log.d("확인 getTimeAtBooked() 예약 시간 가져오기 ", timeAL.size.toString())
+            for (j in 0..changedTableAL.size-1) {
+                var tempTimeHashMap = hashMapOf<String, Any>(
+                        "mutex" to 1
+                )
+                timeHashMap.put("table" + (j + 1).toString(), tempTimeHashMap)
             }
+            var tempBookInfo = hashMapOf<String, Any>(
+                    "current" to changedTableAL.size,
+                    "max" to changedTableAL.size
+            )
+            timeHashMap.put("BookInfo", tempBookInfo)
+
         }
+        ref.setValue(timeHashMap).addOnCompleteListener {
+            sikdangmainRes.getTableDataLineNum = 0
+            sikdangmainRes.getTableDataFromDB()
+        }
+
 
     }
 

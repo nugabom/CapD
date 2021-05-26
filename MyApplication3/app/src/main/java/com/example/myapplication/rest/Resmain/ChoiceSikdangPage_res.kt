@@ -49,28 +49,28 @@ class ChoiceSikdangPage_res:AppCompatActivity() {
     }
 
     public fun setSikdangList(){
-        //Log.d("확인 setSikdangList", "1")
+        Log.d("확인 setSikdangList", "1")
         val uid = FirebaseAuth.getInstance().currentUser.uid
         val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
                 .child("Users").child(uid).child("sikdangList")
         //var query = ref.orderByChild("sikdangId")
         //Log.d("확인 setSikdangList", query.toString())
         var a =ref.key
-        //Log.d("확인 setSikdangList", a.toString())
+        Log.d("확인 setSikdangList", uid)
 
 
 
         ref.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 sikdangList.clear()
-                //Log.d("확인 setSikdangList", "2")
+                Log.d("확인 setSikdangList", "2")
                 for (sikdang in snapshot.children) {
                     //var a =snapshot.children
                     //Log.d("확인 setSikdangList", snapshot.children.toString())
                     val sikdangid = sikdang.getValue(SikdangId::class.java)
                     if(sikdangid == null) continue
                     //Log.d("확인 setSikdangList", "3")
-                    //Log.d("확인 ReviewFragment", "getFromDB : ${sikdangid}")
+                    Log.d("확인 ReviewFragment", "getFromDB : ${sikdangid}")
                     sikdangList.add(sikdangid)
                 }
                 //Log.d("확인 ReviewFragment", "getFromDB : ${sikdangList}")
@@ -108,7 +108,7 @@ class ChoiceSikdangPage_res:AppCompatActivity() {
                     for (sikdangInfo in snapshot.children) {
                         val newsikdangInfo = sikdangInfo.getValue(SikdangInfo::class.java)
                         if(newsikdangInfo!!.store_name == "") continue
-                        //Log.d("확인 setSikdangListInfo()", "getFromDB : ${newsikdangInfo}")
+                        Log.d("확인 setSikdangListInfo()", "getFromDB : ${newsikdangInfo}")
                         sikdangInfoList.add(newsikdangInfo)
                     }
                     //Log.d("확인 setSikdangListInfo()", "getFromDB : ${sikdangInfoList}")

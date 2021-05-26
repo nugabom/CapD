@@ -244,7 +244,7 @@ class ChoiceSikdangPage_res:AppCompatActivity() {
                 "Lat" to 37.535879,
                 "Lng" to 126.824997,
                 "id" to postId!!,
-                "Name" to addRestDialog.ar_sikdangNameRT.text.toString(),
+                "name" to addRestDialog.ar_sikdangNameRT.text.toString(),
                 "store_type" to addRestDialog.catAL[cat]
         )
 

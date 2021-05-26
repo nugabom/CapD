@@ -104,6 +104,8 @@ class SikdangChoiceMenuFragment(var catory : String, var range : Int) :
                                     store.store_image,
                                     store.store_type!!
                             ))
+
+
                         }
 
                         if (sikdangStoreMenuList.isEmpty()) {

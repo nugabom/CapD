@@ -228,7 +228,7 @@ class SikdangMain_res:AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if ( getTableDataLineNum == 0){
                     for (tableInfo in snapshot.children) {
-                        Log.d("확인  getTableDataFromDB()", "getFromDB : "+tableInfo.key.toString())
+                        //Log.d("확인  getTableDataFromDB()", "getFromDB : "+tableInfo.key.toString())
                         floorList.add(tableInfo.key.toString())
                     }
                     getTableDataLineNum=1
@@ -327,19 +327,19 @@ class SikdangMain_res:AppCompatActivity() {
         //var calTableNum = tableNumAL[0]
         for (i in 0..tableFromDBDataAL.size-1){
             var tempTableNum = 0
-            Log.d("확인  getTableBookedInfo()", "for문 시작"+" table"+(i+1).toString() + floorList[floorIt].toString() + " " +floorIt )
+            //Log.d("확인  getTableBookedInfo()", "for문 시작"+" table"+(i+1).toString() + floorList[floorIt].toString() + " " +floorIt )
             //ref.child(floorList[floorIt]).child(showTime).child("BookInfo").child(("table"+(i+1).toString())).addValueEventListener(object : ValueEventListener {
 
             ref.child(floorList[floorIt]).child(showTime).child(("table"+(tempTableNum+1).toString())).addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (getTableDataLineNum==2){
-                        Log.d("확인 getTableBookedInfo() 가져오기 전",i.toString() )
+                        //Log.d("확인 getTableBookedInfo() 가져오기 전",i.toString() )
                         for (tableBooked in snapshot.children) {
-                            Log.d("확인  getTableBookedInfo()", "get tableIsBookedAL FromDB : "+tableBooked.value.toString())
+                            //Log.d("확인  getTableBookedInfo()", "get tableIsBookedAL FromDB : "+tableBooked.value.toString())
                             tableIsBookedAL.add(tableBooked.value.toString().toInt())
                             if (tableBooked == null) tableIsBookedAL.add(1)
                         }
-                        Log.d("확인 getTableBookedInfo() 가져오기 후",i.toString()+" / " +tableFromDBDataAL.size )
+                        //Log.d("확인 getTableBookedInfo() 가져오기 후",i.toString()+" / " +tableFromDBDataAL.size )
 
                         if(i == tableFromDBDataAL.size-1) {
                             Log.d("확인 getTableBookedInfo() 끝","${tableIsBookedAL}" )
@@ -351,7 +351,7 @@ class SikdangMain_res:AppCompatActivity() {
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    Log.d("확인 getTableBookedInfo()", "5 getFromDB : ${error}")
+                    //Log.d("확인 getTableBookedInfo()", "5 getFromDB : ${error}")
                 }
             })
             Log.d("확인 getTableBookedInfo() 가져오기 후 for문 끝",i.toString()+" / " +tableFromDBDataAL.size )
@@ -378,41 +378,41 @@ class SikdangMain_res:AppCompatActivity() {
 
         //tableData.floorList = ArrayList<Int>()//식당 각 몇층인지 1층과 3층이 있으면 1, 3 의 값을 갖는다.
         tableData.tableNumList = tableNumAL//각 층에 테이블 몇개인지
-        Log.d("확인  setTableData()", "tableNumList : ${tableData.tableNumList}")
+        //Log.d("확인  setTableData()", "tableNumList : ${tableData.tableNumList}")
 
         tableData.accumTableNumList = accumTableNumList//테이블 개수 축적
-        Log.d("확인  setTableData()", "accum : ${tableData.accumTableNumList}")
+        //Log.d("확인  setTableData()", "accum : ${tableData.accumTableNumList}")
 
 
         for (i in 0..floorList.size-1){
-            Log.d("확인  setTableData()", " 1for문 "+floorList[i]+"  "+i.toString())
+            //Log.d("확인  setTableData()", " 1for문 "+floorList[i]+"  "+i.toString())
             intFloorIist.add(floorList[i].slice(IntRange(6, 6)).toInt())
         }
 
         tableData.floorList=intFloorIist
-        Log.d("확인  setTableData()", "floorList : ${tableData.floorList}")
+        //Log.d("확인  setTableData()", "floorList : ${tableData.floorList}")
 
-        Log.d("확인  setTableData()", "2")
+        //Log.d("확인  setTableData()", "2")
 
         for (i in 0..tableFromDBDataAL.size-1){
             var calNum = 0
             var floorIt = 0
             var tempFloor = intFloorIist[floorIt]
 
-            Log.d("확인  setTableData()", "3")
+            //Log.d("확인  setTableData()", "3")
             for (j in 0..tableNumAL.size-1){
                 calNum+=tableNumAL[j]
                 if (i<calNum) break
             }
-            Log.d("확인  setTableData()", "3.1")
+            //Log.d("확인  setTableData()", "3.1")
             var tempIsCircle = true
             if (tableFromDBDataAL[i].shape == "circle") tempIsCircle = true
 
-            Log.d("확인  setTableData()", "3.2")
+            //Log.d("확인  setTableData()", "3.2")
             var tempIsBooked = true
             if (tableIsBookedAL[i] == 1) tempIsBooked = true
 
-            Log.d("확인  setTableData()", "4")
+            //Log.d("확인  setTableData()", "4")
 
             tableData.tableList.add(Table_res(tableFromDBDataAL[i].x!!, tableFromDBDataAL[i].y!!, tableFromDBDataAL[i].width!!, tableFromDBDataAL[i].height!!,
                     tableFromDBDataAL[i].capacity!!, tempFloor, tempIsBooked, tempIsCircle))

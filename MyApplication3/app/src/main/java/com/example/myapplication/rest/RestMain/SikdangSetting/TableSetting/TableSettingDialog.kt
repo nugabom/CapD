@@ -367,6 +367,11 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
     //데이터베이스 접속해서 이 층 삭제
     public fun deleteThisFloor(){
         //삭제하고 이 다이얼로그 닫느다.
+        val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
+                .child("Tables").child(sikdangmainRes.sikdangId)
+        ref.child("Booked").child(sikdangmainRes.floorList[floorNum]).removeValue()
+        ref.child("TableInfo").child(sikdangmainRes.floorList[floorNum]).removeValue()
+
 
         this.dismiss()
     }

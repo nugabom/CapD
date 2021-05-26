@@ -37,7 +37,7 @@ class TableFloorFragment_res(var floorNum:Int, val sikdangmainRes: SikdangMain_r
         floorNumTV.setText(sikdangmainRes.tableData.floorList[floorNum].toString()+"층")
         var i = 0
         while(i<sikdangmainRes.tableData.tableNumList[floorNum]){
-            Log.d("확인 TableFloorFragment i", i.toString())
+            //Log.d("확인 TableFloorFragment i", i.toString())
             var count = i
             if (floorNum == 0){
                 count = i
@@ -46,7 +46,7 @@ class TableFloorFragment_res(var floorNum:Int, val sikdangmainRes: SikdangMain_r
                 count = i+sikdangmainRes.tableData.accumTableNumList[floorNum-1]//테이블리스트의 몇번째인가
             }
 
-            Log.d("확인 TableFloorFragment 카운트", count.toString())
+            //Log.d("확인 TableFloorFragment 카운트", count.toString())
             var button= Button(getContext())
             if (sikdangmainRes.tableData.tableList[count].isCircle == true)//원형테이블
             {

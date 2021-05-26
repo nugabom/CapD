@@ -172,6 +172,9 @@ class TableFloorSettingDialog(context: Context, val sikdangNum: String, var sikd
                     //upSikdangOnUser(postId)
                     //setTimeAl(newFloor)
                     Log.d("확인 TableFloorFragment.setTableOnTime", "시간에 층 추가 성공")
+                    sikdangmainRes.getTableDataLineNum=0
+                    sikdangmainRes.getTableDataFromDB()
+                    this.dismiss()
                 }.addOnFailureListener {
                     Toast.makeText(context, "TableFloorSettingDialog().addFloor", Toast.LENGTH_SHORT).show()
                 }

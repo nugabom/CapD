@@ -8,20 +8,25 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.MotionEvent
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.myapplication.R
 import com.example.myapplication.rest.Resmain.SikdangMain_res
 import com.example.sikdangbook_rest.Table.TableData_res
 import com.example.sikdangbook_rest.Table.Table_res
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import kotlinx.android.synthetic.main.activity_notification.*
 
 //TableFloorSettingDialog 에서 사용
 //층을 받아와 그 층의 테이블 정보 띄우고 테이블 정보 수정
 class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum: Int, var sikdangmainRes: SikdangMain_res): Dialog(context) {
     lateinit var tableLayout:ConstraintLayout
-    lateinit var tableData:TableData_res
+    //lateinit var tableData:TableData_res
     lateinit var ts_floorTV:TextView
     lateinit var ts_floorImg:ImageView
     var TPC = 0
@@ -43,24 +48,28 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
         //tableData = TableData_res("09:30")
 
 
-        getTableData()
         ts_floorTV = findViewById<TextView>(R.id.ts_floorTV)
-        ts_floorTV.setText(tableData.floorList[floorNum].toString()+"층")
+        ts_floorTV.setText(sikdangmainRes.tableData.floorList[floorNum].toString()+"층")
         ts_floorImg = findViewById(R.id.ts_floorImg)
+        Log.d("확인 TableSettingDialog", "1")
 
         setFloorImg()
+        Log.d("확인 TableSettingDialog", "2")
 
         //initalTableSet()
 
         setTableAL()
+        Log.d("확인 TableSettingDialog", "3")
         setTable()
+        Log.d("확인 TableSettingDialog", "4")
 
-        nowFloor=tableData.floorList[floorNum]
+        nowFloor=sikdangmainRes.tableData.floorList[floorNum]
 
         //변경버튼 클릭시
         //테이블 정보 새로 저장
         var ts_changeBtn:Button = findViewById(R.id.ts_changeBtn)
         ts_changeBtn.setOnClickListener {
+
 
             setNowLoc()
             //setTable()
@@ -148,18 +157,18 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
         changedTableAL = ArrayList<Table_res>()
         var i = 0
         //Log.d("확인 setTable", "1")
-        while(i<tableData.tableNumList[floorNum]) {
+        while(i<sikdangmainRes.tableData.tableNumList[floorNum]) {
             //Log.d("확인 setTable", "2 "+i.toString())
             //Log.d("확인 TableFloorFragment i", i.toString())
             var count = i
             if (floorNum == 0) {
                 count = i
             } else {
-                count = i + tableData.accumTableNumList[floorNum - 1]//테이블리스트의 몇번째인가
+                count = i + sikdangmainRes.tableData.accumTableNumList[floorNum - 1]//테이블리스트의 몇번째인가
             }
             //tableData.tableList[count]
 
-            var tempTable=tableData.tableList[count]
+            var tempTable=sikdangmainRes.tableData.tableList[count]
 
             changedTableAL.add(tempTable)
 
@@ -240,7 +249,7 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
                     if (floorNum == 0) {
                         tNum = count
                     } else {
-                        tNum = count + tableData.accumTableNumList[floorNum - 1]//테이블리스트의 몇번째인가
+                        tNum = count + sikdangmainRes.tableData.accumTableNumList[floorNum - 1]//테이블리스트의 몇번째인가
                     }
                     //tableData.floorList[floorNum]
                     //Log.d("확인 버튼정보", changedTableAL[count].floor.toString()+changedTableAL[count].isCircle.toString()+changedTableAL[count].maxP.toString() )
@@ -290,7 +299,7 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
     public fun addTable(isCircle:Boolean){
 
         setNowLoc()
-        var a =Table_res(0.0f, 0.0f, 30, 30, 1, tableData.floorList[floorNum], true, isCircle)
+        var a =Table_res(0.0f, 0.0f, 30, 30, 1, sikdangmainRes.tableData.floorList[floorNum], true, isCircle)
         Log.d("확인 tableAL 크기 확인1: ", changedTableAL.size.toString())
         //changedTableAL.add(Table_res(0.0f, 0.0f, 30, 30, 1, tableData.floorList[floorNum], true, isCircle))
 
@@ -301,23 +310,8 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
 
 
 
-    private fun getTableData(){
-        tableData = TableData_res()
-    }
 
-    private fun tableDataSet(){
-        // changedTableAL 을 데이터베이스로 넘긴다
-        // 데이터베이스에 이 층에 속해있는 데이터를 이걸로 대체
-        //floorNum 사용하거나 이전 다이얼로그에서 floor 받아와서 층 정보 넘긴다.
 
-        //이후 데이터 다시 불러옴
-        //getTableData()
-        //setTableAL()
-        //setTable()
-
-        //다시 불러오지 않고 그냥 다이얼로그 닫게 할 수도 있음
-        this.dismiss()
-    }
 
 
 
@@ -373,6 +367,47 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
 
         this.dismiss()
     }
+
+    private fun tableDataSet(){
+        Log.d("확인 TableSettingDialog.tableDataSet(): ", "올리기 시작")
+        val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
+                .child("Tables").child(sikdangmainRes.sikdangId).child("TableInfo").child("floor_"+sikdangmainRes.tableData.floorList[floorNum])
+
+
+        var tableHashMap =hashMapOf<String, Any>()
+
+
+        for(i in 0..changedTableAL.size-1){
+            var tempTableHashMap =hashMapOf<String, Any>(
+                "capacity" to changedTableAL[i].maxP,
+                "height" to changedTableAL[i].lengY,
+                "width" to changedTableAL[i].lengX,
+                "x" to changedTableAL[i].locX,
+                "y" to changedTableAL[i].locy
+            )
+            tableHashMap.put("table"+i.toString(), tempTableHashMap)
+
+        }
+        ref.setValue(tableHashMap).addOnSuccessListener {
+            Log.d("확인 TableSettingDialog.tableDataSet(): ", "올리기 성공")
+        }.addOnFailureListener {
+            Toast.makeText(context, "테이블 업데이트 실패.", Toast.LENGTH_SHORT).show()
+
+        }
+        //changedTableAL
+        // changedTableAL 을 데이터베이스로 넘긴다
+        // 데이터베이스에 이 층에 속해있는 데이터를 이걸로 대체
+        //floorNum 사용하거나 이전 다이얼로그에서 floor 받아와서 층 정보 넘긴다.
+
+        //이후 데이터 다시 불러옴
+        //getTableData()
+        //setTableAL()
+        //setTable()
+
+        //다시 불러오지 않고 그냥 다이얼로그 닫게 할 수도 있음
+        this.dismiss()
+    }
+
 
 
 

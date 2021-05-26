@@ -339,20 +339,24 @@ class SikdangMain_res:AppCompatActivity() {
 
     public fun setTableData(){
 
-        Log.d("확인  setTableData()", "1")
+
         tableData.tableList=ArrayList()//각 테이블 정보 담긴 리스트
-        Log.d("확인  setTableData()", "1.1")
+
         //tableData.floorList = ArrayList<Int>()//식당 각 몇층인지 1층과 3층이 있으면 1, 3 의 값을 갖는다.
         tableData.tableNumList = tableNumAL//각 층에 테이블 몇개인지
-        Log.d("확인  setTableData()", "1.2")
-        tableData.accumTableNumList = accumTableNumList//테이블 개수 축적
+        Log.d("확인  setTableData()", "tableNumList : ${tableData.tableNumList}")
 
-        Log.d("확인  setTableData()", "1.5")
+        tableData.accumTableNumList = accumTableNumList//테이블 개수 축적
+        Log.d("확인  setTableData()", "accum : ${tableData.accumTableNumList}")
+
+
         for (i in 0..floorList.size-1){
             Log.d("확인  setTableData()", " 1for문 "+floorList[i]+"  "+i.toString())
             intFloorIist.add(floorList[i].slice(IntRange(6, 6)).toInt())
         }
+
         tableData.floorList=intFloorIist
+        Log.d("확인  setTableData()", "floorList : ${tableData.floorList}")
 
         Log.d("확인  setTableData()", "2")
 
@@ -379,6 +383,7 @@ class SikdangMain_res:AppCompatActivity() {
 
             if (i>=accumTableNumList[floorIt]-1) floorIt+=1
         }
+        Log.d("확인  setTableData()", "tableList : ${tableData.tableList}")
 
         setTable()
 

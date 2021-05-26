@@ -3,6 +3,7 @@ package com.example.myapplication.rest.RestMain.SikdangSetting.TableSetting
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,7 +19,6 @@ class TableFloorSettingDialog(context: Context, val sikdangNum: String, var sikd
 
     lateinit var floorListRV:RecyclerView
     lateinit var RVAdapter:FloorListRVAdapter
-    lateinit var tableData:TableData_res
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.res_tablefloorsetting_dialog)
@@ -28,7 +28,7 @@ class TableFloorSettingDialog(context: Context, val sikdangNum: String, var sikd
         floorListRV = findViewById(R.id.floorListRV)
 
 
-        RVAdapter = FloorListRVAdapter(context, this)
+        RVAdapter = FloorListRVAdapter(context, this, sikdangmainRes)
         floorListRV.adapter = RVAdapter
 
         var LM2 = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -47,7 +47,6 @@ class TableFloorSettingDialog(context: Context, val sikdangNum: String, var sikd
     //데이터베이스 접속
     private fun getTableData(){
         //테이블정보만 가져오면 됨
-        tableData = TableData_res()
     }
 
 
@@ -59,13 +58,14 @@ class TableFloorSettingDialog(context: Context, val sikdangNum: String, var sikd
     //일단 TableData_res의 구조때문에 둘다 받는데 층만으로 데이터 받아올 수 있으면 굳이 FloorNum 사용할 필요 없음
 
     public fun showTableSettingDialog(floorNum:Int, floor:Int){
+        Log.d("TableFloorSettingDialog", "showTableSettingDialog")
         var customDialog = TableSettingDialog(context,sikdangNum, floorNum, sikdangmainRes)
         customDialog!!.show()
     }
 
     private fun addFloor(){
         //새 층은 현재 최대 층보다 1층 추가
-        var newFloor = tableData.floorList[tableData.floorList.size-1]+1
+        var newFloor = sikdangmainRes.tableData.floorList[sikdangmainRes.tableData.floorList.size-1]+1
         //데이터베이스로 층 전송하고 그 층에 임의의 테이블데이터 하나 추가
         //굳이 이 클래스 형태가 되지 않아도 됨 그냥 데이터베이스에 전송만 가능하면 된다.
         var newTable= Table_res(0.1F, 0.1F, 50, 50, 2, newFloor, false, false)

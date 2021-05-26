@@ -282,9 +282,11 @@ class SikdangMain_res:AppCompatActivity() {
                         }
                         tableNumAL.add(tableNum)
                         Log.d("확인  getTableOnFloor()", "getFromDB : ${tableFromDBDataAL}")
-                        getTableDataLineNum=2
-                        setAccum()
-                        getTableBookedInfo()
+                        if (i ==floorList.size-1){
+                            getTableDataLineNum=2
+                            setAccum()
+                            getTableBookedInfo()
+                        }
                         //choiceMySikdangRVAdapter.notifyDataSetChanged()
                         //getTableBookedInfo()
                     }
@@ -310,6 +312,7 @@ class SikdangMain_res:AppCompatActivity() {
             accumTableNumList.add(accumTableNumList[i]+tableNumAL[i+1])
             //Log.d("확인 tableAccum", accumTableNumList[i].toString())
         }
+        Log.d("확인 setAccum()", "끝 : "+"${accumTableNumList}")
 
     }
 
@@ -323,10 +326,11 @@ class SikdangMain_res:AppCompatActivity() {
         var floorIt = 0
         //var calTableNum = tableNumAL[0]
         for (i in 0..tableFromDBDataAL.size-1){
+            var tempTableNum = 0
             Log.d("확인  getTableBookedInfo()", "for문 시작"+" table"+(i+1).toString() + floorList[floorIt].toString() + " " +floorIt )
             //ref.child(floorList[floorIt]).child(showTime).child("BookInfo").child(("table"+(i+1).toString())).addValueEventListener(object : ValueEventListener {
 
-            ref.child(floorList[floorIt]).child(showTime).child(("table"+(i+1).toString())).addValueEventListener(object : ValueEventListener {
+            ref.child(floorList[floorIt]).child(showTime).child(("table"+(tempTableNum+1).toString())).addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (getTableDataLineNum==2){
                         Log.d("확인 getTableBookedInfo() 가져오기 전",i.toString() )
@@ -338,6 +342,7 @@ class SikdangMain_res:AppCompatActivity() {
                         Log.d("확인 getTableBookedInfo() 가져오기 후",i.toString()+" / " +tableFromDBDataAL.size )
 
                         if(i == tableFromDBDataAL.size-1) {
+                            Log.d("확인 getTableBookedInfo() 끝","${tableIsBookedAL}" )
                             getTableDataLineNum=3
                             setTableData()
                         }
@@ -353,10 +358,12 @@ class SikdangMain_res:AppCompatActivity() {
             //ref.child(floorList[floorIt]).child(showTime).child(("table"+(i+1).toString())).child("mutex")
 
 
+            tempTableNum+=1
 
-
-
-            if (i>=accumTableNumList[floorIt]-1) floorIt+=1
+            if (i>=accumTableNumList[floorIt]-1) {
+                floorIt+=1
+                tempTableNum=0
+            }
 
         }
     }
@@ -425,6 +432,7 @@ class SikdangMain_res:AppCompatActivity() {
 
     public fun setTable() {
         Log.d("확인 setTable()", "시작 : "+getTableDataLineNum.toString())
+        Log.d("확인 setTable()", "불러온 테이블 총 개수 : "+tableFromDBDataAL.size)
         //각 층 들어가는 뷰페이저
         tableFloorVP = findViewById(R.id.tableFloorVP)
         vpAdapter = TableFloorVPAdapter_res(this, this)

@@ -303,7 +303,8 @@ class ChoiceSikdangPage_res:AppCompatActivity() {
                 "height" to 30,
                 "width" to 30,
                 "x" to 0.5,
-                "y" to 0.5
+                "y" to 0.5,
+                "shape" to "circle"
         )
 
 

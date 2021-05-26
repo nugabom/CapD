@@ -38,6 +38,8 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
 
     var timeAL = ArrayList<String>()
 
+    var switch = false
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -369,6 +371,7 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
         this.dismiss()
     }
 
+    //데이터베이스에 층 정보 올림
     private fun tableDataSet(){
         Log.d("확인 TableSettingDialog.tableDataSet(): ", "올리기 시작")
         val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
@@ -379,7 +382,7 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
 
 
         for(i in 0..changedTableAL.size-1){
-            var tempShape = "Circle"
+            var tempShape = "circle"
 
             var tempTableHashMap =hashMapOf<String, Any>(
                 "capacity" to changedTableAL[i].maxP,
@@ -419,13 +422,18 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
         val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
                 .child("Tables").child(sikdangmainRes.sikdangId).child("Booked").child("floor_"+sikdangmainRes.tableData.floorList[floorNum])
 
+        switch = true
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                for (tableBooked in snapshot.children) {
-                    Log.d("확인 getTimeAtBooked() 예약 시간 가져오기 ", tableBooked.key.toString())
-                    timeAL.add(tableBooked.key.toString())
+                if(switch == true){
+                    for (tableBooked in snapshot.children) {
+                        Log.d("확인 getTimeAtBooked() 예약 시간 가져오기 ", tableBooked.key.toString())
+                        timeAL.add(tableBooked.key.toString())
+                    }
+                    setTableOnTime()
+                    switch = false
                 }
-                setTableOnTime()
+
 
             }
             override fun onCancelled(error: DatabaseError) {
@@ -450,8 +458,8 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
                 timeHashMap.put("table" + (j + 1).toString(), tempTimeHashMap)
             }
             var tempBookInfo = hashMapOf<String, Any>(
-                    "current" to changedTableAL[i].maxP,
-                    "max" to changedTableAL[i].maxP
+                    "current" to changedTableAL.size,
+                    "max" to changedTableAL.size
             )
             Log.d("확인 getTimeAtBooked() 예약 시간 가져오기 ", "${timeHashMap}")
             timeHashMap.put("BookInfo", tempBookInfo)

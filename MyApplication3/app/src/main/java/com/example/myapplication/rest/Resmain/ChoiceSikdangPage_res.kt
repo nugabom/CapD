@@ -1,5 +1,6 @@
 package com.example.myapplication.rest.Resmain
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 import com.example.myapplication.dataclass.StoreInfo
 import com.example.myapplication.rest.AddRest.AddRestDialog
+import com.example.myapplication.start.SelectLoginActivity
 import com.example.myapplication.storeActivity.Review
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -43,6 +45,13 @@ class ChoiceSikdangPage_res:AppCompatActivity() {
         var addMarcket:Button = findViewById(R.id.addMarcket)
         addMarcket.setOnClickListener {
             showAddRestDialog()
+
+        }
+
+        var logoutButton:Button = findViewById(R.id.logoutButton)
+        logoutButton.setOnClickListener {
+            val intent = Intent(this, SelectLoginActivity::class.java)
+            startActivity(intent)
         }
 
 
@@ -161,7 +170,7 @@ class ChoiceSikdangPage_res:AppCompatActivity() {
 
         ref.child(postId!!).child("info").setValue(newRes)
                 .addOnSuccessListener {
-                    upMenu(ref, postId)
+                    upMenu(ref, postId, cat)
                     upTable(postId)
                     upSikdangOnUser(postId, cat)
                     //finish()
@@ -174,7 +183,7 @@ class ChoiceSikdangPage_res:AppCompatActivity() {
         Log.d("확인 ChoiceSikdangPage_res", "식당 업데이트")
     }
 
-    public fun upMenu(ref:DatabaseReference, postId:String){
+    public fun upMenu(ref:DatabaseReference, postId:String, cat:Int) {
 
         val tempMenu = hashMapOf<String, Any>(
                 "price" to 100,
@@ -187,7 +196,7 @@ class ChoiceSikdangPage_res:AppCompatActivity() {
 
         menuPushedPostRef.setValue(tempMenu)
                 .addOnSuccessListener {
-                    upIng(ref, postId, menuPostId!!)
+                    upIng(ref, postId, menuPostId!!, cat)
                 }.addOnFailureListener {
                     Toast.makeText(this, "메뉴 업데이트 실패", Toast.LENGTH_SHORT).show()
                     runOnUiThread{
@@ -198,7 +207,7 @@ class ChoiceSikdangPage_res:AppCompatActivity() {
         Log.d("확인 ChoiceSikdangPage_res", "메뉴 업데이트")
     }
 
-    public fun upIng(ref:DatabaseReference, postId:String, menuPostId:String ){
+    public fun upIng(ref:DatabaseReference, postId:String, menuPostId:String, cat:Int ){
         val tempIng = hashMapOf<String, Any>(
                 "country" to "임시원산지",
                 "ing" to "임시원재료명"
@@ -213,7 +222,7 @@ class ChoiceSikdangPage_res:AppCompatActivity() {
         ingPushedPostRef.setValue(tempIng)
                 .addOnSuccessListener {
                         //finish()
-                    upLoc(postId)
+                    upLoc(postId, cat)
                 }.addOnFailureListener {
                     Toast.makeText(this, "재료 업데이트 실패", Toast.LENGTH_SHORT).show()
                     runOnUiThread{
@@ -225,7 +234,7 @@ class ChoiceSikdangPage_res:AppCompatActivity() {
 
     }
 
-    public fun upLoc(postId: String){
+    public fun upLoc(postId: String, cat:Int){
         val locRef: DatabaseReference = FirebaseDatabase.getInstance().getReference()
                 .child("Locations")
         val locPushedPostRef: DatabaseReference = locRef.child(postId)
@@ -233,9 +242,10 @@ class ChoiceSikdangPage_res:AppCompatActivity() {
 
         var newResLoc = hashMapOf<String, Any>(
                 "Lat" to 37.535879,
-                "Lang" to 126.824997,
+                "Lng" to 126.824997,
                 "id" to postId!!,
-                "Name" to addRestDialog.ar_sikdangNameRT.text.toString()
+                "Name" to addRestDialog.ar_sikdangNameRT.text.toString(),
+                "store_type" to addRestDialog.catAL[cat]
         )
 
         locPushedPostRef.setValue(newResLoc)

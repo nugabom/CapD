@@ -41,7 +41,7 @@ class AddRestDialog(context: Context, var choicesikdangpageRes: ChoiceSikdangPag
     var toggleBtnAL = ArrayList<ToggleButton>()
 
     init{
-        catAL.add("돼지고기")
+        //catAL.add("돼지고기")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

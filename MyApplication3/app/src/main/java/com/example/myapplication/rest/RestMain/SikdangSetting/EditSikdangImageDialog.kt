@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.myapplication.R
@@ -44,9 +45,13 @@ class EditSikdangImageDialog(context: Context, val sikdangNum: String, var sikda
 
         var esi_editBtn:Button = findViewById(R.id.esi_editBtn)
         esi_editBtn.setOnClickListener {
-            setNewImgOnDB()
-            //upUrlOnDB()
-            this.dismiss()
+            if(isImgAdded){
+                setNewImgOnDB()
+                //upUrlOnDB()
+                this.dismiss()
+            }
+            else Toast.makeText(context, "이미지를 불러와주세요", Toast.LENGTH_SHORT).show()
+
         }
     }
 
@@ -126,9 +131,10 @@ class EditSikdangImageDialog(context: Context, val sikdangNum: String, var sikda
 
     public fun setNewImgOnDB(){
         var newUrl = ""
-        val storageRef = FirebaseStorage.getInstance().getReference().child(sikdangmainRes.sikdangName)
+        val storageRef = FirebaseStorage.getInstance().getReference()
         //storageRef.
         var file = sikdangmainRes.newSikdangImgUri
+        Log.d("확인 ChangeFloorImageDialog", "2 "+sikdangmainRes.sikdangName + "/" + "sikdangImg.jpg")
         val riversRef = storageRef.child(sikdangmainRes.sikdangName + "/" + "sikdangImg.jpg")
         val uploadTask = riversRef.putFile(file!!).addOnSuccessListener {
             val imgurl = riversRef.downloadUrl.addOnSuccessListener {

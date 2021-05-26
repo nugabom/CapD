@@ -11,9 +11,14 @@ import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
+import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.Resource
+import com.bumptech.glide.request.RequestOptions
 import com.example.myapplication.R
 import com.example.myapplication.rest.Resmain.SikdangMain_res
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
 
 //TableSettingDialog에서 사용
 //층 단면도 변경 다이얼로그
@@ -23,6 +28,11 @@ class ChangeFloorImageDialog(context: Context, val sikdangNum: String, val floor
     lateinit var newImg:Bitmap
     var isImeSetted = false
     lateinit var cfi_newIV:ImageView
+
+    var inImageSetted = false
+    var newUri = ""
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.res_changefloorimage_dialog)
@@ -36,9 +46,10 @@ class ChangeFloorImageDialog(context: Context, val sikdangNum: String, val floor
 
         var cfi_changeBtn:Button = findViewById(R.id.cfi_changeBtn)
         cfi_changeBtn.setOnClickListener {
+            setNewImgOnDB()
             if (isImeSetted == true){//이미 새 이미지 갤러리에서 가져온 경우
-                if(setNewImgOnDB()){//데이터 올리기 성공한 경우
-                    tableSettingDialog.setNewFloorImg(newImg)
+                if(true){//데이터 올리기 성공한 경우
+                    //tableSettingDialog.setNewFloorImg(newImg)
                     this.dismiss()
                 }
                 else{//데이터베이스에 올리기 실패
@@ -78,6 +89,25 @@ class ChangeFloorImageDialog(context: Context, val sikdangNum: String, val floor
         }*/
     }
 
+    public fun setNewImage(){
+        if(sikdangmainRes.sikdangimgCheckNum==1){
+            Log.d("확인 ChangeFloorImageDialog.setNewImage", "수행")
+            setImgOnView(sikdangmainRes.newFloorImageUri.toString())
+            sikdangmainRes.sikdangimgCheckNum=0
+            newUri=sikdangmainRes.newFloorImageUri.toString()
+            isImeSetted = true
+            //afterChangeImage.setImageResource(imageRes)
+        }
+    }
+
+    public fun setImgOnView(url:String){
+        Glide.with(context)
+                .load(url)
+                .apply(RequestOptions())
+                .into(cfi_newIV)
+    }
+
+    /*
     public fun setNewImg(){
         if(sikdangmainRes.sikdangimgCheckNum==1){
             Log.d("확인 setNewImg()", "이미지 변경1")
@@ -100,13 +130,39 @@ class ChangeFloorImageDialog(context: Context, val sikdangNum: String, val floor
             Log.d("확인 setNewImg()", sikdangmainRes.sikdangimgCheckNum.toString())
             isImeSetted = false
         }
-    }
+    }*/
 
     //데이터베이스에 이미지 올림
-    private fun setNewImgOnDB():Boolean{
-        if(false){//올리기 실패시
-            return false
+    private fun setNewImgOnDB(){
+
+        var newUrl = ""
+        val storageRef = FirebaseStorage.getInstance().getReference()
+        Log.d("확인 ChangeFloorImageDialog", "1 "+newUri.toString())
+        //storageRef.
+        var file = sikdangmainRes.newFloorImageUri
+        Log.d("확인 ChangeFloorImageDialog", "2 "+sikdangmainRes.sikdangName+"/floor"+floor.toString() + ".jpg")
+        val riversRef = storageRef.child(sikdangmainRes.sikdangName+"/floor_"+floor.toString() + ".jpg")
+        Log.d("확인 ChangeFloorImageDialog", "3 ")
+        val uploadTask = riversRef.putFile(file!!).addOnSuccessListener {
+            val imgurl = riversRef.downloadUrl.addOnSuccessListener {
+                uri -> Log.d("확인 ChangeFloorImageDialog", uri.toString())
+                newUrl=uri.toString()
+                upUrlOnDB(newUrl)
+                tableSettingDialog.setNewFloorImg(newUri)
+            }.toString()
         }
-        return true
+        //upUrlOnDB(newUrl
+
+
+
     }
+
+    public fun upUrlOnDB(newUrl:String){
+        val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
+                .child("Table").child(sikdangmainRes.sikdangType)
+        Log.d("확인 upUrlOnDB()", sikdangmainRes.sikdangId)
+        Log.d("확인 upUrlOnDB()", newUrl.toString())
+        ref.child("floorUrl").child("floor_"+floor.toString()).setValue(newUrl)
+    }
+
 }

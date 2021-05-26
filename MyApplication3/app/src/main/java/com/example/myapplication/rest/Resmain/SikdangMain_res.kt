@@ -76,6 +76,7 @@ class SikdangMain_res:AppCompatActivity() {
 
     var newSikdangImgUri : Uri? = null
     public var newMenuImgUri : Uri? = null
+    public var newFloorImageUri : Uri? = null
 
     var getTableDataLineNum : Int = 3
 
@@ -579,8 +580,8 @@ class SikdangMain_res:AppCompatActivity() {
         else{
 
             sikdangimgCheckNum=2
-        }
-        if (requestCode == 2){
+        }/*
+        if (requestCode == 2){//테이블 이미지 세팅
             if (resultCode == RESULT_OK) {
                 try {
                     val ins: InputStream? = contentResolver.openInputStream(data?.data!!)
@@ -600,8 +601,29 @@ class SikdangMain_res:AppCompatActivity() {
                 Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show()
                 sikdangimgCheckNum=2
             }
+        }*/
+
+        if(requestCode == 2 && resultCode == Activity.RESULT_OK) {//층 평면도
+            Log.d("확인 sikdangMainRes", "층 평면도 셋")
+            if (data == null) return
+            sikdangimgCheckNum=1
+            newFloorImageUri = data.data
+            changeFloorImageDialog.setNewImage()
+            Log.d("확인 sikdangMainRes", "층 평면도 uri : "+newFloorImageUri.toString())
+        } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE
+                && resultCode == RESULT_OK) {
+            sikdangimgCheckNum==1
+            var result = CropImage.getActivityResult(data)
+            newFloorImageUri = result.uri
+            Log.d("확인 sikdangMainRes", "층 평면도 uri : "+newFloorImageUri.toString())
+            if(newFloorImageUri == null) return
+            changeFloorImageDialog.setNewImage()
+        } else  {
+            sikdangimgCheckNum==2
+            Toast.makeText(this, "죄송합니다. 다시 시도해주세요", Toast.LENGTH_SHORT).show()
         }
-        else if(requestCode == 3 && resultCode == Activity.RESULT_OK) {
+
+        if(requestCode == 3 && resultCode == Activity.RESULT_OK) {
             Log.d("확인 sikdangMainRes", "식당사진 셋")
             if (data == null) return
             sikdangimgCheckNum=1

@@ -14,12 +14,15 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.myapplication.R
 import com.example.myapplication.rest.Resmain.SikdangMain_res
 import com.example.sikdangbook_rest.Table.TableData_res
 import com.example.sikdangbook_rest.Table.Table_res
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_notification.*
+import retrofit2.http.Url
 
 //TableFloorSettingDialog 에서 사용
 //층을 받아와 그 층의 테이블 정보 띄우고 테이블 정보 수정
@@ -360,8 +363,12 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
         nowFloor=newFloor
     }
 
-    public fun setNewFloorImg(newImg:Bitmap){
-        ts_floorImg.setImageBitmap(newImg)
+
+    public fun setNewFloorImg(uri:String){
+        Glide.with(context)
+                .load(uri)
+                .apply(RequestOptions())
+                .into(ts_floorImg)
     }
 
     //데이터베이스 접속해서 이 층 삭제

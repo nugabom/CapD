@@ -3,20 +3,27 @@ package com.example.myapplication.rest.RestMain.SikdangSetting
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 import com.example.myapplication._Ingredient
 import com.example.myapplication.bookActivity.MenuData
+import com.example.myapplication.rest.Resmain.SikdangMain_res
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import kotlinx.android.synthetic.main.activity_notification.*
 
 //EditMenuDialog 에서 사용
 //메뉴 추가하는 다이얼로그
 //메뉴 이름 가격 설명 재료
 
-class AddMenuDialog(context: Context, val sikdangNum: String): Dialog(context) {
+class AddMenuDialog(context: Context, val sikdangNum: String, var editMenuDialog: EditMenuDialog, var sikdangmainRes: SikdangMain_res): Dialog(context) {
 
     var addIngAL = ArrayList<_Ingredient>()
 
@@ -83,7 +90,78 @@ class AddMenuDialog(context: Context, val sikdangNum: String): Dialog(context) {
 
     //데이터 베이스 접속헤 MenuData를 새 메뉴로 집어넣음
     private fun addMenu(menuName:String, menuImg:String, menuPrice:Int, menuExp:String, addIngAL:ArrayList<_Ingredient>){
-        var newMenu= MenuData(menuName, menuImg, menuPrice, menuExp, addIngAL)
+        //var newMenu= MenuData(menuName, menuImg, menuPrice, menuExp, addIngAL)
+
+        val tempMenu = hashMapOf<String, Any>(
+                "price" to menuPrice,
+                "product" to menuName,
+                "product_exp" to menuExp
+        )
+        val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
+                .child("Restaurants").child(sikdangmainRes.sikdangType).child(sikdangmainRes.sikdangId).child("menu")
+
+        val menuPushedPostRef: DatabaseReference = ref.push()
+        val menuPostId = menuPushedPostRef.key
+
+        menuPushedPostRef.setValue(tempMenu)
+                .addOnSuccessListener {
+                    upIng(menuPostId!!, addIngAL)
+                }.addOnFailureListener {
+                    Toast.makeText(context, "메뉴 업데이트 실패", Toast.LENGTH_SHORT).show()
+                }
+
+        Log.d("확인 ChoiceSikdangPage_res", "메뉴 업데이트")
+
+
+    }
+    public fun upIng(menuPostId:String, addIngAL:ArrayList<_Ingredient>){
+
+        val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
+                .child("Restaurants").child(sikdangmainRes.sikdangType).child(sikdangmainRes.sikdangId).child("menu").child(menuPostId).child("ingredients")
+
+        if(addIngAL.size == 0){
+            val tempIng = hashMapOf<String, Any>(
+                    "country" to "임시원산지",
+                    "ing" to "임시원재료명"
+            )
+
+            val ingPushedPostRef: DatabaseReference = ref.push()
+
+
+            ingPushedPostRef.setValue(tempIng)
+                    .addOnSuccessListener {
+                        //finish()
+                        //upLoc(postId)
+                    }.addOnFailureListener {
+                        Toast.makeText(context, "재료 업데이트 실패", Toast.LENGTH_SHORT).show()
+                    }
+
+            Log.d("확인 ChoiceSikdangPage_res", "재료 업데이트")
+        }
+        else{
+            for (i in 0..addIngAL.size-1){
+                val tempIng = hashMapOf<String, Any>(
+                        "country" to addIngAL[i].country!!,
+                        "ing" to addIngAL[i].ing!!
+                )
+                val ingPushedPostRef: DatabaseReference = ref.push()
+
+
+                ingPushedPostRef.setValue(tempIng)
+                        .addOnSuccessListener {
+                            if(i == addIngAL.size-1) editMenuDialog.renewalMenus()
+                            //finish()
+                            //upLoc(postId)
+                        }.addOnFailureListener {
+                            Toast.makeText(context, "재료 업데이트 실패", Toast.LENGTH_SHORT).show()
+                        }
+
+                Log.d("확인 ChoiceSikdangPage_res", "재료 업데이트")
+            }
+        }
+
+
+
 
 
     }

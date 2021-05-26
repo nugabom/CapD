@@ -56,7 +56,7 @@ class EditMenuDialog (context: Context, val sikdangNum:String, var sikdangmainRe
     }
 
     public fun showAddMenuDialog(){
-        var customDialog = AddMenuDialog(context, sikdangNum)
+        var customDialog = AddMenuDialog(context, sikdangNum, this, sikdangmainRes )
         customDialog!!.show()
     }
 
@@ -192,19 +192,20 @@ class EditMenuDialog (context: Context, val sikdangNum:String, var sikdangmainRe
         Log.d("확인  getIngKey() 1  menuKeyAL 사이즈 확인", menuKeyAL.size.toString())
         val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
                 .child("Restaurants").child(sikdangmainRes.sikdangType).child(sikdangmainRes.sikdangId).child("menu")
+        if(lineNum==1) ingKeyAL.clear()
         for (i in 0..menuKeyAL.size-1){
             ref.child(menuKeyAL[i]).child("ingredients").addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot2: DataSnapshot) {
                     if (lineNum == 1){
-                        ingKeyAL.clear()
                         var tempingKeyAL=ArrayList<String>()
                         for (menuData2 in snapshot2.children) {
                             Log.d("확인 EditMenuDialog.getIngKey", "재료 키 추가")
                             tempingKeyAL.add(menuData2.key.toString())
                             //Log.d("확인 2getMenuDataByMenuId()", "내용확인 : ${ingredients}")
                         }
-                        Log.d("확인 EditMenuDialog.getIngKey", "재료 키 배열 추가")
+                        Log.d("확인 EditMenuDialog.getIngKey", "재료 키 배열 추가 : "+ingKeyAL.size.toString()+ " " + tempingKeyAL.size.toString())
                         ingKeyAL.add(tempingKeyAL)
+                        Log.d("확인 EditMenuDialog.getIngKey", "재료 키 배열 추가 : "+ingKeyAL.size.toString()+ " " + tempingKeyAL.size.toString())
 
                         if(i == menuKeyAL.size-1){
                             lineNum = 2
@@ -231,6 +232,7 @@ class EditMenuDialog (context: Context, val sikdangNum:String, var sikdangmainRe
             var tempIngAL = ArrayList<_Ingredient>()
             //Log.d("확인  getIngByKey() 내부수행", "isSetted = false")
             var isSetted = false
+            if(lineNum == 2) ingAL.clear()
             for (j in 0..ingKeyAL[i].size-1){
                 //Log.d("확인  getIngByKey() 내부수행", "안쪽 for문")
                 ref.child(menuKeyAL[i]).child("ingredients").child(ingKeyAL[i][j]).addValueEventListener(object : ValueEventListener {
@@ -238,7 +240,6 @@ class EditMenuDialog (context: Context, val sikdangNum:String, var sikdangmainRe
                         //Log.d("확인  getIngByKey() 내부수행", "lineNum : "+lineNum.toString())
                         if (lineNum == 2){
                             //Log.d("확인  getIngByKey() 내부수행", j.toString())
-                            ingAL.clear()
                             isSetted = true
                             var tempIng = ""
                             var tempCon = ""
@@ -289,20 +290,21 @@ class EditMenuDialog (context: Context, val sikdangNum:String, var sikdangmainRe
     //메뉴 가져옴
     public fun getMenuByMenuKey(){
         Log.d("확인  getMenuByMenuKey() 1  menuKeyAL 사이즈 확인", menuKeyAL.size.toString())
+        if (lineNum == 3) menuDataAL.clear()
         for (i in 0..menuKeyAL.size-1){
             val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
                     .child("Restaurants").child(sikdangmainRes.sikdangType).child(sikdangmainRes.sikdangId).child("menu").child(menuKeyAL[i])
             ref.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if(lineNum ==3){
-                        menuDataAL.clear()
-                        //Log.d("확인  getMenuByMenuKey()", "2")
+
+                        Log.d("확인  getMenuByMenuKey()", "2")
                         var product:String = ""
                         var image_url : String = ""
                         var price : Int = 0
                         var product_exp: String = ""
                         //var ingredients : ArrayList<_Ingredient> = ArrayList()
-                        //Log.d("확인  getMenuByMenuKey()", "3")
+                        Log.d("확인  getMenuByMenuKey()", "3")
                         for (menuData in snapshot.children) {
                             //Log.d("확인  getMenuByMenuKey()", "4")
                             if(menuData.key.toString() == "product") product=menuData.value.toString()
@@ -312,10 +314,10 @@ class EditMenuDialog (context: Context, val sikdangNum:String, var sikdangmainRe
                             //if(menuData.key.toString() == "ingredients") ingredients=menuData.value.
                             //menuKeyAL.add(menuData.key.toString())
                         }
-                        //Log.d("확인  getMenuByMenuKey()", "5"+i.toString()+"/"+ingAL.size.toString())
+                        Log.d("확인  getMenuByMenuKey()", "5"+i.toString()+"/"+ingAL.size.toString() + "ingKeyAL 크기 : "+ingKeyAL.size.toString())
 
                         var tempMenuData = MenuData(product, image_url, price, product_exp, ingAL[i])
-                        //Log.d("확인  getMenuByMenuKey()", "6")
+                        Log.d("확인  getMenuByMenuKey()", "메뉴 추가")
                         menuDataAL.add(tempMenuData)
                         if(i==menuKeyAL.size-1) {
                             //Log.d("확인  getMenuByMenuKey()", "7")

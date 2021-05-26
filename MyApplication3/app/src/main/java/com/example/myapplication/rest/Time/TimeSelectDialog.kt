@@ -16,7 +16,7 @@ class TimeSelectDialog(context: Context, var sikdangMain_res: SikdangMain_res): 
 
 
         var timeRV : RecyclerView = findViewById(R.id.timeRV)
-        var timeRVAdapter = TimeLineAdapter(context, this)
+        var timeRVAdapter = TimeLineAdapter(context, this, sikdangMain_res)
         timeRV.adapter = timeRVAdapter
 
 

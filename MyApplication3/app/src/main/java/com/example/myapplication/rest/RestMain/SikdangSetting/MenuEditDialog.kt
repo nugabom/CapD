@@ -266,6 +266,7 @@ class MenuEditDialog(context: Context, val sikdangNum: String, val menuNum: Int,
         ref.child("product").setValue(newName)
         ref.child("price").setValue(newPrice)
         ref.child("product_exp").setValue(newEXP)
+        ref.child("image").setValue("Null")
 
         if (isnewImageSetted== true) setNewImgOnDB()
 

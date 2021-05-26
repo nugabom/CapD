@@ -74,6 +74,8 @@ class SikdangMain_res:AppCompatActivity() {
     var accumTableNumList = ArrayList<Int>()//테이블 개수 축적
     var tableIsBookedAL = ArrayList<Int>()
 
+    var timeAL = ArrayList<String>()
+
     var newSikdangImgUri : Uri? = null
     public var newMenuImgUri : Uri? = null
     public var newFloorImageUri : Uri? = null
@@ -346,6 +348,7 @@ class SikdangMain_res:AppCompatActivity() {
                             Log.d("확인 getTableBookedInfo() 끝","${tableIsBookedAL}" )
                             getTableDataLineNum=3
                             setTableData()
+                            setTimeAL()
                         }
                     }
 
@@ -670,21 +673,30 @@ class SikdangMain_res:AppCompatActivity() {
 
     }
 
-    /*
-    val requestOptions : RequestOptions by lazy {
-        RequestOptions()
-                .placeholder(R.drawable.profile_placeholder)
-                .transforms(CenterCrop())
+
+
+
+
+    public fun setTimeAL(){
+
+        val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
+                .child("Tables").child(sikdangId).child("Booked").child(floorList[0])
+
+        ref.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (tableInfo in snapshot.children) {
+                    //Log.d("확인  getTableDataFromDB()", "getFromDB : "+tableInfo.key.toString())
+                timeAL.add(tableInfo.key.toString())
+                }
+                Log.d("확인 setTimeAL()", "5 getFromDB : ${timeAL}")
+            }
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("확인 setTimeAL()", "5 getFromDB : ${error}")
+            }
+        })
     }
 
-    private fun set_profile_image(url : String?) {
-        Log.d("확인 set_profile_image", "url: "+url)
-        Glide.with(this)
-                .load(url)
-                .apply(requestOptions)
-                .into(imageView4)
-    }
-*/
+
 
 
     private fun saveBitmap(bitmap: Bitmap): String

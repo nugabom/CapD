@@ -1,6 +1,7 @@
 package com.example.myapplication.rest.Resmain
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,31 +29,36 @@ class ResMainMessageRVAdapter(var context: Context, var sikdangmainRes: SikdangM
     }
 
     override fun getItemCount(): Int {
-        return sikdangmainRes.messages.size
+        Log.d("확인 ResMainMessageRVAdapter 개수", sikdangmainRes.msgKeyAL.size.toString())
+        return sikdangmainRes.msgKeyAL.size
     }
 
     inner class Holder(itemView: View): RecyclerView.ViewHolder(itemView){
         public fun bind(pos:Int){
+            Log.d("확인 ResMainMessageRVAdapter 바인드", pos.toString())
             var count = pos
-            var orderId =sikdangmainRes.messages[count].orderId
+            var orderId =sikdangmainRes.msgKeyAL[count]
+            Log.d("확인 ResMainMessageRVAdapter 바인드", "1")
             var oml_nameTV :TextView = itemView.findViewById(R.id.oml_nameTV)
-            oml_nameTV.setText(sikdangmainRes.messages[count].conName)
+            Log.d("확인 ResMainMessageRVAdapter 바인드", "1.2")
+            oml_nameTV.setText(sikdangmainRes.userDataAL[count].username)
+            Log.d("확인 ResMainMessageRVAdapter 바인드", "2")
 
             var oml_pnTV :TextView = itemView.findViewById(R.id.oml_pnTV)
-            oml_pnTV.setText(sikdangmainRes.messages[count].pn)
+            oml_pnTV.setText(sikdangmainRes.userDataAL[count].phone_number)
 
             var oml_priceTV :TextView = itemView.findViewById(R.id.oml_priceTV)
-            oml_priceTV.setText(sikdangmainRes.messages[count].price.toString()+" 원")
+            oml_priceTV.setText(sikdangmainRes.msgAL[count].totalPay.toString()+" 원")
 
             var oml_timeTV :TextView = itemView.findViewById(R.id.oml_timeTV)
+            Log.d("확인 ResMainMessageRVAdapter 바인드", "3")
             /*
             oml_timeTV.setText(sikdangmainRes.messages[count].sh.toString()+" 시"+sikdangmainRes.messages[count].sm.toString()+" 분 ~ "+
                     sikdangmainRes.messages[count].eh.toString()+" 시"+sikdangmainRes.messages[count].em.toString()+" 분 / 예약시간:"+
                     sikdangmainRes.messages[count].y.toString()+"."+sikdangmainRes.messages[count].m.toString()+"."+sikdangmainRes.messages[count].day.toString()+"."+
                     sikdangmainRes.messages[count].h.toString()+"."+sikdangmainRes.messages[count].min.toString()+"."+sikdangmainRes.messages[count].sec.toString())*/
 
-            oml_timeTV.setText(sikdangmainRes.messages[count].sh.toString()+" 시"+sikdangmainRes.messages[count].sm.toString()+" 분 ~ "+
-                    sikdangmainRes.messages[count].eh.toString()+" 시"+sikdangmainRes.messages[count].em.toString()+" 분" )
+            oml_timeTV.setText(sikdangmainRes.msgAL[count].bookTime)
 
             var oml_layout : LinearLayout= itemView.findViewById(R.id.oml_layout)
             oml_layout.setOnClickListener {
@@ -60,6 +66,7 @@ class ResMainMessageRVAdapter(var context: Context, var sikdangmainRes: SikdangM
             }
 
 
+            Log.d("확인 ResMainMessageRVAdapter 바인드", "4")
 
         }
     }

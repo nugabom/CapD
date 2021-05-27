@@ -83,6 +83,15 @@ class SikdangMain_res:AppCompatActivity() {
 
     var getTableDataLineNum : Int = 3
 
+    public var msgKeyAL = ArrayList<String>()
+    public var msgAL = ArrayList<MsgData>()
+    public var msgTableDataAL = ArrayList<ArrayList<MsgTableData>>() //예약별 층/테이블별
+    public var msgBookInfoDataAL = ArrayList<ArrayList<MsgBookInfo>>()
+    public var userDataAL = ArrayList<OtherUserData>()
+
+
+    public var msgLineNum = 4
+
 
 
 
@@ -120,6 +129,7 @@ class SikdangMain_res:AppCompatActivity() {
 
         setMessage()
         setTable()
+        getMsgKeyFromDB()
 
 
         imageView4=findViewById(R.id.imageView4)
@@ -193,13 +203,15 @@ class SikdangMain_res:AppCompatActivity() {
         val resRef: DatabaseReference = FirebaseDatabase.getInstance().getReference()
                 .child("Store_reservation").child(sikdangId)
 
+        //예약이 추가될 때
         resRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (tableInfo in snapshot.children) {
                     //Log.d("확인  getTableDataFromDB()", "getFromDB : "+tableInfo.key.toString())
                     //floorList.add(tableInfo.key.toString())
                 }
-                Toast.makeText(this@SikdangMain_res, " 데이터베이스 정보변경", Toast.LENGTH_LONG).show();
+                getMsgKeyFromDB()
+                Toast.makeText(this@SikdangMain_res, " 예약이 추가되었습니다.", Toast.LENGTH_LONG).show();
 
             }
             override fun onCancelled(error: DatabaseError) {
@@ -214,6 +226,7 @@ class SikdangMain_res:AppCompatActivity() {
 
     var backPressed = false
     var pressedTime = System.currentTimeMillis()
+
     override fun onBackPressed() {
         //super.onBackPressed()
         if (backPressed == false) {
@@ -238,6 +251,182 @@ class SikdangMain_res:AppCompatActivity() {
     }
 
     //데이터베이스에서 테이블 목록
+    inner class MsgTableData(var floorTable:String, var menuNameNum:String)
+    inner class MsgBookInfo (var floor:String, var table:String, var menu:String, var cnt:Int)
+
+    inner class MsgData(var bookTime:String, var payTime:String, var totalPay:Int, var userId:String)
+    inner class OtherUserData(var username:String, var phone_number:String)
+
+
+
+    //예약의 키 받아옴
+
+    public fun getMsgKeyFromDB(){
+        val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
+                .child("Store_reservation").child(sikdangId)
+
+        msgKeyAL.clear()
+        msgLineNum = 0
+
+        ref.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if ( msgLineNum == 0){
+                    for (tableInfo in snapshot.children) {
+                        Log.d("확인 getMsgKeyFromDB()", tableInfo.key.toString())
+                        msgKeyAL.add(tableInfo.key.toString())
+                    }
+                    msgLineNum=1
+                    getMsgByKey()
+                }
+
+            }
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("확인 setSikdangListInfo()", "5 getFromDB : ${error}")
+            }
+        })
+    }
+
+
+    //키 기반 예약 정보 받아옴
+    public fun getMsgByKey(){
+        val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
+                .child("Store_reservation").child(sikdangId)
+
+        msgAL.clear()
+        for (i in 0..msgKeyAL.size-1){
+            ref.child(msgKeyAL[i]).addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if ( msgLineNum == 1){
+                        var tempMsg = MsgData("", "", 0, "")
+                        for (tableInfo in snapshot.children) {
+                            Log.d("확인 getMsgByKey()", tableInfo.key.toString())
+                            //msgKeyAL.add(tableInfo.key.toString())
+                            if (tableInfo.key.toString() == "bookTime") tempMsg.bookTime = tableInfo.value.toString()
+                            if (tableInfo.key.toString() == "payTime") tempMsg.payTime = tableInfo.value.toString()
+                            if (tableInfo.key.toString() == "totalPay") tempMsg.totalPay = tableInfo.value.toString().toInt()
+                            if (tableInfo.key.toString() == "userId") tempMsg.userId = tableInfo.value.toString()
+                        }
+                        msgAL.add(tempMsg)
+                        if (i == msgKeyAL.size-1){
+                            msgLineNum=2
+                            getMsgTableByKey()
+                        }
+
+                    }
+
+                }
+                override fun onCancelled(error: DatabaseError) {
+                    Log.d("확인 setSikdangListInfo()", "5 getFromDB : ${error}")
+                }
+            })
+        }
+    }
+
+
+
+    //키 기반 테이블과 메뉴 정보 받아옴
+
+    public fun getMsgTableByKey(){
+        val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
+                .child("Store_reservation").child(sikdangId)
+
+        msgTableDataAL.clear()
+
+        for (i in 0..msgKeyAL.size-1){
+            ref.child(msgKeyAL[i]).child("tables").addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    var temptempMsgTable = ArrayList<MsgTableData>()
+                    if ( msgLineNum == 2){
+                        var tempMsgTable = MsgTableData("", "")
+                        for (tableInfo in snapshot.children) {
+                            Log.d("확인 getMsgTableByKey()", tableInfo.key.toString())
+                            tempMsgTable.floorTable = tableInfo.key.toString()
+                            tempMsgTable.menuNameNum = tableInfo.value.toString()
+                            temptempMsgTable.add(tempMsgTable)
+                        }
+                        msgTableDataAL.add(temptempMsgTable)
+                        if (i == msgKeyAL.size-1){
+                            msgLineNum=3
+                            getOtherDataFromUid()
+                            setMsgTableInfo()
+                            //getMsgTableByKey()
+                        }
+
+                    }
+
+                }
+                override fun onCancelled(error: DatabaseError) {
+                    Log.d("확인 setSikdangListInfo()", "5 getFromDB : ${error}")
+                }
+            })
+
+        }
+
+    }
+
+    //유저 키 기반 유저 정보 받아옴
+
+    public fun getOtherDataFromUid(){
+
+        val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
+                .child("Users")
+        for (i in 0..msgKeyAL.size-1){
+           userDataAL.clear()
+            //msgLineNum = 0
+
+            ref.child(msgAL[i].userId).addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if ( msgLineNum == 3){
+                        var tempUserData = OtherUserData("", "")
+                        for (tableInfo in snapshot.children) {
+                            Log.d("확인 getOtherDataFromUid()", tableInfo.key.toString())
+                            Log.d("확인 getOtherDataFromUid()", tableInfo.value.toString())
+                            //Log.d("확인 getMsgKeyFromDB()", tableInfo.key.toString())
+                            //msgKeyAL.add(tableInfo.key.toString())
+                            if(tableInfo.key.toString() == "username") tempUserData.username = tableInfo.value.toString()
+                            if(tableInfo.key.toString() == "phone_number") tempUserData.phone_number = tableInfo.value.toString()
+                        }
+                        userDataAL.add(tempUserData)
+                        if (i == msgKeyAL.size-1){
+                            msgLineNum=4
+                            renewalOrder()
+                        }
+                        //getMsgByKey()
+                    }
+
+                }
+                override fun onCancelled(error: DatabaseError) {
+                    Log.d("확인 setSikdangListInfo()", "5 getFromDB : ${error}")
+                }
+            })
+        }
+    }
+
+
+    public fun setMsgTableInfo(){
+        for (i in 0..msgTableDataAL.size-1){
+            var tempAL = ArrayList<MsgBookInfo>()
+            for (j in 0..msgTableDataAL[i].size-1){
+                var floor = msgTableDataAL[i][j].floorTable.slice(IntRange(0, 6))
+                Log.d("확인 setMsgTableInfo()", floor)
+                var table = msgTableDataAL[i][j].floorTable.slice(IntRange(8, 13))
+                Log.d("확인 setMsgTableInfo()", table)
+                var menuName =msgTableDataAL[i][j].menuNameNum.slice(IntRange(0, msgTableDataAL[i][j].menuNameNum.length-5))
+                Log.d("확인 setMsgTableInfo()", menuName)
+                var menucnt =msgTableDataAL[i][j].menuNameNum.slice(IntRange(msgTableDataAL[i][j].menuNameNum.length-1, msgTableDataAL[i][j].menuNameNum.length-1)).toInt()
+                Log.d("확인 setMsgTableInfo()", menucnt.toString())
+                var tempMsgBookInfo = MsgBookInfo(floor, table, menuName, menucnt)
+                tempAL.add(tempMsgBookInfo)
+            }
+            msgBookInfoDataAL.add(tempAL)
+
+        }
+
+    }
+
+
+
+
 
 
     //데이터베이스에서 층을 받음

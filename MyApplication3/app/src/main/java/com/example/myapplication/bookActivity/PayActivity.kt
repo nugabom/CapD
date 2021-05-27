@@ -564,7 +564,7 @@ class PayActivity : AppCompatActivity() {
 
 
 
-        ref.push().setValue(resInfo).addOnSuccessListener {
+        ref.push().setValue(reservation).addOnSuccessListener {
             //finish()
             //upSikdangOnUser(postId)
             //setTimeAl(newFloor)

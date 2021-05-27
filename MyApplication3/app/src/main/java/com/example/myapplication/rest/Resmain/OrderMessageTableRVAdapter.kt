@@ -25,15 +25,14 @@ class OrderMessageTableRVAdapter(var context: Context, var orderNum:Int, var sik
     }
 
     override fun getItemCount(): Int {
-        return sikdangmainRes.messages[orderNum].tables.size
+        return sikdangmainRes.msgBookInfoDataAL[orderNum].size
     }
 
     inner class Holder(itemView: View): RecyclerView.ViewHolder(itemView) {
         public fun bind(pos:Int){
             var count = pos
             var tableNumTV:TextView = itemView.findViewById(R.id.tableNumTV)
-            tableNumTV.setText(sikdangmainRes.messages[orderNum].tables[pos].tableFloor.toString()+" 층 "+
-                    sikdangmainRes.messages[orderNum].tables[pos].tableNum.toString()+" 번 테이블")
+            tableNumTV.setText(sikdangmainRes.msgBookInfoDataAL[orderNum][pos].floor + " " + sikdangmainRes.msgBookInfoDataAL[orderNum][pos].table)
 
             var tableMenuRV:RecyclerView = itemView.findViewById(R.id.tableMenuRV)
             var rvAdapter = InnerRVAdaper(context, count)
@@ -60,17 +59,17 @@ class OrderMessageTableRVAdapter(var context: Context, var orderNum:Int, var sik
         }
 
         override fun getItemCount(): Int {
-            return sikdangmainRes.messages[orderNum].tables[tableNum].menus.size
+            return 1
         }
 
         inner class InnerHolder(val innerView: View): RecyclerView.ViewHolder(innerView){
             public fun innerBind(pos:Int){
                 var count = pos
                 var menuNameLineTV = innerView.findViewById<TextView>(R.id.menuNameLineTV)
-                menuNameLineTV.setText(sikdangmainRes.messages[orderNum].tables[tableNum].menus[count].menuName)
+                menuNameLineTV.setText(sikdangmainRes.msgBookInfoDataAL[orderNum][pos].menu)
 
                 var menuNumLineTV = innerView.findViewById<TextView>(R.id.menuNumLineTV)
-                menuNumLineTV.setText(sikdangmainRes.messages[orderNum].tables[tableNum].menus[count].menuNum.toString())
+                menuNumLineTV.setText(sikdangmainRes.msgBookInfoDataAL[orderNum][pos].cnt.toString())
             }
         }
     }

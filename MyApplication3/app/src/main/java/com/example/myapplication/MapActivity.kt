@@ -22,8 +22,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.bookActivity.BookActivity
 
 import com.example.myapplication.dataclass.LocationWithID
+import com.example.myapplication.dataclass.StoreInfo
 import com.example.myapplication.mainPage.CatorySetAdapter
 import com.example.myapplication.mainPage.Sikdang_main
+import com.example.myapplication.storeActivity.StoreActivity
 import com.google.firebase.database.*
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
@@ -213,10 +215,22 @@ class MapActivity : AppCompatActivity(),
             val marker = overlay
             if(marker.infoWindow != null) {
                 Log.d("onClick", "${(marker.tag as Store).name} is Double Clicked?")
-                val sikdangId = (marker.tag as Store).id
-                var intent = Intent(this, BookActivity::class.java)
-                val result = BookActivityBuilder(sikdangId, (marker.tag as Store).category, this).build()
-                Log.d("Map clicked", "${result}")
+                val (id, catory) = Pair((marker.tag as Store).id, (marker.tag as Store).category)
+                FirebaseDatabase.getInstance().getReference("Restaurants")
+                        .child(catory)
+                        .child(id)
+                        .child("info")
+                        .addListenerForSingleValueEvent(object : ValueEventListener{
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                val store_info = snapshot.getValue(StoreInfo::class.java)
+                                val intent = Intent(this@MapActivity, StoreActivity::class.java)
+                                intent.putExtra("store_info", store_info)
+                                startActivity(intent)
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {
+                            }
+                        })
                 infoWindow?.close()
             } else {
                 infoWindow!!.open(marker)

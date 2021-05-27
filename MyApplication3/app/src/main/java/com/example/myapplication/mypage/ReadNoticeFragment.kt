@@ -53,21 +53,21 @@ class ReadNoticeFragment(
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_read_notice, container, false)
         listener.loading.visibility = View.GONE
-        listener.title.text = Message.title
+        listener.title.text = Message.title!!
 
         listener.finish.setOnClickListener { completed() }
         message_header = view.findViewById(R.id.message_header)
-        message_header.text = Message.message_header
+        message_header.text = Message.message_header!!.replace("\\n", System.getProperty("line.separator"))
 
         message = view.findViewById(R.id.message)
-        message.text = Message.message
+        message.text = Message.message!!.replace("\\n", System.getProperty("line.separator"))
 
         message_image = view.findViewById(R.id.message_image)
         if(Message.message_image != null) {
             Glide.with(requireContext()).load(Message.message_image).into(message_image)
         }
         message_tail = view.findViewById(R.id.message_tail)
-        message_tail.text = Message.message_tail
+        message_tail.text = Message.message_tail!!.replace("\\n", System.getProperty("line.separator"))
         return view
     }
 

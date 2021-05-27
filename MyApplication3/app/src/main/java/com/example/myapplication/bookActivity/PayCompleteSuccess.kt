@@ -13,7 +13,7 @@ import com.example.myapplication.start.StartActivity
 
 class PayCompleteSuccess : AppCompatActivity() {
     lateinit var request : TextView
-    lateinit var requst_string : String
+    var requst_string : String? = null
 
     lateinit var rv_content : RecyclerView
     lateinit var tableDirectoryAdapter: TableDirectoryAdapter
@@ -33,7 +33,9 @@ class PayCompleteSuccess : AppCompatActivity() {
         }
 
         stocks = intent.getSerializableExtra("stocks") as HashMap<String, ChoiceItem>
-        requst_string = intent.getStringExtra("request")!!
+        requst_string = intent.getStringExtra("request")
+        if(requst_string != null)
+            request.setText(requst_string)
 
         tableDirectoryAdapter = TableDirectoryAdapter(this, stocks)
         val linearLayout = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)

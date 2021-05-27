@@ -3,8 +3,10 @@ package com.example.myapplication.mypage
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.*
 import com.example.myapplication.R
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
@@ -49,7 +51,10 @@ class NotificationActivity : AppCompatActivity() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val Message = snapshot.getValue(NoticeMessage::class.java)
                     if(Message == null) {
-                        Toast.makeText(this@NotificationActivity, "불러오기 실패했습니다.", Toast.LENGTH_SHORT).show()
+                        val view : View = window.decorView.findViewById(android.R.id.content)
+                        Snackbar.make(view, "불러오기에 실패 했습니다.", Snackbar.LENGTH_SHORT).show()
+                        loading.visibility = View.GONE
+                        return
                     }
                     runOnUiThread {
                         supportFragmentManager.beginTransaction()

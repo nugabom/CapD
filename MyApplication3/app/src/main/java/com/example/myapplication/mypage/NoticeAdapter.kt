@@ -31,7 +31,7 @@ class NoticeAdapter(
             holder.not_read.visibility = View.GONE
         }
         holder.itemView.setOnClickListener {
-            listener.thisItemSelected(notice.message_id!!)
+            val done = listener.thisItemSelected(notice.message_id!!)
         }
     }
 

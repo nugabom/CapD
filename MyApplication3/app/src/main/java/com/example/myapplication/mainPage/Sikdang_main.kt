@@ -174,9 +174,9 @@ class Sikdang_main : Fragment() {
         hash_tag_menu_recycler_view.layoutManager = hash_tag_layout
         hashTagList = arrayListOf(
                 HashTag("닭밝"),
-                HashTag("곱창"),
-                HashTag("죽"),
-                HashTag("버거"),
+                HashTag("탕수육"),
+                HashTag("짜장면"),
+                HashTag("양장피"),
                 HashTag("마라탕"),
                 HashTag("찜닭"),
                 HashTag("냉면"),
@@ -194,13 +194,12 @@ class Sikdang_main : Fragment() {
         banner_layout.orientation = LinearLayoutManager.HORIZONTAL
         banner_recycler_view.layoutManager = banner_layout
         bannerList = arrayListOf(
-                Banner(R.drawable.ic_placeholder, "1"),
-                Banner(R.drawable.add_main, "2"),
-                Banner(R.drawable.add_main_2, "3"),
-                Banner(R.drawable.add_main_3, "4"),
-                Banner(R.drawable.add_main_4, "5"),
-                Banner(R.drawable.add_main_5, "6"),
-                Banner(R.drawable.add_main_6, "7")
+                Banner(R.drawable.add_main),
+                Banner(R.drawable.add_main_2),
+                Banner(R.drawable.add_main_3),
+                Banner(R.drawable.add_main_4),
+                Banner(R.drawable.add_main_5),
+                Banner(R.drawable.add_main_6)
         )
         bannerAdapter = BannerAdapter(requireContext(), bannerList)
         banner_recycler_view.adapter = bannerAdapter
@@ -212,7 +211,7 @@ class Sikdang_main : Fragment() {
         }
 
 
-        Timer().schedule(StartBanner(), 0, 1000)
+        Timer().schedule(StartBanner(), 0, 7000)
 
 
         return view

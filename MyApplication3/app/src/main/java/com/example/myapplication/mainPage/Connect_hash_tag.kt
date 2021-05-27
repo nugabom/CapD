@@ -16,7 +16,6 @@ class Connect_hash_tag : AppCompatActivity() {
         web_view = findViewById(R.id.web_view)
 
         val tag = intent.getStringExtra("hashtag_uri")
-        Toast.makeText(this, "받은 태그: ${tag} !!!", Toast.LENGTH_SHORT).show()
 
         web_view.webChromeClient = WebChromeClient()
         web_view.loadUrl(insta + tag)

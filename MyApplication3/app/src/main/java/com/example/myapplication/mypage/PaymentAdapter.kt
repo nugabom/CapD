@@ -15,6 +15,7 @@ import com.example.myapplication.R
 import com.example.myapplication.Store
 import com.example.myapplication.bookhistory.BookHistory
 import com.example.myapplication.dataclass.StoreInfo
+import com.example.myapplication.mainPage.CatList
 import com.example.myapplication.storeActivity.EditReviewActivity
 import com.example.myapplication.storeActivity.StoreActivity
 import com.google.firebase.database.DataSnapshot
@@ -60,6 +61,7 @@ class PaymentAdapter (
         } else {
             holder.payment_layout.visibility = View.VISIBLE
             holder.store_type_image
+            holder.store_type_image.setImageResource(CatList.getType(store.store_type!!))
             holder.date.text = history.date
             holder.store_name.text = store.store_name
             holder.payment_content.text = compactcontentToString(history.hashMap)

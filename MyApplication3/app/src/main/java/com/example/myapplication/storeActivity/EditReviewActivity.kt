@@ -3,6 +3,7 @@ package com.example.myapplication.storeActivity
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.ContactsContract
@@ -13,6 +14,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
@@ -57,6 +59,7 @@ class EditReviewActivity : AppCompatActivity() {
 
     var isCached = false
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_review)
@@ -74,6 +77,7 @@ class EditReviewActivity : AppCompatActivity() {
             .child(storeInfo.store_id!!)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun init_Ui() {
         close = findViewById(R.id.close)
         close.setOnClickListener {
@@ -143,6 +147,7 @@ class EditReviewActivity : AppCompatActivity() {
         return mime.getExtensionFromMimeType(contentResolver.getType(uri))
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun uploadImage() {
         if(isNoComment()) {
             Toast.makeText(this, "코멘트를 적지 않았습니다.", Toast.LENGTH_SHORT).show()
@@ -244,6 +249,7 @@ class EditReviewActivity : AppCompatActivity() {
             })
         }
     }
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun writeComment(image : String, rating : Int) {
         val write_time = LocalDate.now().format(DateTimeFormatter.ISO_DATE)
         val writed_comment = comment.text.toString()

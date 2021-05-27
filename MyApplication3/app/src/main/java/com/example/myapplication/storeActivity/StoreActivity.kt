@@ -1,5 +1,7 @@
 package com.example.myapplication.storeActivity
 
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -77,6 +79,11 @@ class StoreActivity : AppCompatActivity() {
 
         phone_number = findViewById(R.id.phone_number)
         phone_number.text = store_info.phone_number
+        phone_number.setOnLongClickListener {
+            val tel = "tel:${phone_number.text}"
+            startActivity(Intent("android.intent.action.DIAL", Uri.parse(tel)))
+            return@setOnLongClickListener true
+        }
 
         bookmark_number = findViewById(R.id.bookmark_number)
         user_review = findViewById(R.id.user_review)

@@ -15,7 +15,6 @@ class BannerAdapter(var mContext : Context?, var mBannerList: ArrayList<Banner>)
 {
     inner class ViewHolder (itemview : View) : RecyclerView.ViewHolder(itemview) {
         var banner_image : ImageView = itemview.findViewById(R.id.banner)
-        var id : TextView = itemview.findViewById(R.id.banner_id)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -27,7 +26,6 @@ class BannerAdapter(var mContext : Context?, var mBannerList: ArrayList<Banner>)
         val banner = mBannerList[position]
 
         holder.banner_image.setImageResource(banner.imageUrl)
-        holder.id.text = banner.data
     }
 
     override fun getItemCount(): Int {

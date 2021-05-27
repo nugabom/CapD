@@ -15,6 +15,7 @@ import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import com.example.myapplication.R
 import com.google.android.material.tabs.TabLayout
+import kotlinx.android.synthetic.main.activity_app_setting.view.*
 import okhttp3.internal.parseCookie
 
 class TableFloorFragment(val floor_name : String, val table_info : ArrayList<Table>)
@@ -69,7 +70,7 @@ class TableFloorFragment(val floor_name : String, val table_info : ArrayList<Tab
                 if(table.shape.equals("circle")) {
                     image.background = resources.getDrawable(R.drawable.button_round_red, null)
                 } else {
-                    image.setBackgroundColor(Color.parseColor("#CC5555"))
+                    image.setBackgroundResource(R.drawable.button_rect_red)
                 }
             } else {
                 image.setOnClickListener {
@@ -78,7 +79,7 @@ class TableFloorFragment(val floor_name : String, val table_info : ArrayList<Tab
                 if(table.shape.equals("circle")) {
                     image.background = resources.getDrawable(R.drawable.button_round_gray, null)
                 } else {
-                    image.setBackgroundColor(Color.parseColor("#CCCCCC"))
+                    image.setBackgroundResource(R.drawable.button_rect_gray)
                 }
             }
 
@@ -101,8 +102,13 @@ class TableFloorFragment(val floor_name : String, val table_info : ArrayList<Tab
         tableSelectedByUser.put(selectedTable.id, selectedTable)
         for (view in floor_layout.children) {
             if (view.tag is Table) {
-                if((view.tag as Table).id == selectedTable.id)
-                    view.setBackgroundColor(Color.parseColor("#55CC55"))
+                val table = view.tag as Table
+                if(table.id == selectedTable.id) {
+                    when (table.shape) {
+                        "circle" -> view.setBackgroundResource(R.drawable.button_round_green)
+                        else -> view.setBackgroundResource(R.drawable.button_rect_green)
+                    }
+                }
             }
         }
     }
@@ -113,8 +119,13 @@ class TableFloorFragment(val floor_name : String, val table_info : ArrayList<Tab
         tableSelectedByUser.remove(invalid_table.id)
         for (view in floor_layout.children) {
             if (view.tag is Table) {
-                if((view.tag as Table).id == invalid_table.id)
-                    view.setBackgroundColor(Color.parseColor("#555555"))
+                val table = view.tag as Table
+                if(table.id == invalid_table.id) {
+                    when(table.shape) {
+                        "circle" -> view.setBackgroundResource(R.drawable.button_round_gray)
+                        else -> view.setBackgroundResource(R.drawable.button_rect_gray)
+                    }
+                }
             }
         }
     }

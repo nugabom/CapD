@@ -33,28 +33,23 @@ class MainActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.nav_home -> {
                     selectedFragment = Sikdang_main()
-                    Toast.makeText(this, "메인 clicked", Toast.LENGTH_SHORT).show()
                 }
 
                 R.id.nav_bookmark -> {
-                  Toast.makeText(this, "즐겨찾기 clicked", Toast.LENGTH_SHORT).show()
                     selectedFragment = BookMarkFragment()
                 }
 
                 R.id.nav_dish -> {
-                    Toast.makeText(this, "키오스 clicked", Toast.LENGTH_SHORT).show()
                     selectedFragment = BookHistoryFragment()
                 }
 
                 R.id.nav_search-> {
-                    Toast.makeText(this, "검색 찾기 clicked", Toast.LENGTH_SHORT).show()
                     selectedFragment = null
                     var _intent = Intent(this, SikdangChoice::class.java)
                     startActivity(_intent)
                 }
 
                 R.id.nav_profile-> {
-                    Toast.makeText(this, "My Profile clicked", Toast.LENGTH_SHORT).show()
                     selectedFragment = MyPage()
 
                     /*

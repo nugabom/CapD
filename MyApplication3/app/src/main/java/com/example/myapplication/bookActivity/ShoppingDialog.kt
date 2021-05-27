@@ -33,9 +33,10 @@ class ShoppingDialog (
             val (item, cnt, table_price) = baskets[floor_name]!!.getReceipt()
             _price += table_price
             for (i in 0 until item.size) {
-                payment += "\t\t\t%-60s : %d\n".format(item[i], cnt[i])
+                payment += "\t\t\t%-40s : %d\n".format(item[i], cnt[i])
             }
             payment +="\n"
+            payment.replace("\\\n", System.getProperty("line.separator"))
         }
         content.text = payment
         price.text = "총가격 : ${_price}"

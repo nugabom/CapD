@@ -7,9 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.myapplication.R
 import com.example.myapplication.rest.Table.IsBooked.TableStateIsBookedDialog_res
 import com.example.myapplication.rest.Resmain.SikdangMain_res
@@ -18,8 +21,10 @@ import com.example.myapplication.rest.Resmain.SikdangMain_res
 //TableFloorVPAdapter 에서 사용
 class TableFloorFragment_res(var floorNum:Int, val sikdangmainRes: SikdangMain_res, val timeNum:String):Fragment() {
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var view = inflater.inflate(R.layout.res_table_floor_fragment, container, false)
+
 
         bind(view)
 
@@ -28,6 +33,25 @@ class TableFloorFragment_res(var floorNum:Int, val sikdangmainRes: SikdangMain_r
 
     //여기세 각 층 정보를 넣는다.
     public fun bind(view:View){
+        var thisUrl = ""
+        var floorImage:ImageView = view.findViewById(R.id.floorImage)
+
+
+        for (i in 0..sikdangmainRes.floorUrlAL.size-1){
+            if (sikdangmainRes.floorList[floorNum] ==sikdangmainRes.floorUrlAL[i].floor){
+                thisUrl = sikdangmainRes.floorUrlAL[i].url
+            }
+        }
+        if (thisUrl ==""){
+
+        }else{
+            Glide.with(this)
+                    .load(thisUrl)
+                    .apply(RequestOptions())
+                    .into(floorImage)
+        }
+
+
         Log.d("확인 TableFloorFragment floorNum", floorNum.toString())
         //var tableData = TableData_res()
         var tableLayout:ConstraintLayout = view.findViewById(R.id.tableCL)

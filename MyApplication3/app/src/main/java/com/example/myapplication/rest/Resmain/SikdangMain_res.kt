@@ -56,6 +56,7 @@ class SikdangMain_res:AppCompatActivity() {
     lateinit var editSikdangImageDialog:EditSikdangImageDialog
 
 
+
     private var timeNum = ""
     var sikdangName = "식다아아아앙이름"
     var sikdangId = "10987654321"
@@ -249,6 +250,49 @@ class SikdangMain_res:AppCompatActivity() {
         }
 
     }
+
+    inner class FloorImage(var floor:String, var url:String)
+    //층 이미지
+
+    public var floorUrlAL = ArrayList<FloorImage>()
+
+
+    //층 이미지 가져오는 루틴
+
+    var imageSwitch = 1
+    public fun getFloorImageFromDB(){
+        val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
+                .child("Tables").child(sikdangId).child("floorUrl")
+        imageSwitch =0
+
+        ref.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (imageSwitch== 0){
+                    for (tableInfo in snapshot.children) {
+                        Log.d("확인 getMsgKeyFromDB()", tableInfo.key.toString())
+                        floorUrlAL.add(FloorImage(tableInfo.key.toString(), tableInfo.value.toString()))
+                    }
+                    setFloorImage()
+                }
+
+            }
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("확인 setSikdangListInfo()", "5 getFromDB : ${error}")
+            }
+        })
+    }
+
+    public fun setFloorImage(){
+
+    }
+
+
+
+
+
+
+
+
 
     //데이터베이스에서 테이블 목록
     inner class MsgTableData(var floorTable:String, var menuNameNum:String)

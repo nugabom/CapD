@@ -19,6 +19,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.myapplication.R
 import com.example.myapplication.rest.Resmain.SikdangMain_res
 import com.example.sikdangbook_rest.Table.TableData_res
+import com.example.sikdangbook_rest.Table.TableFloorFragment_res
 import com.example.sikdangbook_rest.Table.Table_res
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_notification.*
@@ -42,6 +43,8 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
     var timeAL = ArrayList<String>()
 
     var switch = false
+
+
 
 
 

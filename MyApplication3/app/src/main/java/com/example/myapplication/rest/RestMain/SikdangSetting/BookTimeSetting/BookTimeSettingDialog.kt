@@ -12,6 +12,8 @@ import com.example.myapplication.R
 import com.example.myapplication.rest.Resmain.SikdangMain_res
 import com.example.myapplication.rest.Time.TempTimeClass
 import com.example.sikdangbook_rest.Time.TimeLineAdapter
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 
 //SikdangSettingDialog에서 사용
 //예약 가능 시간 목록 띄우고
@@ -191,6 +193,91 @@ class BookTimeSettingDialog(context: Context, val sikdangNum:String, var sikdang
         //아래 두개 저장
         //tempTimeClass.timeArrayList
         //nowTerm
+
+
+        /*
+        for (i in 0..sikdangmainRes.floorList.size-1){
+            var tempBookInfo = hashMapOf<String, Any>(
+                    "cerrent" to sikdangmainRes.tableData.tableNumList[i],
+                    "max" to sikdangmainRes.tableData.tableNumList[i]
+            )
+            var temptableMutex = hashMapOf<String, Any>(
+                    "mutex" to 1
+            )
+            var timeHashMap =hashMapOf<String, Any>(
+                    "BookInfo" to tempBookInfo,
+                    "table1" to temptableMutex
+            )
+            var floorHashMap = hashMapOf<String, Any>()
+            for (j in 0..tempTimeAL.size-1){
+                floorHashMap.put(tempTimeAL[i], timeHashMap)
+            }
+
+            val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
+                    .child("Tables").child(sikdangmainRes.sikdangId).child("Booked").child(sikdangmainRes.floorList[i]).child(tempTimeAL)
+
+            ref.setValue(floorHashMap)
+                    .addOnSuccessListener {
+                        //finish()
+                        //upSikdangOnUser(postId)
+                        //setTimeAl(newFloor)
+                        Log.d("확인 TableFloorFragment.setTableOnTime", "시간에 층 추가 성공")
+                        sikdangmainRes.getTableDataLineNum=0
+                        sikdangmainRes.getTableDataFromDB()
+                        this.dismiss()
+                    }.addOnFailureListener {
+                        Toast.makeText(context, "TableFloorSettingDialog().addFloor", Toast.LENGTH_SHORT).show()
+                    }
+
+
+
+        }*/
+
+
+
+
+        var temptableMutex = hashMapOf<String, Any>(
+                "mutex" to 1
+        )
+        var floorHashMap = hashMapOf<String, Any>()
+        for (i in 0..sikdangmainRes.floorList.size-1){
+            var tempBookInfo = hashMapOf<String, Any>(
+                    "cerrent" to sikdangmainRes.tableData.tableNumList[i],
+                    "max" to sikdangmainRes.tableData.tableNumList[i]
+            )
+            var timeHashMap = hashMapOf<String, Any>()
+
+            var tableHashMap = hashMapOf<String, Any>()
+            tableHashMap.put("BookInfo", tempBookInfo)
+            for (k in 0..sikdangmainRes.tableNumAL[i]-1){
+                tableHashMap.put("table"+(k+1).toString(), temptableMutex)
+            }
+
+            for (j in 0..tempTimeAL.size - 1){
+                timeHashMap.put(tempTimeAL[j], tableHashMap)
+            }
+            floorHashMap.put(sikdangmainRes.floorList[i], timeHashMap)
+
+        }
+
+        val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
+                .child("Tables").child(sikdangmainRes.sikdangId).child("Booked")
+
+        ref.setValue(floorHashMap)
+                .addOnSuccessListener {
+                    //finish()
+                    //upSikdangOnUser(postId)
+                    //setTimeAl(newFloor)
+                    Log.d("확인 BookTimeSettingDialog.saveTimeInfo()", "시간대 추가 성공")
+                    sikdangmainRes.getTableDataLineNum=0
+                    sikdangmainRes.getTableDataFromDB()
+                    this.dismiss()
+                }.addOnFailureListener {
+                    Toast.makeText(context, "TableFloorSettingDialog().addFloor", Toast.LENGTH_SHORT).show()
+                }
+
+
+
 
         this.dismiss()
     }

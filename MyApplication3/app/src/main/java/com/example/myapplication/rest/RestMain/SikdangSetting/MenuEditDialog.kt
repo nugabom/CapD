@@ -215,25 +215,6 @@ class MenuEditDialog(context: Context, val sikdangNum: String, val menuNum: Int,
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     fun closeKeyBoard(){
         var view = this.currentFocus
         if (view != null){

@@ -75,6 +75,7 @@ class SikdangMain_res:AppCompatActivity() {
     var tableIsBookedAL = ArrayList<Int>()
 
     var timeAL = ArrayList<String>()
+    var timeSwitch = false
 
     var newSikdangImgUri : Uri? = null
     public var newMenuImgUri : Uri? = null
@@ -225,7 +226,8 @@ class SikdangMain_res:AppCompatActivity() {
         val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
                 .child("Tables").child(sikdangId).child("TableInfo")
 
-        if(getTableDataLineNum==0) floorList.clear()
+        //if(getTableDataLineNum==0)
+        floorList.clear()
 
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -250,10 +252,15 @@ class SikdangMain_res:AppCompatActivity() {
     //데이터베이스에서 받은 층 토대로 테이블 가져옴옴
     public fun getTableOnFloor(){
         Log.d("확인 getTableOnFloor()", "시작 : "+getTableDataLineNum.toString())
+
+        /*
         if (getTableDataLineNum == 1){
             tableFromDBDataAL.clear()
             tableNumAL.clear()
-        }
+        }*/
+
+        tableFromDBDataAL.clear()
+        tableNumAL.clear()
         val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
                 .child("Tables").child(sikdangId).child("TableInfo")
 
@@ -325,7 +332,8 @@ class SikdangMain_res:AppCompatActivity() {
         val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
                 .child("Tables").child(sikdangId).child("Booked")
 
-        if (getTableDataLineNum == 2) tableIsBookedAL.clear()
+        //if (getTableDataLineNum == 2) tableIsBookedAL.clear()
+        tableIsBookedAL.clear()
         var floorIt = 0
         //var calTableNum = tableNumAL[0]
         for (i in 0..tableFromDBDataAL.size-1){
@@ -388,6 +396,7 @@ class SikdangMain_res:AppCompatActivity() {
         //Log.d("확인  setTableData()", "accum : ${tableData.accumTableNumList}")
 
 
+        intFloorIist.clear()
         for (i in 0..floorList.size-1){
             //Log.d("확인  setTableData()", " 1for문 "+floorList[i]+"  "+i.toString())
             intFloorIist.add(floorList[i].slice(IntRange(6, 6)).toInt())
@@ -398,6 +407,7 @@ class SikdangMain_res:AppCompatActivity() {
 
         //Log.d("확인  setTableData()", "2")
 
+        tableData.tableList.clear()
         for (i in 0..tableFromDBDataAL.size-1){
             var calNum = 0
             var floorIt = 0
@@ -682,13 +692,18 @@ class SikdangMain_res:AppCompatActivity() {
         val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
                 .child("Tables").child(sikdangId).child("Booked").child(floorList[0])
 
+        timeSwitch=true
+        timeAL.clear()
+
+
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (tableInfo in snapshot.children) {
+                    if(timeSwitch == true)timeAL.add(tableInfo.key.toString())
                     //Log.d("확인  getTableDataFromDB()", "getFromDB : "+tableInfo.key.toString())
-                timeAL.add(tableInfo.key.toString())
                 }
                 Log.d("확인 setTimeAL()", "5 getFromDB : ${timeAL}")
+                timeSwitch = false
             }
             override fun onCancelled(error: DatabaseError) {
                 Log.d("확인 setTimeAL()", "5 getFromDB : ${error}")

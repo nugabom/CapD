@@ -154,14 +154,26 @@ class TimeLineAdapter (var context: Context?,
             curi = (curs.slice(IntRange(0, 1))+curs.slice(IntRange(3, 4))).toInt()
         }
         else{
-            curi = (curs.slice(IntRange(0, 1))+curs.slice(IntRange(3, 4))).toInt()+1200
+            if(curs.slice(IntRange(0, 1))=="12"){
+                curi = (curs.slice(IntRange(0, 1))+curs.slice(IntRange(3, 4))).toInt()
+            }
+            else{
+                curi = (curs.slice(IntRange(0, 1))+curs.slice(IntRange(3, 4))).toInt()+1200
+            }
+
         }
 
         if (ts.slice(IntRange(6, 7)) == "오전"){
             ti = (ts.slice(IntRange(0, 1))+ts.slice(IntRange(3, 4))).toInt()
         }
         else{
-            ti = (ts.slice(IntRange(0, 1))+ts.slice(IntRange(3, 4))).toInt()+1200
+            if(ts.slice(IntRange(0, 1))=="12"){
+                ti = (ts.slice(IntRange(0, 1))+ts.slice(IntRange(3, 4))).toInt()
+            }
+            else{
+                ti = (ts.slice(IntRange(0, 1))+ts.slice(IntRange(3, 4))).toInt()+1200
+            }
+
         }
 
         if (curi > ti)return true

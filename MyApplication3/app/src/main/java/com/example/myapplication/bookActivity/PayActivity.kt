@@ -281,12 +281,14 @@ class PayActivity : AppCompatActivity() {
                             val jsonData = response.body!!.string()
                             val jobject = JSONObject(jsonData)
                             if (jobject.getString("code") == "-708") {
-                                Log.d("success", "임시적 성공")
+                                Log.d("확인 success", "임시적 성공")
+                                Log.d("kakaoPayProcess 주문 물품", "${stocks}")
 
                                 semaphore.acquire()
                                 isSuccess = is_sign_up
+                                //bookComplete()
                                 if(!isSuccess) {
-                                    Log.d("sucess", "한번만 나와야 정상~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`")
+                                    Log.d("확인 sucess", "한번만 나와야 정상~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`")
                                     bookComplete()
                                 }
                                 is_sign_up = true
@@ -302,6 +304,7 @@ class PayActivity : AppCompatActivity() {
     }
 
     private fun bookComplete() {
+        Log.d("확인 bookComplete() 호출", "${stocks}")
         var bookHere = ArrayList(stocks.keys)
         var tryToBook: ArrayList<Pair<String, String>> = arrayListOf()
         var cnt = 0
@@ -312,13 +315,22 @@ class PayActivity : AppCompatActivity() {
         var isCached = false
         var complete = false
         var sem = Semaphore(1)
+
+
+
+
+
+
+
         while (!isCached) {
+            //Log.d("확인 while문", "@@@@@@@@@@@@@@@@@@@@@@@")
             var store_ref = FirebaseDatabase.getInstance().getReference("Tables")
                 .child(storeInfo.store_id!!)
                 .child("Booked")
                 .runTransaction(object :Transaction.Handler{
                     override fun doTransaction(currentData: MutableData): Transaction.Result {
                         for (location in tryToBook) {
+                            //Log.d("확인 for문", "#####################################")
                             var ref = currentData.child(location.first)
                                 .child(selected_time)
                                 .child(location.second)
@@ -355,6 +367,7 @@ class PayActivity : AppCompatActivity() {
                             complete = true
                         }
 
+                        Log.d("확인 bookComplete() reservate 호출", "${stocks}")
                         reservate()
                         use_up_coupons()
                         val _intent = Intent(this@PayActivity, PayCompleteSuccess::class.java)
@@ -387,6 +400,24 @@ class PayActivity : AppCompatActivity() {
 
         if(TextUtils.isEmpty(request)) request == "NULL"
 
+
+
+        var ref = FirebaseDatabase.getInstance().getReference().child("Store_reservation").child(current_date)
+        Log.d("reservate 확인 주문 물품", "${stocks}")
+
+        var resInfo = hashMapOf<String, Any>(
+                "userId" to firebaseUser.uid,
+                "sikdangId" to storeInfo.store_id.toString(),
+                "totalPay" to price,
+                "bookTime" to selected_time,
+                "payTime" to pay_time,
+                "store_type" to storeInfo.store_type!!
+        )
+
+
+
+
+
         var reservation = hashMapOf<String, Any>(
             "userId" to firebaseUser.uid,
             "sikdangId" to storeInfo.store_id.toString(),
@@ -402,6 +433,19 @@ class PayActivity : AppCompatActivity() {
         }
 
         reservation.put("tables", floor_table_list)
+
+
+
+
+        ref.push().setValue(resInfo).addOnSuccessListener {
+            //finish()
+            //upSikdangOnUser(postId)
+            //setTimeAl(newFloor)
+            Log.d("확인 PayActivity.reservate", "예약 추가 성공")
+
+        }.addOnFailureListener {
+            Log.d("확인 PayActivity.reservate", "예약 추가 실패")
+        }
 
         // Reservation for user
         FirebaseDatabase.getInstance().getReference()

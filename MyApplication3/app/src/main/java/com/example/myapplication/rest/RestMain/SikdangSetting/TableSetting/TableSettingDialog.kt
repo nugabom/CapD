@@ -390,7 +390,8 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
 
 
         for(i in 0..changedTableAL.size-1){
-            var tempShape = "circle"
+            var tempShape = "rect"
+            if (changedTableAL[i].isCircle) tempShape = "circle"
 
             var tempTableHashMap =hashMapOf<String, Any>(
                 "capacity" to changedTableAL[i].maxP,

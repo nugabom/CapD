@@ -22,6 +22,7 @@ import com.example.myapplication.rest.Resmain.SikdangMain_res
 class TableFloorFragment_res(var floorNum:Int, val sikdangmainRes: SikdangMain_res, val timeNum:String):Fragment() {
 
 
+    lateinit var floorImage:ImageView
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var view = inflater.inflate(R.layout.res_table_floor_fragment, container, false)
 
@@ -31,12 +32,20 @@ class TableFloorFragment_res(var floorNum:Int, val sikdangmainRes: SikdangMain_r
         return view
     }
 
+    public fun setFloorImage(thisUrl:String){
+        Glide.with(this)
+                .load(thisUrl)
+                .apply(RequestOptions())
+                .into(floorImage)
+    }
+
     //여기세 각 층 정보를 넣는다.
     public fun bind(view:View){
         var thisUrl = ""
-        var floorImage:ImageView = view.findViewById(R.id.floorImage)
+        floorImage = view.findViewById(R.id.floorImage)
 
 
+        /*
         for (i in 0..sikdangmainRes.floorUrlAL.size-1){
             if (sikdangmainRes.floorList[floorNum] ==sikdangmainRes.floorUrlAL[i].floor){
                 thisUrl = sikdangmainRes.floorUrlAL[i].url
@@ -49,7 +58,7 @@ class TableFloorFragment_res(var floorNum:Int, val sikdangmainRes: SikdangMain_r
                     .load(thisUrl)
                     .apply(RequestOptions())
                     .into(floorImage)
-        }
+        }*/
 
 
         Log.d("확인 TableFloorFragment floorNum", floorNum.toString())

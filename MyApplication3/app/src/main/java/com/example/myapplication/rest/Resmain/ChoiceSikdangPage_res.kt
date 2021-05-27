@@ -164,7 +164,7 @@ class ChoiceSikdangPage_res:AppCompatActivity() {
                 "phone_number" to addRestDialog.ar_pnET.text.toString(),
                 "store_id" to postId!!,
                 "store_name" to addRestDialog.ar_sikdangNameRT.text.toString(),
-                "Store_image" to "Null",
+                "store_image" to "Null",
                 "store_type" to addRestDialog.catAL[cat]
         )
 

@@ -283,7 +283,7 @@ class SikdangMain_res:AppCompatActivity() {
     }
 
     public fun setFloorImage(){
-
+        //vpAdapter.setImageByUrl()
     }
 
 
@@ -735,6 +735,7 @@ class SikdangMain_res:AppCompatActivity() {
         Log.d("확인 renewalTable()", "showTime : "+showTime)
         Log.d("확인 renewalTable()", "tableData.tableList : ${tableData.tableList}")
         Log.d("확인 renewalTable()", "tableIsBookedAL : ${tableIsBookedAL}")
+        getFloorImageFromDB()
         vpAdapter.notifyDataSetChanged()
     }
 

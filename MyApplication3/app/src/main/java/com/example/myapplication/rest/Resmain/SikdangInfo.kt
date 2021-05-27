@@ -4,7 +4,7 @@ import com.google.firebase.database.IgnoreExtraProperties
 
 @IgnoreExtraProperties
 data class SikdangInfo(
-        val Store_image : String? = "",
+        val store_image : String? = "",
         val phone_number : String? = "",
         val store_id : String?="",
         val store_name : String? = "",
@@ -13,7 +13,7 @@ data class SikdangInfo(
 ){
     fun toMap(): Map<String, Any?> {
         return mapOf(
-                "Store_image" to Store_image,
+                "store_image" to store_image,
                 "phone_number" to phone_number,
                 "store_id" to store_id,
                 "store_name" to store_name,

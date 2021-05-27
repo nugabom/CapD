@@ -67,7 +67,7 @@ class EditSikdangImageDialog(context: Context, val sikdangNum: String, var sikda
             override fun onDataChange(snapshot: DataSnapshot) {
                 Log.d("확인  setImgOnView()", "2")
                 for (tableInfo in snapshot.children) {
-                    if(tableInfo.key =="sikdangImageUrl"){
+                    if(tableInfo.key =="store_image"){
                         setUrl = tableInfo.value.toString()
                         Log.d("확인  setImgOnView()", "url : " + setUrl)
                         newUrl=setUrl
@@ -149,7 +149,7 @@ class EditSikdangImageDialog(context: Context, val sikdangNum: String, var sikda
 
     public fun upUrlOnDB(newUrl:String){
         val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
-                .child("Restaurants").child(sikdangmainRes.sikdangType).child(sikdangmainRes.sikdangId).child("info").child("sikdangImageUrl")
+                .child("Restaurants").child(sikdangmainRes.sikdangType).child(sikdangmainRes.sikdangId).child("info").child("store_image")
         //Log.d("확인 upUrlOnDB()", sikdangmainRes.sikdangId)
         //Log.d("확인 upUrlOnDB()", newUrl.toString())
         ref.setValue(newUrl)
@@ -157,6 +157,7 @@ class EditSikdangImageDialog(context: Context, val sikdangNum: String, var sikda
         var ref2: DatabaseReference = FirebaseDatabase.getInstance().getReference()
                 .child("Locations").child(sikdangmainRes.sikdangId).child("store_image")
         ref2.setValue(newUrl)
+
     }
 
 

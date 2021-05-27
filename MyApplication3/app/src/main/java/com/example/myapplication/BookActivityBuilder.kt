@@ -151,11 +151,12 @@ class BookActivityBuilder(val sikdangId : String, val category: String, var cont
         var floor_table = hashMapOf<String, Table>()
         floor_tables = hashMapOf()
         for (floor in table_info_snapshot.children) {
-            Log.d("getStoreTable ",floor.key.toString())
+            Log.d("확인 getStoreTable ",floor.key.toString())
             val floor_name = floor.key.toString()
             for (table in floor.children) {
                 val data = table.getValue(_Table::class.java)
                 if(data == null) return false
+                Log.d("확인 getStoreTable ",table.key.toString())
                 floor_table.put(table.key.toString(), Table(table.key.toString(), floor_name, data))
             }
             floor_tables.put(floor_name, floor_table)

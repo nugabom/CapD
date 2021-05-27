@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"
-        android:src="@mipmap/ic_launcher"
+        android:src="@drawable/main_logo"
         android:background="@color/white"/>
 
     <RelativeLayout
@@ -116,12 +116,6 @@
             android:layout_below="@+id/kakao_btn"
             android:layout_marginTop="10dp"/>
 
-        <ImageButton
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher"
-            android:layout_below="@+id/google_btn"
-            android:layout_marginTop="10dp"/>
     </RelativeLayout>
 
 </LinearLayout>

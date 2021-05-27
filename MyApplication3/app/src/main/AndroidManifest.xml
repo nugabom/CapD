@@ -55,11 +55,7 @@
         <activity
             android:name=".start.StartActivity"
             android:windowSoftInputMode="adjustPan">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".start.RegisterActivity"
@@ -96,6 +92,23 @@
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Theme.AppCompat" />
+
+        <activity android:name=".rest.Resmain.MainActivity_res">
+
+        </activity>
+        <activity android:name=".rest.Resmain.SikdangMain_res">
+
+        </activity>
+        <activity android:name=".rest.Resmain.ChoiceSikdangPage_res">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".rest.ResInfo.ResInfoActivity" />
+        <activity android:name=".rest.ResInfo.SellInfoActivity" />
+        <activity android:name=".rest.ResInfo.ResPrivateSettingActivity" />
 
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"

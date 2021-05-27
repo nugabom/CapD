@@ -70,7 +70,7 @@ class SikdangChoiceMenuFragment(var catory : String, var range : Int) :
             // for ActivityCompat#requestPermissions for more details.
             return view
         }
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 3000, 20.0f, this)
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 20.0f, this)
 
         updateMenu(range)
         //View.setBackgroundResource(bannerImage)

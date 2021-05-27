@@ -296,7 +296,7 @@ class Sikdang_main : Fragment() {
             val currentPos = banner_layout.findFirstVisibleItemPosition()
             activity?.runOnUiThread({
                 banner_recycler_view.scrollToPosition((currentPos + 1) % bannerAdapter.itemCount)
-                Log.d("StartBanner", "called")
+                //Log.d("StartBanner", "called")
             })
 
             try {

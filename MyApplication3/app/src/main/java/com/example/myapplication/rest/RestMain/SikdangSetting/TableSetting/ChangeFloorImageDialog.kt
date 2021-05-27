@@ -159,7 +159,7 @@ class ChangeFloorImageDialog(context: Context, val sikdangNum: String, val floor
 
     public fun upUrlOnDB(newUrl:String){
         val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
-                .child("Table").child(sikdangmainRes.sikdangType)
+                .child("Tables").child(sikdangmainRes.sikdangType).child(sikdangmainRes.sikdangId)
         Log.d("확인 upUrlOnDB()", sikdangmainRes.sikdangId)
         Log.d("확인 upUrlOnDB()", newUrl.toString())
         ref.child("floorUrl").child("floor_"+floor.toString()).setValue(newUrl)

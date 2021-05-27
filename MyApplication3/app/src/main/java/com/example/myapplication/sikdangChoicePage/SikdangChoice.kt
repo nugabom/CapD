@@ -100,7 +100,11 @@ class SikdangChoice : AppCompatActivity() {
 
         find_from_map = findViewById(R.id.find_from_map)
         find_from_map.setOnClickListener {
-            val dist = sikdangChoice_distET.text.toString().toInt()
+            var dist=0
+            if(sikdangChoice_distET.text.toString()==""){
+                dist = 200
+            }
+            else dist = sikdangChoice_distET.text.toString().toInt()
             var intent = Intent(this@SikdangChoice, MapActivity::class.java)
             intent.putExtra("range", dist)
             map_range = dist

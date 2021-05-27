@@ -317,10 +317,6 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
 
 
 
-
-
-
-
     //층수, 테이블번호, 인원수, changedTableAL 배열에서 몇 번째인지, 버튼 크기
     public fun showOneTableSettingDialog(tableFloor:Int, tableNum:Int, pNum:Int, alNum:Int){
         var customDialog = OneTableSettingDialog(context,tableFloor, tableNum, pNum, alNum, changedTableAL[alNum].lengX, changedTableAL[alNum].lengY, this)

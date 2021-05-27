@@ -188,7 +188,8 @@ class ChoiceSikdangPage_res:AppCompatActivity() {
         val tempMenu = hashMapOf<String, Any>(
                 "price" to 100,
                 "product" to "임시메뉴",
-                "product_exp" to "임시메뉴설명"
+                "product_exp" to "임시메뉴설명",
+                "image" to "Null"
         )
 
         val menuPushedPostRef: DatabaseReference = ref.child(postId!!).child("menu").push()

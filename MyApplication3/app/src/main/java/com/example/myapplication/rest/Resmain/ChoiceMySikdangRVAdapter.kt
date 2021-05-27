@@ -38,20 +38,21 @@ class ChoiceMySikdangRVAdapter(var context: Context, val choicesikdangpageRes: C
     //getItempCount 에 리턴값 2로 되어있는데 저 부분은 식당 갯수로 수정 필요
     inner class Holder(itemView: View): RecyclerView.ViewHolder(itemView){
         public fun bind(pos:Int) {
+            var count = pos
             var sikdangImage:ImageView = itemView.findViewById(R.id.sikdangImage)
             var sikdangLine_NameTV:TextView = itemView.findViewById(R.id.sikdangLine_NameTV)
             var sikdangLine_addr:TextView = itemView.findViewById(R.id.sikdangLine_addr)
             var sikdangLine_number:TextView = itemView.findViewById(R.id.sikdangLine_number)
 
-            sikdangLine_NameTV.setText(choicesikdangpageRes.sikdangInfoList[pos].store_name)
-            sikdangLine_number.setText(choicesikdangpageRes.sikdangInfoList[pos].phone_number)
+            sikdangLine_NameTV.setText(choicesikdangpageRes.sikdangInfoList[count].store_name)
+            sikdangLine_number.setText(choicesikdangpageRes.sikdangInfoList[count].phone_number)
 
             itemView.setOnClickListener {
                 Log.d("확인 ChoiceMySikdangRVAdapter", "ㅁㅁ")
                 val intent = Intent(itemView.context, SikdangMain_res::class.java)
-                intent.putExtra("sikdangId", choicesikdangpageRes.sikdangList[pos].sikdangId)
-                intent.putExtra("sikdangType", choicesikdangpageRes.sikdangInfoList[pos].store_type)
-                intent.putExtra("sikdangName", choicesikdangpageRes.sikdangInfoList[pos].store_name)
+                intent.putExtra("sikdangId", choicesikdangpageRes.sikdangList[count].sikdangId)
+                intent.putExtra("sikdangType", choicesikdangpageRes.sikdangInfoList[count].store_type)
+                intent.putExtra("sikdangName", choicesikdangpageRes.sikdangInfoList[count].store_name)
 
                 context.startActivity(intent)
 

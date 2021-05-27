@@ -401,9 +401,10 @@ class TableSettingDialog(context: Context, val sikdangNum: String, val floorNum:
                 "height" to changedTableAL[i].lengY,
                 "width" to changedTableAL[i].lengX,
                 "x" to changedTableAL[i].locX,
-                "y" to changedTableAL[i].locy
+                "y" to changedTableAL[i].locy,
+                "shape" to tempShape
             )
-            if (changedTableAL[i].isCircle) tempTableHashMap.put("shape", tempShape)
+            //if (changedTableAL[i].isCircle) tempTableHashMap.put("shape", tempShape)
 
             tableHashMap.put("table"+(i+1).toString(), tempTableHashMap)
             if(i == changedTableAL.size-1) getTimeAtBooked()

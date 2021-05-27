@@ -34,9 +34,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="20dp"
-                android:text="뭐넣지"
                 android:gravity="center_horizontal"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
         </LinearLayout>
     </RelativeLayout>
 

@@ -58,6 +58,8 @@ class PayActivity : AppCompatActivity() {
     var isSuccess = false
     var semaphore = Semaphore(1)
 
+    var bookCompleteSwitch = false
+
     lateinit var user_id : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -316,11 +318,57 @@ class PayActivity : AppCompatActivity() {
         var complete = false
         var sem = Semaphore(1)
 
+        Log.d("확인 bookComplete()", "2")
+
+
+        var firstSwitch = true
+        var secondSwitch = false
+
+        bookCompleteSwitch = true
+
+        var tempRef = FirebaseDatabase.getInstance().getReference("Tables")
+                .child(storeInfo.store_id!!)
+                .child("Booked")
+
+        var isNasted = false
+        for (i in 0..tryToBook.size-1) {
+            Log.d("확인 bookComplete()", tryToBook.size.toString()+"반복 시작 tryToBook: ${tryToBook} ")
+            tempRef.child(tryToBook[i].first).child(selected_time).child(tryToBook[i].second).addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    Log.d("확인 bookComplete() tryToBook", "2")
+                    if (bookCompleteSwitch == true){
+                        //Log.d("확인 bookComplete() tryToBook", "3")
+                        for (tableInfo in snapshot.children) {
+                            Log.d("확인 bookComplete()", tableInfo.toString() + tableInfo.value.toString())
+                            if(tableInfo.value == 0){ // mutex 가 0인게 있으면 실패
+                                //Log.d("확인 bookComplete() tryToBook", "4")
+                                isNasted = true
+                            }
+                            //Log.d("확인 bookComplete() tryToBook", "5")
+                        }
+                        bookCompleteSwitch = false
+                        //Log.d("확인 bookComplete() tryToBook", "6")
+                        if(isNasted){
+                            Toast.makeText(this@PayActivity, "테이블이 중복됐습니다.", Toast.LENGTH_SHORT).show()
+                        }
+                        //getTableOnFloor()
+                        setTablesBooked(tryToBook)
+                    }
+
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.d("확인 setSikdangListInfo()", "5 getFromDB : ${error}")
+                }
+
+            })
+            //Log.d("확인 bookComplete() tryToBook", "7")
+        }
 
 
 
 
-
+/*
 
         while (!isCached) {
             //Log.d("확인 while문", "@@@@@@@@@@@@@@@@@@@@@@@")
@@ -329,20 +377,25 @@ class PayActivity : AppCompatActivity() {
                 .child("Booked")
                 .runTransaction(object :Transaction.Handler{
                     override fun doTransaction(currentData: MutableData): Transaction.Result {
+
                         for (location in tryToBook) {
                             //Log.d("확인 for문", "#####################################")
+                            //Log.d("확인 for문", "${tryToBook}")
                             var ref = currentData.child(location.first)
                                 .child(selected_time)
                                 .child(location.second)
 
                             val mutex = ref.getValue(IsTableBooKed::class.java)
+                            //Log.d("확인 for문2 ", mutex.toString())
 
                             if (mutex == null) {
                                 Log.d("in transaction", "Not cached")
                                 return Transaction.abort()
                             }
+                            //Log.d("확인 for문3 ", mutex.toString())
                             isCached = true
-                            if (mutex!!.mutex == 0) {
+                            //Log.d("확인 for문4 ", mutex.toString())
+                            if (mutex!!.mutex == 0) { //예약 들어있으면 중지?
                                 return Transaction.abort()
                             }
                             ref.value = hashMapOf(
@@ -364,6 +417,7 @@ class PayActivity : AppCompatActivity() {
 
 
                             }
+                            Log.d("확인 bookComplete()", "complete = true")
                             complete = true
                         }
 
@@ -385,6 +439,79 @@ class PayActivity : AppCompatActivity() {
                     }
                 })
         }
+    */
+
+    }
+
+    public fun setTablesBooked(tryToBook: ArrayList<Pair<String, String>>){
+
+        var tempRef = FirebaseDatabase.getInstance().getReference("Tables")
+                .child(storeInfo.store_id!!)
+                .child("Booked")
+
+        for ( i in 0..tryToBook.size-1){
+            Log.d("확인 setTablesBooked ", "반복")
+            var ref = tempRef.child(tryToBook[i].first).child(selected_time).child(tryToBook[i].second)
+            ref.setValue(hashMapOf(
+                    "mutex" to 0
+            ))
+
+            var bookInfoRef = tempRef.child(tryToBook[i].first)
+                    .child(selected_time)
+                    .child("BookInfo")
+
+            //var bookInfo = bookInfoRef.getValue(BookInfo::class.java)
+            bookCompleteSwitch = true
+
+            var isDataerrored = false
+            bookInfoRef.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    //Log.d("확인 bookComplete() tryToBook", "2")
+                    if (bookCompleteSwitch == true){
+                        for (tableInfo in snapshot.children) {
+                            var bookInfo = snapshot.value
+                            if(bookInfo == null) isDataerrored = true
+                            Log.d("확인 setTablesBooked ", "${bookInfo}")
+                        }
+                        bookCompleteSwitch = false
+                        reservate()
+                        use_up_coupons()
+                        val _intent = Intent(this@PayActivity, PayCompleteSuccess::class.java)
+                        _intent.putExtra("request", requset.text.toString())
+                        _intent.putExtra("stocks", stocks)
+                        startActivity(_intent)
+                        //return Transaction.success(currentData)
+                        /*
+                        bookInfoRef.setValue(hashMapOf(
+                                "current" to (bookInfo!!.current!! - cnt),
+                                "max" to bookInfo!!.max
+                        ))*/
+                        //setTablesBooked(tryToBook)
+                    }
+                }
+                override fun onCancelled(error: DatabaseError) {
+                    Log.d("확인 setSikdangListInfo()", "5 getFromDB : ${error}")
+                }
+
+            })
+
+            /*
+            if(bookInfo == null) return Transaction.abort()
+            if (complete == true) return Transaction.abort()
+            if(!complete) {
+                bookInfoRef.value = hashMapOf(
+                        "current" to (bookInfo!!.current!! - cnt),
+                        "max" to bookInfo!!.max
+                )
+
+
+            }
+            Log.d("확인 bookComplete()", "complete = true")
+            complete = true*/
+        }
+
+
+
     }
 
 
@@ -402,7 +529,7 @@ class PayActivity : AppCompatActivity() {
 
 
 
-        var ref = FirebaseDatabase.getInstance().getReference().child("Store_reservation").child(current_date)
+        var ref = FirebaseDatabase.getInstance().getReference().child("Store_reservation").child(storeInfo.store_id.toString())
         Log.d("reservate 확인 주문 물품", "${stocks}")
 
         var resInfo = hashMapOf<String, Any>(

@@ -189,6 +189,25 @@ class SikdangMain_res:AppCompatActivity() {
 
         Log.d("확인 CSikdangMain_res", "8")
 
+        val resRef: DatabaseReference = FirebaseDatabase.getInstance().getReference()
+                .child("Store_reservation").child(sikdangId)
+
+        resRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (tableInfo in snapshot.children) {
+                    //Log.d("확인  getTableDataFromDB()", "getFromDB : "+tableInfo.key.toString())
+                    //floorList.add(tableInfo.key.toString())
+                }
+                Toast.makeText(this@SikdangMain_res, " 데이터베이스 정보변경", Toast.LENGTH_LONG).show();
+
+            }
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("확인 setSikdangListInfo()", "5 getFromDB : ${error}")
+                Toast.makeText(this@SikdangMain_res, " 데이터베이스 정보변경 접근실패", Toast.LENGTH_LONG).show();
+            }
+        })
+
+
 
     }
 

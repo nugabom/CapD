@@ -31,6 +31,10 @@ class TimeSelectDialog(context: Context, var sikdangMain_res: SikdangMain_res): 
     //TimeLineAdapter 에서 호출
     public fun setTimeNum(timeNum:String){
         sikdangMain_res.setTimeNum(timeNum)
+
+        sikdangMain_res.showTime = timeNum
+        sikdangMain_res.getTableDataLineNum=0
+        sikdangMain_res.getTableDataFromDB()
         this.dismiss()
     }
 

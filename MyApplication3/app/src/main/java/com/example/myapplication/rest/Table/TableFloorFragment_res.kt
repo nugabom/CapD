@@ -52,7 +52,7 @@ class TableFloorFragment_res(var floorNum:Int, val sikdangmainRes: SikdangMain_r
             {
 
                 var roundDrawable = resources.getDrawable(R.drawable.button_round_gray, null)
-                if (sikdangmainRes.tableData.tableList[count].isBooked == true) {//예약이 돼있으면
+                if (sikdangmainRes.tableIsBookedAL[count] == 0) {//예약이 돼있으면
                     roundDrawable = resources.getDrawable(R.drawable.button_round_red, null)
                     button.setOnClickListener {
                         showDialogIsBooked(sikdangmainRes.tableData.tableList[count].maxP, count)

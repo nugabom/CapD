@@ -119,6 +119,7 @@ class SikdangMain_res:AppCompatActivity() {
         //setTable()
 
         setMessage()
+        setTable()
 
 
         imageView4=findViewById(R.id.imageView4)
@@ -355,23 +356,32 @@ class SikdangMain_res:AppCompatActivity() {
         tableIsBookedAL.clear()
         var floorIt = 0
         //var calTableNum = tableNumAL[0]
+        var tempTableNum = 0
         for (i in 0..tableFromDBDataAL.size-1){
-            var tempTableNum = 0
             //Log.d("확인  getTableBookedInfo()", "for문 시작"+" table"+(i+1).toString() + floorList[floorIt].toString() + " " +floorIt )
             //ref.child(floorList[floorIt]).child(showTime).child("BookInfo").child(("table"+(i+1).toString())).addValueEventListener(object : ValueEventListener {
 
+            Log.d("확인  getTableBookedInfo() for문 시작", getTableDataLineNum.toString()+"get tableIsBookedAL FromDB : "+floorList[floorIt].toString()+" "+showTime + ("table"+(tempTableNum+1).toString()))
+            //Log.d("확인  getTableBookedInfo()", "get tableIsBookedAL FromDB : "+tableBooked.key.toString()+" "+tableBooked.value.toString())
             ref.child(floorList[floorIt]).child(showTime).child(("table"+(tempTableNum+1).toString())).addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
+                    var tempNum = i
+                    Log.d("확인 getTableBookedInfo() 가져오기 전전",i.toString() )
                     if (getTableDataLineNum==2){
-                        //Log.d("확인 getTableBookedInfo() 가져오기 전",i.toString() )
+                        Log.d("확인 getTableBookedInfo() 가져오기 전",i.toString() )
                         for (tableBooked in snapshot.children) {
-                            //Log.d("확인  getTableBookedInfo()", "get tableIsBookedAL FromDB : "+tableBooked.value.toString())
+                            Log.d("확인  getTableBookedInfo()", "get tableIsBookedAL FromDB : ")
+                            //Log.d("확인  getTableBookedInfo()", "get tableIsBookedAL FromDB : "+floorList[floorIt].toString()+" "+showTime)
+                            //Log.d("확인  getTableBookedInfo()", "get tableIsBookedAL FromDB : "+tableBooked.key.toString()+" "+tableBooked.value.toString())
                             tableIsBookedAL.add(tableBooked.value.toString().toInt())
-                            if (tableBooked == null) tableIsBookedAL.add(1)
+                            if (tableBooked == null) {
+                                Log.d("확인 getTableBookedInfo() 가져오기 ","비어서 1넣음")
+                                tableIsBookedAL.add(1)
+                            }
                         }
-                        //Log.d("확인 getTableBookedInfo() 가져오기 후",i.toString()+" / " +tableFromDBDataAL.size )
+                        Log.d("확인 getTableBookedInfo() 가져오기 후",i.toString()+" / " +tableFromDBDataAL.size )
 
-                        if(i == tableFromDBDataAL.size-1) {
+                        if(tempNum == tableFromDBDataAL.size-1) {
                             Log.d("확인 getTableBookedInfo() 끝","${tableIsBookedAL}" )
                             getTableDataLineNum=3
                             setTableData()
@@ -395,6 +405,7 @@ class SikdangMain_res:AppCompatActivity() {
                 floorIt+=1
                 tempTableNum=0
             }
+            Log.d("확인 getTableBookedInfo() 가져오기 후 for문 끝후"," " )
 
         }
     }
@@ -454,7 +465,8 @@ class SikdangMain_res:AppCompatActivity() {
         }
         Log.d("확인  setTableData()", "tableList : ${tableData.tableList}")
 
-        setTable()
+        //setTable()
+        renewalTable()
 
 
 
@@ -484,6 +496,9 @@ class SikdangMain_res:AppCompatActivity() {
     }
 
     public fun renewalTable() {
+        Log.d("확인 renewalTable()", "showTime : "+showTime)
+        Log.d("확인 renewalTable()", "tableData.tableList : ${tableData.tableList}")
+        Log.d("확인 renewalTable()", "tableIsBookedAL : ${tableIsBookedAL}")
         vpAdapter.notifyDataSetChanged()
     }
 

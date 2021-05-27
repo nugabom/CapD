@@ -57,8 +57,8 @@ class StartActivity : AppCompatActivity() {
 
         if(firebaseUser != null) {
             //startActivity(Intent(this, SelectLoginActivity::class.java))
-            //startActivity(Intent(this, MainActivity::class.java))
-            startActivity(Intent(this, ChoiceSikdangPage_res::class.java))
+            startActivity(Intent(this, MainActivity::class.java))
+            //startActivity(Intent(this, ChoiceSikdangPage_res::class.java))
             finish()
         }
 

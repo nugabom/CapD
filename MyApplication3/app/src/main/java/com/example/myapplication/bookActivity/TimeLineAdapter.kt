@@ -45,18 +45,20 @@ class TimeLineAdapter (var context: Context?,
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val time = bookTime.time_list[position]
+        Log.d("확인 onBindViewHolder", "몇던 돌리나")
         holder.time.text = time
 
         if(compareTime(current_time, time)) {
-            Log.d("timeset", "${current_time} > ${holder.time.text}")
+            Log.d("확인 timeset notifyInvalid", "${current_time} > ${holder.time.text}")
             notifyInvalid(holder)
         }
-
         else if(bookTime.book_check_list[bookTime.time_list.indexOf(holder.time.text.toString())]) {
+            Log.d("확인 timeset notifyInvalid", "${bookTime.book_check_list} > ${bookTime.time_list}")
             notifyInvalid(holder)
         }
         else {
             holder.time.setOnClickListener{
+                Log.d("확인 timeset", "${bookTime.book_check_list} > ${bookTime.time_list}")
                 showMenu(holder)
             }
         }
@@ -142,6 +144,30 @@ class TimeLineAdapter (var context: Context?,
     fun compareTime(current_time : String, table_time : String) : Boolean{
         var current = current_time
 
+        var curs= current_time
+        var ts =table_time
+
+        var curi=0
+        var ti=0
+
+        if (curs.slice(IntRange(6, 7)) == "오전"){
+            curi = (curs.slice(IntRange(0, 1))+curs.slice(IntRange(3, 4))).toInt()
+        }
+        else{
+            curi = (curs.slice(IntRange(0, 1))+curs.slice(IntRange(3, 4))).toInt()+1200
+        }
+
+        if (ts.slice(IntRange(6, 7)) == "오전"){
+            ti = (ts.slice(IntRange(0, 1))+ts.slice(IntRange(3, 4))).toInt()
+        }
+        else{
+            ti = (ts.slice(IntRange(0, 1))+ts.slice(IntRange(3, 4))).toInt()+1200
+        }
+
+        if (curi > ti)return true
+        return false
+
+        /*
         var table = table_time
         if(table_time.substring(0, 2).compareTo("12") == 0) {
             table = "00" + table.substring(2)
@@ -151,7 +177,7 @@ class TimeLineAdapter (var context: Context?,
         Log.d("compareTime", "${current}, ${table}")
 
         if(current.last() > table.last()) return true
-        return current.compareTo(table, false) >= 0
+        return current.compareTo(table, false) >= 0*/
     }
 }
 

@@ -87,28 +87,28 @@ class BookActivityBuilder(val sikdangId : String, val category: String, var cont
 
     fun getMenu(menu_snapshot: DataSnapshot) :Boolean {
         for (menu_data in menu_snapshot.child("menu").children) {
-            Log.d("확인 BookActivityBuilder.getMenu", "for문")
+            //Log.d("확인 BookActivityBuilder.getMenu", "for문")
             val product = menu_data.getValue(_Menu::class.java)
-            Log.d("확인 BookActivityBuilder.getMenu", "for문2")
+            //Log.d("확인 BookActivityBuilder.getMenu", "for문2")
             if(product == null) return false
-            Log.d("확인 BookActivityBuilder.getMenu", "for문3")
+            //Log.d("확인 BookActivityBuilder.getMenu", "for문3")
 
-            Log.d("확인 BookActivityBuilder.getMenu", "for문4")
+            //Log.d("확인 BookActivityBuilder.getMenu", "for문4")
             var ingredients = arrayListOf<_Ingredient>()
             for (ingredient_data in menu_data.child("ingredients").children) {
-                Log.d("확인 BookActivityBuilder.getMenu", "for문5")
+                //Log.d("확인 BookActivityBuilder.getMenu", "for문5")
                 val ing = ingredient_data.getValue(_Ingredient::class.java)
-                Log.d("확인 BookActivityBuilder.getMenu", "for문6")
+                //Log.d("확인 BookActivityBuilder.getMenu", "for문6")
                 if(ing == null) return false
-                Log.d("확인 BookActivityBuilder.getMenu", "for문7")
+                //Log.d("확인 BookActivityBuilder.getMenu", "for문7")
                 ingredients.add(ing)
             }
 
-            Log.d("확인 BookActivityBuilder.getMenu", "for문8")
+            //Log.d("확인 BookActivityBuilder.getMenu", "for문8")
             menus.add(MenuData(product, ingredients))
-            Log.d("확인 BookActivityBuilder.getMenu", "for문9")
+            //Log.d("확인 BookActivityBuilder.getMenu", "for문9")
         }
-        Log.d("확인 BookActivityBuilder.getMenu", "for문 끝")
+        //Log.d("확인 BookActivityBuilder.getMenu", "for문 끝")
 
         return true
     }
@@ -128,10 +128,12 @@ class BookActivityBuilder(val sikdangId : String, val category: String, var cont
         }
         time_list = ArrayList(timeMap.keys)
         time_list = ArrayList(time_list.sortedWith(compareBy ({ it.contains("오후") }, {it})))
+        Log.d("확인 bookActivityBuilder timeList 확인", "${time_list}")
         book_check_list = arrayListOf()
         for (book_status in time_list) {
             book_check_list.add(timeMap[book_status]!!)
         }
+        Log.d("확인 bookActivityBuilder book_check_list 확인", "${book_check_list}")
 
         Log.d("bookActivityBuilder", "${storeInfo}")
         for (menu in menus) {

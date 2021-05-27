@@ -84,9 +84,18 @@ class OrderMessageDialog(context: Context, var orderNum:Int, var orederId:String
         val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference()
                 .child("Store_reservation").child(sikdangmainRes.sikdangId).child(sikdangmainRes.msgKeyAL[orderNum])
 
+        val bookedRef: DatabaseReference = FirebaseDatabase.getInstance().getReference()
+                .child("Tables").child(sikdangmainRes.sikdangId).child("Booked")
+
+        for (i in 0..sikdangmainRes.msgBookInfoDataAL[orderNum].size-1){
+            bookedRef.child(sikdangmainRes.msgBookInfoDataAL[orderNum][i].floor).child(sikdangmainRes.msgAL[orderNum].bookTime).child(sikdangmainRes.msgBookInfoDataAL[orderNum][i].table).setValue(1)
+        }
+
         ref.removeValue().addOnCompleteListener {
             sikdangmainRes.renewalOrder()
             this.dismiss()
         }
+
+
     }
 }

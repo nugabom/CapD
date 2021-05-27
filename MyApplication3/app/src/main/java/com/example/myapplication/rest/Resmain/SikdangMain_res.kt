@@ -258,6 +258,8 @@ class SikdangMain_res:AppCompatActivity() {
     inner class OtherUserData(var username:String, var phone_number:String)
 
 
+    //예약 추가될 때
+
 
     //예약의 키 받아옴
 
@@ -427,6 +429,7 @@ class SikdangMain_res:AppCompatActivity() {
 
 
 
+    //메인페이지에 테이블 띄우는 루틴
 
 
     //데이터베이스에서 층을 받음
